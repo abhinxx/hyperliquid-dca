@@ -48,7 +48,8 @@
   <div id="content"><div class="empty">Loading...</div></div>
 
   <script>
-    const HISTORY_URL = '../bot/logs/history.json';
+    const base = window.location.hostname.includes('github.io') ? '/hyperliquid-dca' : '..';
+    const HISTORY_URL = base + '/bot/logs/history.json';
     let allData = [];
 
     async function load() {
