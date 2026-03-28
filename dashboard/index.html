@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DCA Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 24px; max-width: 1200px; margin: 0 auto; }
+    h1 { font-size: 1.4rem; margin-bottom: 4px; }
+    .subtitle { color: #8b949e; font-size: 0.85rem; margin-bottom: 20px; }
+    .cards { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+    .card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px 20px; min-width: 180px; flex: 1; }
+    .card-label { color: #8b949e; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .card-value { font-size: 1.3rem; font-weight: 600; }
+    .positive { color: #3fb950; }
+    .negative { color: #f85149; }
+    .neutral { color: #c9d1d9; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 24px; }
+    th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #21262d; }
+    th { color: #8b949e; font-weight: 600; position: sticky; top: 0; background: #0d1117; }
+    tr:hover { background: #161b22; }
+    .status-filled { color: #3fb950; font-weight: 600; }
+    .status-error { color: #f85149; font-weight: 600; }
+    .filter-bar { margin-bottom: 16px; display: flex; gap: 12px; align-items: center; }
+    .filter-bar select, .filter-bar input { background: #161b22; border: 1px solid #21262d; color: #c9d1d9; padding: 6px 12px; border-radius: 6px; font-size: 0.82rem; }
+    .empty { text-align: center; padding: 60px; color: #484f58; }
+    .run-header { background: #161b22; font-weight: 600; }
+    .run-header td { border-bottom: 2px solid #30363d; padding: 10px 12px; }
+  </style>
+</head>
+<body>
+  <h1>Hyperliquid DCA Dashboard</h1>
+  <div class="subtitle">Daily $15/asset, 3x leverage, 7 assets</div>
+
+  <div class="cards">
+    <div class="card"><div class="card-label">Total Runs</div><div class="card-value" id="totalRuns">—</div></div>
+    <div class="card"><div class="card-label">Total Invested</div><div class="card-value" id="totalInvested">—</div></div>
+    <div class="card"><div class="card-label">Filled / Failed</div><div class="card-value" id="filledFailed">—</div></div>
+    <div class="card"><div class="card-label">Last Run</div><div class="card-value" id="lastRun">—</div></div>
+  </div>
+
+  <div class="filter-bar">
+    <select id="filterAsset"><option value="">All Assets</option></select>
+    <select id="filterStatus"><option value="">All Statuses</option><option value="filled">Filled</option><option value="error">Error</option></select>
+  </div>
+
+  <div id="content"><div class="empty">Loading...</div></div>
+
+  <script>
+    const HISTORY_URL = '../bot/logs/history.json';
+    let allData = [];
+
+    async function load() {
+      try {
+        const res = await fetch(HISTORY_URL);
+        allData = await res.json();
+      } catch {
+        document.getElementById('content').innerHTML = '<div class="empty">No data yet — waiting for first DCA run</div>';
+        return;
+      }
+      if (!allData.length) {
+        document.getElementById('content').innerHTML = '<div class="empty">No trades yet — waiting for first DCA run</div>';
+        return;
+      }
+
+      const coins = new Set();
+      let totalFilled = 0, totalFailed = 0, totalSpent = 0;
+      for (const run of allData) {
+        for (const t of run.trades || []) {
+          coins.add(t.coin);
+          if (t.status === 'filled') { totalFilled++; totalSpent += parseFloat(t.notional || 0); }
+          else totalFailed++;
+        }
+      }
+
+      document.getElementById('totalRuns').textContent = allData.length;
+      document.getElementById('totalInvested').textContent = `$${totalSpent.toFixed(0)}`;
+      document.getElementById('filledFailed').innerHTML = `<span class="positive">${totalFilled}</span> / <span class="negative">${totalFailed}</span>`;
+      const last = allData[allData.length - 1];
+      const d = new Date(last.timestamp);
+      document.getElementById('lastRun').textContent = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+      const sel = document.getElementById('filterAsset');
+      for (const c of [...coins].sort()) {
+        const o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        sel.appendChild(o);
+      }
+
+      render();
+      document.getElementById('filterAsset').addEventListener('change', render);
+      document.getElementById('filterStatus').addEventListener('change', render);
+    }
+
+    function render() {
+      const fAsset = document.getElementById('filterAsset').value;
+      const fStatus = document.getElementById('filterStatus').value;
+
+      let html = '<table><thead><tr><th>Date</th><th>Asset</th><th>Status</th><th>Size</th><th>Price</th><th>Notional</th><th>USDC Before</th><th>USDC After</th><th>Error</th></tr></thead><tbody>';
+
+      const runs = [...allData].reverse();
+      for (const run of runs) {
+        const ts = new Date(run.timestamp).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        const trades = (run.trades || []).filter(t => {
+          if (fAsset && t.coin !== fAsset) return false;
+          if (fStatus && t.status !== fStatus) return false;
+          return true;
+        });
+        if (!trades.length) continue;
+
+        html += `<tr class="run-header"><td colspan="9">${ts} — USDC: $${run.usdc_balance_before ?? '?'} → $${run.usdc_balance_after ?? '?'}</td></tr>`;
+        for (const t of trades) {
+          const cls = t.status === 'filled' ? 'status-filled' : 'status-error';
+          html += '<tr>';
+          html += `<td>${ts}</td>`;
+          html += `<td>${t.coin}</td>`;
+          html += `<td class="${cls}">${t.status}</td>`;
+          html += `<td>${t.size || '—'}</td>`;
+          html += `<td>${t.price ? '$' + parseFloat(t.price).toLocaleString() : '—'}</td>`;
+          html += `<td>${t.notional ? '$' + t.notional : '—'}</td>`;
+          html += `<td>$${run.usdc_balance_before ?? '?'}</td>`;
+          html += `<td>$${run.usdc_balance_after ?? '?'}</td>`;
+          html += `<td style="color:#f85149;font-size:0.75rem">${t.error || ''}</td>`;
+          html += '</tr>';
+        }
+      }
+      html += '</tbody></table>';
+
+      if (runs.length === 0 || html.includes('<tbody></tbody>')) {
+        html = '<div class="empty">No matching trades</div>';
+      }
+      document.getElementById('content').innerHTML = html;
+    }
+
+    load();
+  </script>
+</body>
+</html>

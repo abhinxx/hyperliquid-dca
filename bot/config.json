@@ -1,0 +1,14 @@
+{
+  "daily_margin_usd": 15,
+  "leverage": 3,
+  "slippage": 0.01,
+  "assets": [
+    {"coin": "BTC", "dex": "", "sz_decimals": 5, "cross": true},
+    {"coin": "HYPE", "dex": "", "sz_decimals": 2, "cross": true},
+    {"coin": "xyz:GOLD", "dex": "xyz", "sz_decimals": 4, "cross": true},
+    {"coin": "xyz:SILVER", "dex": "xyz", "sz_decimals": 2, "cross": true},
+    {"coin": "xyz:CRCL", "dex": "xyz", "sz_decimals": 3, "cross": false},
+    {"coin": "xyz:SKHX", "dex": "xyz", "sz_decimals": 3, "cross": false},
+    {"coin": "vntl:ENERGY", "dex": "vntl", "sz_decimals": 2, "cross": false, "collateral": "USDH", "swap_pair": "@230"}
+  ]
+}

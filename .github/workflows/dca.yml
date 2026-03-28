@@ -1,0 +1,36 @@
+name: Daily DCA
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 06:00 UTC daily
+  workflow_dispatch: {}   # manual trigger
+
+permissions:
+  contents: write
+
+jobs:
+  dca:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r bot/requirements.txt
+
+      - name: Run DCA bot
+        env:
+          AGENT_PRIVATE_KEY: ${{ secrets.AGENT_PRIVATE_KEY }}
+          MAIN_WALLET_ADDRESS: ${{ secrets.MAIN_WALLET_ADDRESS }}
+        run: python bot/dca_bot.py
+
+      - name: Commit trade log
+        run: |
+          git config user.name "dca-bot"
+          git config user.email "bot@hyperliquid-dca"
+          git add bot/logs/history.json
+          git diff --cached --quiet || git commit -m "dca: $(date -u +%Y-%m-%d) trades"
+          git push
