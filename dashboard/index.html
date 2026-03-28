@@ -48,16 +48,17 @@
   <div id="content"><div class="empty">Loading...</div></div>
 
   <script>
-    const base = window.location.hostname.includes('github.io') ? '/hyperliquid-dca' : '..';
-    const HISTORY_URL = base + '/bot/logs/history.json';
+    const REPO = 'abhinxx/hyperliquid-dca';
+    const HISTORY_URL = `https://raw.githubusercontent.com/${REPO}/main/bot/logs/history.json?t=${Date.now()}`;
     let allData = [];
 
     async function load() {
       try {
         const res = await fetch(HISTORY_URL);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
         allData = await res.json();
-      } catch {
-        document.getElementById('content').innerHTML = '<div class="empty">No data yet — waiting for first DCA run</div>';
+      } catch (err) {
+        document.getElementById('content').innerHTML = `<div class="empty">Failed to load data: ${err.message}</div>`;
         return;
       }
       if (!allData.length) {
