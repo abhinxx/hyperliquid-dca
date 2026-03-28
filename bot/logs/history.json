@@ -54,5 +54,53 @@
       }
     ],
     "usdc_balance_after": 3931.63
+  },
+  {
+    "timestamp": "2026-03-28T22:49:10.367823+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3931.08,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00067",
+        "price": "66740.0",
+        "notional": 44.72,
+        "drawdown": 0.1215
+      },
+      {
+        "coin": "xyz:GOLD",
+        "status": "filled",
+        "size": "0.01",
+        "price": "4496.6",
+        "notional": 44.97,
+        "drawdown": 0.1081
+      },
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.64",
+        "price": "69.832",
+        "notional": 44.69,
+        "drawdown": 0.154
+      },
+      {
+        "coin": "xyz:CRCL",
+        "status": "filled",
+        "size": "0.483",
+        "price": "93.057",
+        "notional": 44.95,
+        "drawdown": 0.3191
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.074",
+        "price": "604.98",
+        "notional": 44.77,
+        "drawdown": 0.1706
+      }
+    ],
+    "usdc_balance_after": 3930.8
   }
 ]
