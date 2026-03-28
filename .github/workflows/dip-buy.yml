@@ -1,0 +1,36 @@
+name: Hourly Dip Check
+
+on:
+  schedule:
+    - cron: '15 * * * *'  # :15 past every hour (avoids collision with daily DCA at :00)
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  dip-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: pip install -r bot/requirements.txt
+
+      - name: Check dips and buy
+        env:
+          AGENT_PRIVATE_KEY: ${{ secrets.AGENT_PRIVATE_KEY }}
+          MAIN_WALLET_ADDRESS: ${{ secrets.MAIN_WALLET_ADDRESS }}
+        run: python bot/dip_buy.py
+
+      - name: Commit if trades were made
+        run: |
+          git config user.name "dca-bot"
+          git config user.email "bot@hyperliquid-dca"
+          git add bot/logs/history.json
+          git diff --cached --quiet || git commit -m "dip: $(date -u +%Y-%m-%dT%H:%M) trades"
+          git push

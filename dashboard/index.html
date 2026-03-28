@@ -27,6 +27,8 @@
     .empty { text-align: center; padding: 60px; color: #484f58; }
     .run-header { background: #161b22; font-weight: 600; }
     .run-header td { border-bottom: 2px solid #30363d; padding: 10px 12px; }
+    .tag-dca { display: inline-block; background: #1f6feb33; color: #58a6ff; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .tag-dip { display: inline-block; background: #d2992233; color: #d29922; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -44,6 +46,7 @@
   <div class="filter-bar">
     <select id="filterAsset"><option value="">All Assets</option></select>
     <select id="filterStatus"><option value="">All Statuses</option><option value="filled">Filled</option><option value="error">Error</option></select>
+    <select id="filterType"><option value="">All Types</option><option value="dca">DCA</option><option value="dip">Dip Buy</option></select>
   </div>
 
   <div id="content"><div class="empty">Loading...</div></div>
@@ -94,16 +97,20 @@
       render();
       document.getElementById('filterAsset').addEventListener('change', render);
       document.getElementById('filterStatus').addEventListener('change', render);
+      document.getElementById('filterType').addEventListener('change', render);
     }
 
     function render() {
       const fAsset = document.getElementById('filterAsset').value;
       const fStatus = document.getElementById('filterStatus').value;
+      const fType = document.getElementById('filterType').value;
 
-      let html = '<table><thead><tr><th>Date</th><th>Asset</th><th>Status</th><th>Size</th><th>Price</th><th>Notional</th><th>USDC Before</th><th>USDC After</th><th>Error</th></tr></thead><tbody>';
+      let html = '<table><thead><tr><th>Date</th><th>Type</th><th>Asset</th><th>Status</th><th>Size</th><th>Price</th><th>Notional</th><th>Drawdown</th><th>Error</th></tr></thead><tbody>';
 
       const runs = [...allData].reverse();
       for (const run of runs) {
+        const runType = run.type || 'dca';
+        if (fType && runType !== fType) continue;
         const ts = new Date(run.timestamp).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
         const trades = (run.trades || []).filter(t => {
           if (fAsset && t.coin !== fAsset) return false;
@@ -112,18 +119,20 @@
         });
         if (!trades.length) continue;
 
-        html += `<tr class="run-header"><td colspan="9">${ts} — USDC: $${run.usdc_balance_before ?? '?'} → $${run.usdc_balance_after ?? '?'}</td></tr>`;
+        const tag = runType === 'dip' ? '<span class="tag-dip">DIP</span>' : '<span class="tag-dca">DCA</span>';
+        html += `<tr class="run-header"><td colspan="9">${tag} ${ts} — USDC: $${run.usdc_balance_before ?? '?'} → $${run.usdc_balance_after ?? '?'}</td></tr>`;
         for (const t of trades) {
           const cls = t.status === 'filled' ? 'status-filled' : 'status-error';
+          const dd = t.drawdown ? `${(t.drawdown * 100).toFixed(1)}%` : '—';
           html += '<tr>';
           html += `<td>${ts}</td>`;
+          html += `<td>${tag}</td>`;
           html += `<td>${t.coin}</td>`;
           html += `<td class="${cls}">${t.status}</td>`;
           html += `<td>${t.size || '—'}</td>`;
           html += `<td>${t.price ? '$' + parseFloat(t.price).toLocaleString() : '—'}</td>`;
           html += `<td>${t.notional ? '$' + t.notional : '—'}</td>`;
-          html += `<td>$${run.usdc_balance_before ?? '?'}</td>`;
-          html += `<td>$${run.usdc_balance_after ?? '?'}</td>`;
+          html += `<td>${dd}</td>`;
           html += `<td style="color:#f85149;font-size:0.75rem">${t.error || ''}</td>`;
           html += '</tr>';
         }

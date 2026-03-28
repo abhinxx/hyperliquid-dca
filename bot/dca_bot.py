@@ -134,6 +134,7 @@ def main():
 
     run = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
+        "type": "dca",
         "usdc_balance_before": round(usdc_before, 2),
         "trades": [],
     }
