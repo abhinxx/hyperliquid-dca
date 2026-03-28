@@ -7,10 +7,10 @@
   "assets": [
     {"coin": "BTC", "dex": "", "sz_decimals": 5, "cross": true, "dip_threshold": 0.10},
     {"coin": "HYPE", "dex": "", "sz_decimals": 2, "cross": true, "dip_threshold": 0.15},
-    {"coin": "xyz:GOLD", "dex": "xyz", "sz_decimals": 4, "cross": true, "dip_threshold": null},
+    {"coin": "xyz:GOLD", "dex": "xyz", "sz_decimals": 4, "cross": true, "dip_threshold": 0.10},
     {"coin": "xyz:SILVER", "dex": "xyz", "sz_decimals": 2, "cross": true, "dip_threshold": 0.15},
-    {"coin": "xyz:CRCL", "dex": "xyz", "sz_decimals": 3, "cross": false, "dip_threshold": 0.10},
-    {"coin": "xyz:SKHX", "dex": "xyz", "sz_decimals": 3, "cross": false, "dip_threshold": 0.15},
+    {"coin": "xyz:CRCL", "dex": "xyz", "sz_decimals": 3, "cross": false, "dip_threshold": 0.07},
+    {"coin": "xyz:SKHX", "dex": "xyz", "sz_decimals": 3, "cross": false, "dip_threshold": 0.10},
     {"coin": "vntl:ENERGY", "dex": "vntl", "sz_decimals": 2, "cross": false, "collateral": "USDH", "swap_pair": "@230", "dip_threshold": 0.03}
   ]
 }
