@@ -38,6 +38,7 @@
     <div class="card"><div class="card-label">Total Invested</div><div class="card-value" id="totalInvested">—</div></div>
     <div class="card"><div class="card-label">Filled / Failed</div><div class="card-value" id="filledFailed">—</div></div>
     <div class="card"><div class="card-label">Last Run</div><div class="card-value" id="lastRun">—</div></div>
+    <div class="card"><div class="card-label">Next Auto Trade</div><div class="card-value" id="nextRun">—</div></div>
   </div>
 
   <div class="filter-bar">
@@ -135,7 +136,22 @@
       document.getElementById('content').innerHTML = html;
     }
 
+    function updateCountdown() {
+      const now = new Date();
+      const next = new Date(now);
+      next.setUTCHours(6, 0, 0, 0);
+      if (now >= next) next.setUTCDate(next.getUTCDate() + 1);
+      const diff = next - now;
+      const h = Math.floor(diff / 3600000);
+      const m = Math.floor((diff % 3600000) / 60000);
+      const s = Math.floor((diff % 60000) / 1000);
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('nextRun').textContent = `${pad(h)}h ${pad(m)}m ${pad(s)}s`;
+    }
+
     load();
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
