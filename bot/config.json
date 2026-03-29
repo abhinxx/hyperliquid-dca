@@ -2,8 +2,6 @@
   "daily_margin_usd": 15,
   "leverage": 3,
   "slippage": 0.01,
-  "dip_lookback_hours": 288,
-  "dip_cooldown_hours": 24,
   "assets": [
     {"coin": "BTC", "dex": "", "sz_decimals": 5, "cross": true, "dip_threshold": 0.10},
     {"coin": "HYPE", "dex": "", "sz_decimals": 2, "cross": true, "dip_threshold": 0.15},

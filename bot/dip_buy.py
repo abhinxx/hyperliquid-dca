@@ -1,10 +1,10 @@
-"""Dip-buy checker — runs hourly, buys assets that dipped past their threshold."""
+"""Dip-buy checker — runs hourly, buys when price drops X% from last entry."""
 
 import json
 import math
 import os
 import sys
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timezone
 from pathlib import Path
 
 import eth_account
@@ -49,27 +49,12 @@ def get_spot_balance(wallet, coin="USDC"):
     return 0.0
 
 
-def get_rolling_high(coin, dex, lookback_hours):
-    """Fetch 1h candles and return the highest price in the lookback window."""
-    now = int(datetime.now(timezone.utc).timestamp() * 1000)
-    start = now - lookback_hours * 3600000
-    body = {"type": "candleSnapshot", "req": {"coin": coin, "interval": "1h", "startTime": start, "endTime": now}}
-    if dex:
-        body["req"]["coin"] = coin
-    candles = requests.post(API, json=body, timeout=10).json()
-    if not candles:
-        return None
-    return max(float(c["h"]) for c in candles)
-
-
-def last_dip_buy_time(history, coin):
-    """Find the most recent dip-buy timestamp for a given coin."""
+def last_entry_price(history, coin):
+    """Find the fill price of the most recent entry (DCA or dip) for a coin."""
     for run in reversed(history):
-        if run.get("type") != "dip":
-            continue
         for t in run.get("trades", []):
-            if t["coin"] == coin and t["status"] == "filled":
-                return datetime.fromisoformat(run["timestamp"])
+            if t["coin"] == coin and t["status"] == "filled" and t.get("price"):
+                return float(t["price"])
     return None
 
 
@@ -92,7 +77,7 @@ def execute_trade(exchange_client, coin, dex, sz_decimals, is_cross, margin, lev
     mids = get_mids(dex)
     price = float(mids.get(coin, 0))
     if price == 0:
-        return {"coin": coin, "status": "error", "error": f"no price found"}
+        return {"coin": coin, "status": "error", "error": "no price found"}
 
     notional = margin * leverage
     size = math.floor((notional / price) * (10 ** sz_decimals)) / (10 ** sz_decimals)
@@ -126,11 +111,8 @@ def main():
     margin = config["daily_margin_usd"]
     leverage = config["leverage"]
     slippage = config["slippage"]
-    lookback = config.get("dip_lookback_hours", 288)
-    cooldown = config.get("dip_cooldown_hours", 24)
     assets = config["assets"]
     history = load_history()
-    now = datetime.now(timezone.utc)
 
     dip_assets = [a for a in assets if a.get("dip_threshold")]
     if not dip_assets:
@@ -143,17 +125,16 @@ def main():
         perp_dexs.insert(0, "")
 
     triggered = []
-    print(f"Checking {len(dip_assets)} assets for dip triggers...")
+    print(f"Checking {len(dip_assets)} assets for dip triggers (vs last entry price)...")
 
     for asset in dip_assets:
         coin = asset["coin"]
         dex = asset["dex"]
         threshold = asset["dip_threshold"]
 
-        last_dip = last_dip_buy_time(history, coin)
-        if last_dip and (now - last_dip) < timedelta(hours=cooldown):
-            hrs_left = cooldown - (now - last_dip).total_seconds() / 3600
-            print(f"  {coin}: cooldown ({hrs_left:.1f}h remaining)")
+        ref_price = last_entry_price(history, coin)
+        if ref_price is None:
+            print(f"  {coin}: no previous entry — skipping")
             continue
 
         mids = get_mids(dex)
@@ -162,17 +143,12 @@ def main():
             print(f"  {coin}: no price")
             continue
 
-        high = get_rolling_high(coin, dex, lookback)
-        if not high:
-            print(f"  {coin}: no candle data")
-            continue
+        drop = (ref_price - current) / ref_price
+        print(f"  {coin}: last entry=${ref_price:,.2f}, now=${current:,.2f}, drop={drop*100:.1f}%, threshold={threshold*100:.0f}%")
 
-        drawdown = (high - current) / high
-        print(f"  {coin}: price=${current:,.2f}, 12d-high=${high:,.2f}, drawdown={drawdown*100:.1f}%, threshold={threshold*100:.0f}%")
-
-        if drawdown >= threshold:
-            print(f"  >>> TRIGGERED")
-            triggered.append(asset)
+        if drop >= threshold:
+            print(f"  >>> TRIGGERED (-{drop*100:.1f}% from last buy)")
+            triggered.append((asset, ref_price, current, drop))
         else:
             print(f"  --- no trigger")
 
@@ -184,6 +160,7 @@ def main():
     exchange = Exchange(agent_wallet, constants.MAINNET_API_URL, account_address=main_wallet, perp_dexs=perp_dexs)
 
     usdc_before = get_spot_balance(main_wallet, "USDC")
+    now = datetime.now(timezone.utc)
     run = {
         "timestamp": now.isoformat(),
         "type": "dip",
@@ -193,7 +170,7 @@ def main():
 
     print(f"\nExecuting {len(triggered)} dip-buys (${margin} each, {leverage}x)...")
 
-    for asset in triggered:
+    for asset, ref_price, current, drop in triggered:
         coin = asset["coin"]
         collateral = asset.get("collateral")
         swap_pair = asset.get("swap_pair")
@@ -205,10 +182,9 @@ def main():
                 continue
 
         trade = execute_trade(exchange, coin, asset["dex"], asset["sz_decimals"], asset.get("cross", True), margin, leverage, slippage)
-        mids = get_mids(asset["dex"])
-        high = get_rolling_high(coin, asset["dex"], lookback)
-        trade["drawdown"] = round((high - float(mids.get(coin, 0))) / high, 4) if high else None
-        print(f"  {coin}: {trade['status']} {trade.get('size', '')} @ ${trade.get('price', '')} {trade.get('error', '')}")
+        trade["ref_price"] = ref_price
+        trade["drop_pct"] = round(drop, 4)
+        print(f"  {coin}: {trade['status']} {trade.get('size', '')} @ ${trade.get('price', '')} (was ${ref_price:,.2f}, -{drop*100:.1f}%) {trade.get('error', '')}")
         run["trades"].append(trade)
 
     usdc_after = get_spot_balance(main_wallet, "USDC")
