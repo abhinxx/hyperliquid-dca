@@ -59,7 +59,7 @@
   <section>
     <h2>Portfolio Allocation</h2>
     <div class="alloc-section">
-      <div class="alloc-chart"><canvas id="pieChart" width="220" height="220"></canvas><div class="alloc-center"><div class="amount" id="allocTotal">—</div><div class="label">total notional</div></div></div>
+      <div class="alloc-chart"><canvas id="pieChart" width="220" height="220"></canvas><div class="alloc-center"><div class="amount" id="allocTotal">—</div><div class="label">live positions</div></div></div>
       <div class="alloc-legend" id="allocLegend"></div>
     </div>
   </section>
@@ -77,18 +77,54 @@
   <script>
     const REPO = 'abhinxx/hyperliquid-dca';
     const HISTORY_URL = `https://raw.githubusercontent.com/${REPO}/main/bot/logs/history.json?t=${Date.now()}`;
-    const COLORS = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#f778ba', '#79c0ff'];
+    const HL_API = 'https://api.hyperliquid.xyz/info';
+    const WALLET = '0x8256E29428Ff7b448a9B636151d9e73788459e83';
+    const DEXES = ['', 'xyz', 'vntl'];
+    const COLORS = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#f778ba', '#79c0ff', '#ffa657', '#7ee787', '#d2a8ff'];
     let allData = [];
 
-    async function load() {
-      try {
-        const res = await fetch(HISTORY_URL);
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        allData = await res.json();
-      } catch (err) {
-        document.getElementById('content').innerHTML = `<div class="empty">Failed to load data: ${err.message}</div>`;
-        return;
+    async function hlPost(body) {
+      const res = await fetch(HL_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      return res.json();
+    }
+
+    async function fetchLivePositions() {
+      const positions = [];
+      for (const dex of DEXES) {
+        const body = { type: 'clearinghouseState', user: WALLET };
+        if (dex) body.dex = dex;
+        try {
+          const state = await hlPost(body);
+          for (const ap of (state.assetPositions || [])) {
+            const p = ap.position;
+            const szi = parseFloat(p.szi);
+            if (szi === 0) continue;
+            positions.push({
+              coin: p.coin,
+              direction: szi >= 0 ? 'Long' : 'Short',
+              size: Math.abs(szi),
+              entryPx: parseFloat(p.entryPx),
+              positionValue: parseFloat(p.positionValue),
+              unrealizedPnl: parseFloat(p.unrealizedPnl),
+              leverage: p.leverage,
+              marginUsed: parseFloat(p.marginUsed || 0),
+            });
+          }
+        } catch (e) { /* skip failed dex */ }
       }
+      return positions;
+    }
+
+    async function load() {
+      const [historyResult, positions] = await Promise.all([
+        fetch(HISTORY_URL).then(r => r.ok ? r.json() : []).catch(() => []),
+        fetchLivePositions(),
+      ]);
+      allData = historyResult;
+
+      // Draw live allocation from API positions
+      drawAllocation(positions);
+
       if (!allData.length) {
         document.getElementById('content').innerHTML = '<div class="empty">No trades yet — waiting for first DCA run</div>';
         return;
@@ -96,18 +132,11 @@
 
       const coins = new Set();
       let totalFilled = 0, totalFailed = 0, totalSpent = 0;
-      const notionalByCoin = {};
       for (const run of allData) {
         for (const t of run.trades || []) {
           coins.add(t.coin);
-          if (t.status === 'filled') {
-            totalFilled++;
-            const ntl = parseFloat(t.notional || 0);
-            totalSpent += ntl;
-            notionalByCoin[t.coin] = (notionalByCoin[t.coin] || 0) + ntl;
-          } else {
-            totalFailed++;
-          }
+          if (t.status === 'filled') { totalFilled++; totalSpent += parseFloat(t.notional || 0); }
+          else totalFailed++;
         }
       }
 
@@ -124,16 +153,24 @@
         sel.appendChild(o);
       }
 
-      drawAllocation(notionalByCoin, totalSpent);
       renderTable();
       document.getElementById('filterAsset').addEventListener('change', renderTable);
       document.getElementById('filterStatus').addEventListener('change', renderTable);
       document.getElementById('filterType').addEventListener('change', renderTable);
     }
 
-    function drawAllocation(byCoin, total) {
-      const sorted = Object.entries(byCoin).sort((a, b) => b[1] - a[1]);
-      document.getElementById('allocTotal').textContent = `$${total.toFixed(0)}`;
+    function drawAllocation(positions) {
+      if (!positions.length) {
+        document.getElementById('allocLegend').innerHTML = '<div style="color:#484f58">No open positions</div>';
+        return;
+      }
+
+      const sorted = positions.sort((a, b) => b.positionValue - a.positionValue);
+      const total = sorted.reduce((s, p) => s + p.positionValue, 0);
+      const totalPnl = sorted.reduce((s, p) => s + p.unrealizedPnl, 0);
+      const pnlCls = totalPnl >= 0 ? 'positive' : 'negative';
+
+      document.getElementById('allocTotal').innerHTML = `$${total.toFixed(0)}<div class="label ${pnlCls}" style="font-size:0.75rem;font-weight:600">${totalPnl >= 0 ? '+' : ''}$${totalPnl.toFixed(2)}</div>`;
 
       const canvas = document.getElementById('pieChart');
       const ctx = canvas.getContext('2d');
@@ -144,8 +181,8 @@
       const legend = document.getElementById('allocLegend');
       legend.innerHTML = '';
 
-      sorted.forEach(([coin, val], i) => {
-        const pct = total > 0 ? val / total : 0;
+      sorted.forEach((pos, i) => {
+        const pct = total > 0 ? pos.positionValue / total : 0;
         const sweep = pct * 2 * Math.PI;
         const color = COLORS[i % COLORS.length];
 
@@ -156,12 +193,17 @@
         ctx.closePath();
         ctx.fillStyle = color;
         ctx.fill();
-
         startAngle += sweep;
 
+        const pnlSign = pos.unrealizedPnl >= 0 ? '+' : '';
+        const pnlColor = pos.unrealizedPnl >= 0 ? '#3fb950' : '#f85149';
         const row = document.createElement('div');
         row.className = 'alloc-row';
-        row.innerHTML = `<div class="alloc-dot" style="background:${color}"></div><div class="alloc-name">${coin}</div><div class="alloc-val">$${val.toFixed(0)}</div><div class="alloc-pct">${(pct * 100).toFixed(1)}%</div>`;
+        row.innerHTML = `<div class="alloc-dot" style="background:${color}"></div>`
+          + `<div class="alloc-name">${pos.coin}</div>`
+          + `<div class="alloc-val">$${pos.positionValue.toFixed(0)}</div>`
+          + `<div class="alloc-pct">${(pct * 100).toFixed(1)}%</div>`
+          + `<div style="min-width:65px;text-align:right;font-size:0.78rem;color:${pnlColor}">${pnlSign}$${pos.unrealizedPnl.toFixed(2)}</div>`;
         legend.appendChild(row);
       });
     }
