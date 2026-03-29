@@ -15,7 +15,6 @@
     .card-value { font-size: 1.3rem; font-weight: 600; }
     .positive { color: #3fb950; }
     .negative { color: #f85149; }
-    .neutral { color: #c9d1d9; }
     table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 24px; }
     th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #21262d; }
     th { color: #8b949e; font-weight: 600; position: sticky; top: 0; background: #0d1117; }
@@ -23,12 +22,26 @@
     .status-filled { color: #3fb950; font-weight: 600; }
     .status-error { color: #f85149; font-weight: 600; }
     .filter-bar { margin-bottom: 16px; display: flex; gap: 12px; align-items: center; }
-    .filter-bar select, .filter-bar input { background: #161b22; border: 1px solid #21262d; color: #c9d1d9; padding: 6px 12px; border-radius: 6px; font-size: 0.82rem; }
+    .filter-bar select { background: #161b22; border: 1px solid #21262d; color: #c9d1d9; padding: 6px 12px; border-radius: 6px; font-size: 0.82rem; }
     .empty { text-align: center; padding: 60px; color: #484f58; }
     .run-header { background: #161b22; font-weight: 600; }
     .run-header td { border-bottom: 2px solid #30363d; padding: 10px 12px; }
     .tag-dca { display: inline-block; background: #1f6feb33; color: #58a6ff; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
     .tag-dip { display: inline-block; background: #d2992233; color: #d29922; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
+    .alloc-section { display: flex; gap: 32px; margin-bottom: 32px; align-items: center; flex-wrap: wrap; }
+    .alloc-chart { position: relative; width: 220px; height: 220px; flex-shrink: 0; }
+    .alloc-chart canvas { width: 220px; height: 220px; }
+    .alloc-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+    .alloc-center .amount { font-size: 1.2rem; font-weight: 700; }
+    .alloc-center .label { font-size: 0.7rem; color: #8b949e; }
+    .alloc-legend { display: flex; flex-direction: column; gap: 6px; }
+    .alloc-row { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; }
+    .alloc-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+    .alloc-name { min-width: 100px; }
+    .alloc-val { color: #8b949e; min-width: 70px; text-align: right; }
+    .alloc-pct { font-weight: 600; min-width: 45px; text-align: right; }
+    section { margin-bottom: 8px; }
+    section h2 { font-size: 1rem; margin-bottom: 12px; border-bottom: 1px solid #21262d; padding-bottom: 6px; color: #8b949e; font-weight: 600; }
   </style>
 </head>
 <body>
@@ -43,17 +56,28 @@
     <div class="card"><div class="card-label">Next Auto Trade</div><div class="card-value" id="nextRun">—</div></div>
   </div>
 
-  <div class="filter-bar">
-    <select id="filterAsset"><option value="">All Assets</option></select>
-    <select id="filterStatus"><option value="">All Statuses</option><option value="filled">Filled</option><option value="error">Error</option></select>
-    <select id="filterType"><option value="">All Types</option><option value="dca">DCA</option><option value="dip">Dip Buy</option></select>
-  </div>
+  <section>
+    <h2>Portfolio Allocation</h2>
+    <div class="alloc-section">
+      <div class="alloc-chart"><canvas id="pieChart" width="220" height="220"></canvas><div class="alloc-center"><div class="amount" id="allocTotal">—</div><div class="label">total notional</div></div></div>
+      <div class="alloc-legend" id="allocLegend"></div>
+    </div>
+  </section>
 
-  <div id="content"><div class="empty">Loading...</div></div>
+  <section>
+    <h2>Trade History</h2>
+    <div class="filter-bar">
+      <select id="filterAsset"><option value="">All Assets</option></select>
+      <select id="filterStatus"><option value="">All Statuses</option><option value="filled">Filled</option><option value="error">Error</option></select>
+      <select id="filterType"><option value="">All Types</option><option value="dca">DCA</option><option value="dip">Dip Buy</option></select>
+    </div>
+    <div id="content"><div class="empty">Loading...</div></div>
+  </section>
 
   <script>
     const REPO = 'abhinxx/hyperliquid-dca';
     const HISTORY_URL = `https://raw.githubusercontent.com/${REPO}/main/bot/logs/history.json?t=${Date.now()}`;
+    const COLORS = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#f778ba', '#79c0ff'];
     let allData = [];
 
     async function load() {
@@ -72,11 +96,18 @@
 
       const coins = new Set();
       let totalFilled = 0, totalFailed = 0, totalSpent = 0;
+      const notionalByCoin = {};
       for (const run of allData) {
         for (const t of run.trades || []) {
           coins.add(t.coin);
-          if (t.status === 'filled') { totalFilled++; totalSpent += parseFloat(t.notional || 0); }
-          else totalFailed++;
+          if (t.status === 'filled') {
+            totalFilled++;
+            const ntl = parseFloat(t.notional || 0);
+            totalSpent += ntl;
+            notionalByCoin[t.coin] = (notionalByCoin[t.coin] || 0) + ntl;
+          } else {
+            totalFailed++;
+          }
         }
       }
 
@@ -84,8 +115,7 @@
       document.getElementById('totalInvested').textContent = `$${totalSpent.toFixed(0)}`;
       document.getElementById('filledFailed').innerHTML = `<span class="positive">${totalFilled}</span> / <span class="negative">${totalFailed}</span>`;
       const last = allData[allData.length - 1];
-      const d = new Date(last.timestamp);
-      document.getElementById('lastRun').textContent = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      document.getElementById('lastRun').textContent = new Date(last.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
       const sel = document.getElementById('filterAsset');
       for (const c of [...coins].sort()) {
@@ -94,13 +124,49 @@
         sel.appendChild(o);
       }
 
-      render();
-      document.getElementById('filterAsset').addEventListener('change', render);
-      document.getElementById('filterStatus').addEventListener('change', render);
-      document.getElementById('filterType').addEventListener('change', render);
+      drawAllocation(notionalByCoin, totalSpent);
+      renderTable();
+      document.getElementById('filterAsset').addEventListener('change', renderTable);
+      document.getElementById('filterStatus').addEventListener('change', renderTable);
+      document.getElementById('filterType').addEventListener('change', renderTable);
     }
 
-    function render() {
+    function drawAllocation(byCoin, total) {
+      const sorted = Object.entries(byCoin).sort((a, b) => b[1] - a[1]);
+      document.getElementById('allocTotal').textContent = `$${total.toFixed(0)}`;
+
+      const canvas = document.getElementById('pieChart');
+      const ctx = canvas.getContext('2d');
+      const cx = 110, cy = 110, r = 90, inner = 60;
+      ctx.clearRect(0, 0, 220, 220);
+
+      let startAngle = -Math.PI / 2;
+      const legend = document.getElementById('allocLegend');
+      legend.innerHTML = '';
+
+      sorted.forEach(([coin, val], i) => {
+        const pct = total > 0 ? val / total : 0;
+        const sweep = pct * 2 * Math.PI;
+        const color = COLORS[i % COLORS.length];
+
+        ctx.beginPath();
+        ctx.moveTo(cx + inner * Math.cos(startAngle), cy + inner * Math.sin(startAngle));
+        ctx.arc(cx, cy, r, startAngle, startAngle + sweep);
+        ctx.arc(cx, cy, inner, startAngle + sweep, startAngle, true);
+        ctx.closePath();
+        ctx.fillStyle = color;
+        ctx.fill();
+
+        startAngle += sweep;
+
+        const row = document.createElement('div');
+        row.className = 'alloc-row';
+        row.innerHTML = `<div class="alloc-dot" style="background:${color}"></div><div class="alloc-name">${coin}</div><div class="alloc-val">$${val.toFixed(0)}</div><div class="alloc-pct">${(pct * 100).toFixed(1)}%</div>`;
+        legend.appendChild(row);
+      });
+    }
+
+    function renderTable() {
       const fAsset = document.getElementById('filterAsset').value;
       const fStatus = document.getElementById('filterStatus').value;
       const fType = document.getElementById('filterType').value;
@@ -138,10 +204,7 @@
         }
       }
       html += '</tbody></table>';
-
-      if (runs.length === 0 || html.includes('<tbody></tbody>')) {
-        html = '<div class="empty">No matching trades</div>';
-      }
+      if (runs.length === 0 || html.includes('<tbody></tbody>')) html = '<div class="empty">No matching trades</div>';
       document.getElementById('content').innerHTML = html;
     }
 
