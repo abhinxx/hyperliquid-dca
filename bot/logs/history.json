@@ -233,5 +233,62 @@
       }
     ],
     "usdc_balance_after": 3723.38
+  },
+  {
+    "timestamp": "2026-03-31T07:26:49.606684+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3735.6,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00067",
+        "price": "67151.0",
+        "notional": 44.99
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "1.23",
+        "price": "36.439",
+        "notional": 44.82
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "filled",
+        "size": "0.807",
+        "price": "55.773",
+        "notional": 45.01
+      },
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.62",
+        "price": "71.918",
+        "notional": 44.59
+      },
+      {
+        "coin": "xyz:CRCL",
+        "status": "filled",
+        "size": "0.496",
+        "price": "90.559",
+        "notional": 44.92
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.084",
+        "price": "530.41",
+        "notional": 44.55
+      },
+      {
+        "coin": "vntl:ENERGY",
+        "status": "filled",
+        "size": "0.72",
+        "price": "62.448",
+        "notional": 44.96
+      }
+    ],
+    "usdc_balance_after": 3705.74
   }
 ]
