@@ -290,5 +290,22 @@
       }
     ],
     "usdc_balance_after": 3705.74
+  },
+  {
+    "timestamp": "2026-03-31T17:14:22.741652+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3748.36,
+    "trades": [
+      {
+        "coin": "vntl:ENERGY",
+        "status": "filled",
+        "size": "0.74",
+        "price": "60.568",
+        "notional": 44.82,
+        "ref_price": 62.448,
+        "drop_pct": 0.0301
+      }
+    ],
+    "usdc_balance_after": 3733.36
   }
 ]
