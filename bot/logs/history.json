@@ -381,5 +381,22 @@
       }
     ],
     "usdc_balance_after": 3517.14
+  },
+  {
+    "timestamp": "2026-04-01T18:04:53.468121+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3497.32,
+    "trades": [
+      {
+        "coin": "xyz:CRCL",
+        "status": "filled",
+        "size": "0.492",
+        "price": "91.374",
+        "notional": 44.96,
+        "ref_price": 98.2,
+        "drop_pct": 0.0701
+      }
+    ],
+    "usdc_balance_after": 3497.42
   }
 ]
