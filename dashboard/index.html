@@ -46,7 +46,7 @@
 </head>
 <body>
   <h1>Hyperliquid DCA Dashboard</h1>
-  <div class="subtitle">Daily $15/asset, 3x leverage, 7 assets</div>
+  <div class="subtitle">Smart DCA — $15/asset, 3x leverage, 7 assets | buys on dips, deadline at 19:00 UTC</div>
 
   <div class="cards">
     <div class="card"><div class="card-label">Total Runs</div><div class="card-value" id="totalRuns">—</div></div>
@@ -253,14 +253,13 @@
     function updateCountdown() {
       const now = new Date();
       const next = new Date(now);
-      next.setUTCHours(6, 0, 0, 0);
-      if (now >= next) next.setUTCDate(next.getUTCDate() + 1);
+      next.setUTCMinutes(45, 0, 0);
+      if (now >= next) next.setUTCHours(next.getUTCHours() + 1);
       const diff = next - now;
-      const h = Math.floor(diff / 3600000);
-      const m = Math.floor((diff % 3600000) / 60000);
+      const m = Math.floor(diff / 60000);
       const s = Math.floor((diff % 60000) / 1000);
       const pad = n => String(n).padStart(2, '0');
-      document.getElementById('nextRun').textContent = `${pad(h)}h ${pad(m)}m ${pad(s)}s`;
+      document.getElementById('nextRun').textContent = `${pad(m)}m ${pad(s)}s`;
     }
 
     load();
