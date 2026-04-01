@@ -9,57 +9,70 @@
     body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #0d1117; color: #c9d1d9; padding: 24px; max-width: 1200px; margin: 0 auto; }
     h1 { font-size: 1.4rem; margin-bottom: 4px; }
     .subtitle { color: #8b949e; font-size: 0.85rem; margin-bottom: 20px; }
-    .cards { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
-    .card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 16px 20px; min-width: 180px; flex: 1; }
-    .card-label { color: #8b949e; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
-    .card-value { font-size: 1.3rem; font-weight: 600; }
+    .cards { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
+    .card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 14px 18px; min-width: 150px; flex: 1; }
+    .card-label { color: #8b949e; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .card-value { font-size: 1.2rem; font-weight: 600; }
     .positive { color: #3fb950; }
     .negative { color: #f85149; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-bottom: 24px; }
-    th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid #21262d; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-bottom: 20px; }
+    th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid #21262d; }
     th { color: #8b949e; font-weight: 600; position: sticky; top: 0; background: #0d1117; }
     tr:hover { background: #161b22; }
     .status-filled { color: #3fb950; font-weight: 600; }
     .status-error { color: #f85149; font-weight: 600; }
-    .filter-bar { margin-bottom: 16px; display: flex; gap: 12px; align-items: center; }
-    .filter-bar select { background: #161b22; border: 1px solid #21262d; color: #c9d1d9; padding: 6px 12px; border-radius: 6px; font-size: 0.82rem; }
-    .empty { text-align: center; padding: 60px; color: #484f58; }
+    .filter-bar { margin-bottom: 12px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .filter-bar select { background: #161b22; border: 1px solid #21262d; color: #c9d1d9; padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; }
+    .empty { text-align: center; padding: 40px; color: #484f58; }
     .run-header { background: #161b22; font-weight: 600; }
-    .run-header td { border-bottom: 2px solid #30363d; padding: 10px 12px; }
-    .tag-dca { display: inline-block; background: #1f6feb33; color: #58a6ff; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
-    .tag-dip { display: inline-block; background: #d2992233; color: #d29922; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 600; }
-    .alloc-section { display: flex; gap: 32px; margin-bottom: 32px; align-items: center; flex-wrap: wrap; }
-    .alloc-chart { position: relative; width: 220px; height: 220px; flex-shrink: 0; }
-    .alloc-chart canvas { width: 220px; height: 220px; }
+    .run-header td { border-bottom: 2px solid #30363d; padding: 8px 10px; }
+    .tag-dca { display: inline-block; background: #1f6feb33; color: #58a6ff; padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; }
+    .tag-dip { display: inline-block; background: #d2992233; color: #d29922; padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; }
+    .tag-deadline { display: inline-block; background: #484f5833; color: #8b949e; padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; }
+    .tag-target { display: inline-block; background: #3fb95022; color: #3fb950; padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; }
+    .tag-first { display: inline-block; background: #bc8cff22; color: #bc8cff; padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 600; }
+    .alloc-section { display: flex; gap: 32px; margin-bottom: 24px; align-items: center; flex-wrap: wrap; }
+    .alloc-chart { position: relative; width: 200px; height: 200px; flex-shrink: 0; }
+    .alloc-chart canvas { width: 200px; height: 200px; }
     .alloc-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
-    .alloc-center .amount { font-size: 1.2rem; font-weight: 700; }
-    .alloc-center .label { font-size: 0.7rem; color: #8b949e; }
-    .alloc-legend { display: flex; flex-direction: column; gap: 6px; }
-    .alloc-row { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; }
-    .alloc-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
-    .alloc-name { min-width: 100px; }
-    .alloc-val { color: #8b949e; min-width: 70px; text-align: right; }
-    .alloc-pct { font-weight: 600; min-width: 45px; text-align: right; }
-    section { margin-bottom: 8px; }
-    section h2 { font-size: 1rem; margin-bottom: 12px; border-bottom: 1px solid #21262d; padding-bottom: 6px; color: #8b949e; font-weight: 600; }
+    .alloc-center .amount { font-size: 1.1rem; font-weight: 700; }
+    .alloc-center .label { font-size: 0.68rem; color: #8b949e; }
+    .alloc-legend { display: flex; flex-direction: column; gap: 5px; }
+    .alloc-row { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; }
+    .alloc-dot { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+    .alloc-name { min-width: 90px; }
+    .alloc-val { color: #8b949e; min-width: 60px; text-align: right; }
+    .alloc-pct { font-weight: 600; min-width: 42px; text-align: right; }
+    section { margin-bottom: 24px; }
+    section h2 { font-size: 0.95rem; margin-bottom: 10px; border-bottom: 1px solid #21262d; padding-bottom: 6px; color: #8b949e; font-weight: 600; }
+    .hunt-waiting { color: #d29922; }
+    .hunt-bought { color: #3fb950; }
+    .hunt-progress { background: #21262d; border-radius: 4px; height: 6px; width: 80px; display: inline-block; overflow: hidden; vertical-align: middle; margin-left: 6px; }
+    .hunt-progress-bar { height: 100%; border-radius: 4px; }
   </style>
 </head>
 <body>
   <h1>Hyperliquid DCA Dashboard</h1>
-  <div class="subtitle">Smart DCA — $15/asset, 3x leverage, 7 assets | buys on dips, deadline at 19:00 UTC</div>
+  <div class="subtitle">Smart DCA — $15/asset, 3x leverage | buys on dips within 24h window, deadline 19:00 UTC</div>
 
   <div class="cards">
     <div class="card"><div class="card-label">Total Runs</div><div class="card-value" id="totalRuns">—</div></div>
-    <div class="card"><div class="card-label">Total Invested</div><div class="card-value" id="totalInvested">—</div></div>
+    <div class="card"><div class="card-label">Total Notional</div><div class="card-value" id="totalInvested">—</div></div>
     <div class="card"><div class="card-label">Filled / Failed</div><div class="card-value" id="filledFailed">—</div></div>
-    <div class="card"><div class="card-label">Last Run</div><div class="card-value" id="lastRun">—</div></div>
-    <div class="card"><div class="card-label">Next Auto Trade</div><div class="card-value" id="nextRun">—</div></div>
+    <div class="card"><div class="card-label">Last Trade</div><div class="card-value" id="lastRun">—</div></div>
+    <div class="card"><div class="card-label">Next Check</div><div class="card-value" id="nextRun">—</div></div>
+    <div class="card"><div class="card-label">Deadline In</div><div class="card-value" id="deadlineIn">—</div></div>
   </div>
 
   <section>
-    <h2>Portfolio Allocation</h2>
+    <h2>Live Dip Hunting — Current Window</h2>
+    <div id="huntStatus"><div class="empty">Loading live prices...</div></div>
+  </section>
+
+  <section>
+    <h2>Portfolio Allocation (Live)</h2>
     <div class="alloc-section">
-      <div class="alloc-chart"><canvas id="pieChart" width="220" height="220"></canvas><div class="alloc-center"><div class="amount" id="allocTotal">—</div><div class="label">live positions</div></div></div>
+      <div class="alloc-chart"><canvas id="pieChart" width="200" height="200"></canvas><div class="alloc-center"><div class="amount" id="allocTotal">—</div><div class="label">live positions</div></div></div>
       <div class="alloc-legend" id="allocLegend"></div>
     </div>
   </section>
@@ -77,11 +90,16 @@
   <script>
     const REPO = 'abhinxx/hyperliquid-dca';
     const HISTORY_URL = `https://raw.githubusercontent.com/${REPO}/main/bot/logs/history.json?t=${Date.now()}`;
+    const CONFIG_URL = `https://raw.githubusercontent.com/${REPO}/main/bot/config.json?t=${Date.now()}`;
     const HL_API = 'https://api.hyperliquid.xyz/info';
     const WALLET = '0x8256E29428Ff7b448a9B636151d9e73788459e83';
     const DEXES = ['', 'xyz', 'vntl'];
     const COLORS = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#f778ba', '#79c0ff', '#ffa657', '#7ee787', '#d2a8ff'];
+    const WINDOW_START_HOUR = 20;
+    const DEADLINE_HOUR = 19;
+
     let allData = [];
+    let config = null;
 
     async function hlPost(body) {
       const res = await fetch(HL_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
@@ -99,34 +117,105 @@
             const p = ap.position;
             const szi = parseFloat(p.szi);
             if (szi === 0) continue;
-            positions.push({
-              coin: p.coin,
-              direction: szi >= 0 ? 'Long' : 'Short',
-              size: Math.abs(szi),
-              entryPx: parseFloat(p.entryPx),
-              positionValue: parseFloat(p.positionValue),
-              unrealizedPnl: parseFloat(p.unrealizedPnl),
-              leverage: p.leverage,
-              marginUsed: parseFloat(p.marginUsed || 0),
-            });
+            positions.push({ coin: p.coin, direction: szi >= 0 ? 'Long' : 'Short', size: Math.abs(szi),
+              entryPx: parseFloat(p.entryPx), positionValue: parseFloat(p.positionValue),
+              unrealizedPnl: parseFloat(p.unrealizedPnl), leverage: p.leverage, marginUsed: parseFloat(p.marginUsed || 0) });
           }
-        } catch (e) { /* skip failed dex */ }
+        } catch (e) {}
       }
       return positions;
     }
 
+    function getWindowStart(now) {
+      const ws = new Date(now);
+      ws.setUTCHours(WINDOW_START_HOUR, 0, 0, 0);
+      if (now < ws) ws.setUTCDate(ws.getUTCDate() - 1);
+      return ws;
+    }
+
+    function lastEntryPrice(coin) {
+      for (let i = allData.length - 1; i >= 0; i--) {
+        for (const t of (allData[i].trades || [])) {
+          if (t.coin === coin && t.status === 'filled' && t.price) return parseFloat(t.price);
+        }
+      }
+      return null;
+    }
+
+    function boughtInWindow(coin, windowStart) {
+      for (let i = allData.length - 1; i >= 0; i--) {
+        const run = allData[i];
+        if (run.type !== 'dca') continue;
+        const rt = new Date(run.timestamp);
+        if (rt < windowStart) break;
+        for (const t of (run.trades || [])) {
+          if (t.coin === coin && t.status === 'filled') return t;
+        }
+      }
+      return null;
+    }
+
+    async function renderHuntStatus() {
+      if (!config || !allData) return;
+      const now = new Date();
+      const windowStart = getWindowStart(now);
+
+      const midsNative = await hlPost({ type: 'allMids' });
+      const midsXyz = await hlPost({ type: 'allMids', dex: 'xyz' });
+      const midsVntl = await hlPost({ type: 'allMids', dex: 'vntl' });
+      const allMids = { ...midsNative, ...midsXyz, ...midsVntl };
+
+      let html = '<table><thead><tr><th>Asset</th><th>Status</th><th>Last Buy</th><th>Target</th><th>Current</th><th>Distance</th><th>Progress</th></tr></thead><tbody>';
+
+      for (const asset of config.assets) {
+        const coin = asset.coin;
+        const threshold = asset.intraday_drop || 0.03;
+        const bought = boughtInWindow(coin, windowStart);
+        const refPrice = lastEntryPrice(coin);
+        const current = parseFloat(allMids[coin] || 0);
+
+        if (bought) {
+          const trigger = bought.trigger || 'DCA';
+          const tCls = trigger === 'DIP_TARGET' ? 'tag-target' : trigger === 'DEADLINE' ? 'tag-deadline' : 'tag-first';
+          html += `<tr><td>${coin}</td><td><span class="hunt-bought">BOUGHT</span></td>`;
+          html += `<td>$${parseFloat(bought.price).toLocaleString()}</td><td>—</td>`;
+          html += `<td>$${current.toLocaleString()}</td>`;
+          html += `<td><span class="${tCls}">${trigger}</span></td><td>—</td></tr>`;
+        } else if (refPrice && current) {
+          const target = refPrice * (1 - threshold);
+          const drop = (refPrice - current) / refPrice;
+          const progress = Math.min(drop / threshold, 1);
+          const pctDone = (progress * 100).toFixed(0);
+          const barColor = progress >= 1 ? '#3fb950' : progress > 0.7 ? '#d29922' : '#484f58';
+          html += `<tr><td>${coin}</td><td><span class="hunt-waiting">HUNTING</span></td>`;
+          html += `<td>$${refPrice.toLocaleString()}</td>`;
+          html += `<td>$${target.toLocaleString()}</td>`;
+          html += `<td>$${current.toLocaleString()}</td>`;
+          html += `<td>${drop >= 0 ? '-' : '+'}${Math.abs(drop * 100).toFixed(2)}% / ${(threshold * 100).toFixed(1)}%</td>`;
+          html += `<td><div class="hunt-progress"><div class="hunt-progress-bar" style="width:${pctDone}%;background:${barColor}"></div></div> ${pctDone}%</td></tr>`;
+        } else {
+          html += `<tr><td>${coin}</td><td><span class="tag-first">FIRST ENTRY</span></td>`;
+          html += `<td>—</td><td>—</td><td>${current ? '$' + current.toLocaleString() : '—'}</td><td>—</td><td>—</td></tr>`;
+        }
+      }
+      html += '</tbody></table>';
+      document.getElementById('huntStatus').innerHTML = html;
+    }
+
     async function load() {
-      const [historyResult, positions] = await Promise.all([
+      const [historyResult, positions, configResult] = await Promise.all([
         fetch(HISTORY_URL).then(r => r.ok ? r.json() : []).catch(() => []),
         fetchLivePositions(),
+        fetch(CONFIG_URL).then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
       allData = historyResult;
+      config = configResult;
 
-      // Draw live allocation from API positions
       drawAllocation(positions);
+      renderHuntStatus();
 
       if (!allData.length) {
-        document.getElementById('content').innerHTML = '<div class="empty">No trades yet — waiting for first DCA run</div>';
+        document.getElementById('content').innerHTML = '<div class="empty">No trades yet</div>';
         return;
       }
 
@@ -148,9 +237,7 @@
 
       const sel = document.getElementById('filterAsset');
       for (const c of [...coins].sort()) {
-        const o = document.createElement('option');
-        o.value = c; o.textContent = c;
-        sel.appendChild(o);
+        const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o);
       }
 
       renderTable();
@@ -160,50 +247,30 @@
     }
 
     function drawAllocation(positions) {
-      if (!positions.length) {
-        document.getElementById('allocLegend').innerHTML = '<div style="color:#484f58">No open positions</div>';
-        return;
-      }
-
+      if (!positions.length) { document.getElementById('allocLegend').innerHTML = '<div style="color:#484f58">No open positions</div>'; return; }
       const sorted = positions.sort((a, b) => b.positionValue - a.positionValue);
       const total = sorted.reduce((s, p) => s + p.positionValue, 0);
       const totalPnl = sorted.reduce((s, p) => s + p.unrealizedPnl, 0);
       const pnlCls = totalPnl >= 0 ? 'positive' : 'negative';
-
-      document.getElementById('allocTotal').innerHTML = `$${total.toFixed(0)}<div class="label ${pnlCls}" style="font-size:0.75rem;font-weight:600">${totalPnl >= 0 ? '+' : ''}$${totalPnl.toFixed(2)}</div>`;
-
+      document.getElementById('allocTotal').innerHTML = `$${total.toFixed(0)}<div class="label ${pnlCls}" style="font-size:0.72rem;font-weight:600">${totalPnl >= 0 ? '+' : ''}$${totalPnl.toFixed(2)}</div>`;
       const canvas = document.getElementById('pieChart');
       const ctx = canvas.getContext('2d');
-      const cx = 110, cy = 110, r = 90, inner = 60;
-      ctx.clearRect(0, 0, 220, 220);
-
+      const cx = 100, cy = 100, r = 85, inner = 55;
+      ctx.clearRect(0, 0, 200, 200);
       let startAngle = -Math.PI / 2;
       const legend = document.getElementById('allocLegend');
       legend.innerHTML = '';
-
       sorted.forEach((pos, i) => {
         const pct = total > 0 ? pos.positionValue / total : 0;
         const sweep = pct * 2 * Math.PI;
         const color = COLORS[i % COLORS.length];
-
-        ctx.beginPath();
-        ctx.moveTo(cx + inner * Math.cos(startAngle), cy + inner * Math.sin(startAngle));
-        ctx.arc(cx, cy, r, startAngle, startAngle + sweep);
-        ctx.arc(cx, cy, inner, startAngle + sweep, startAngle, true);
-        ctx.closePath();
-        ctx.fillStyle = color;
-        ctx.fill();
-        startAngle += sweep;
-
+        ctx.beginPath(); ctx.moveTo(cx + inner * Math.cos(startAngle), cy + inner * Math.sin(startAngle));
+        ctx.arc(cx, cy, r, startAngle, startAngle + sweep); ctx.arc(cx, cy, inner, startAngle + sweep, startAngle, true);
+        ctx.closePath(); ctx.fillStyle = color; ctx.fill(); startAngle += sweep;
         const pnlSign = pos.unrealizedPnl >= 0 ? '+' : '';
         const pnlColor = pos.unrealizedPnl >= 0 ? '#3fb950' : '#f85149';
-        const row = document.createElement('div');
-        row.className = 'alloc-row';
-        row.innerHTML = `<div class="alloc-dot" style="background:${color}"></div>`
-          + `<div class="alloc-name">${pos.coin}</div>`
-          + `<div class="alloc-val">$${pos.positionValue.toFixed(0)}</div>`
-          + `<div class="alloc-pct">${(pct * 100).toFixed(1)}%</div>`
-          + `<div style="min-width:65px;text-align:right;font-size:0.78rem;color:${pnlColor}">${pnlSign}$${pos.unrealizedPnl.toFixed(2)}</div>`;
+        const row = document.createElement('div'); row.className = 'alloc-row';
+        row.innerHTML = `<div class="alloc-dot" style="background:${color}"></div><div class="alloc-name">${pos.coin}</div><div class="alloc-val">$${pos.positionValue.toFixed(0)}</div><div class="alloc-pct">${(pct * 100).toFixed(1)}%</div><div style="min-width:60px;text-align:right;font-size:0.75rem;color:${pnlColor}">${pnlSign}$${pos.unrealizedPnl.toFixed(2)}</div>`;
         legend.appendChild(row);
       });
     }
@@ -212,9 +279,7 @@
       const fAsset = document.getElementById('filterAsset').value;
       const fStatus = document.getElementById('filterStatus').value;
       const fType = document.getElementById('filterType').value;
-
-      let html = '<table><thead><tr><th>Date</th><th>Type</th><th>Asset</th><th>Status</th><th>Size</th><th>Price</th><th>Notional</th><th>Drop</th><th>Error</th></tr></thead><tbody>';
-
+      let html = '<table><thead><tr><th>Date</th><th>Type</th><th>Trigger</th><th>Asset</th><th>Status</th><th>Size</th><th>Price</th><th>Notional</th><th>Ref Price</th><th>Drop</th><th>Error</th></tr></thead><tbody>';
       const runs = [...allData].reverse();
       for (const run of runs) {
         const runType = run.type || 'dca';
@@ -226,22 +291,26 @@
           return true;
         });
         if (!trades.length) continue;
-
-        const tag = runType === 'dip' ? '<span class="tag-dip">DIP</span>' : '<span class="tag-dca">DCA</span>';
-        html += `<tr class="run-header"><td colspan="9">${tag} ${ts} — USDC: $${run.usdc_balance_before ?? '?'} → $${run.usdc_balance_after ?? '?'}</td></tr>`;
+        const typeTag = runType === 'dip' ? '<span class="tag-dip">DIP</span>' : '<span class="tag-dca">DCA</span>';
+        html += `<tr class="run-header"><td colspan="11">${typeTag} ${ts} — USDC: $${run.usdc_balance_before ?? '?'} → $${run.usdc_balance_after ?? '?'}</td></tr>`;
         for (const t of trades) {
           const cls = t.status === 'filled' ? 'status-filled' : 'status-error';
-          const dd = t.drop_pct ? `-${(t.drop_pct * 100).toFixed(1)}%` : t.drawdown ? `${(t.drawdown * 100).toFixed(1)}%` : '—';
+          const trigger = t.trigger || '—';
+          const trigCls = trigger === 'DIP_TARGET' ? 'tag-target' : trigger === 'DEADLINE' ? 'tag-deadline' : trigger === 'FIRST' ? 'tag-first' : 'tag-dca';
+          const dd = t.drop_pct ? `-${(t.drop_pct * 100).toFixed(1)}%` : '—';
+          const ref = t.ref_price ? '$' + parseFloat(t.ref_price).toLocaleString() : '—';
           html += '<tr>';
           html += `<td>${ts}</td>`;
-          html += `<td>${tag}</td>`;
+          html += `<td>${typeTag}</td>`;
+          html += `<td><span class="${trigCls}">${trigger}</span></td>`;
           html += `<td>${t.coin}</td>`;
           html += `<td class="${cls}">${t.status}</td>`;
           html += `<td>${t.size || '—'}</td>`;
           html += `<td>${t.price ? '$' + parseFloat(t.price).toLocaleString() : '—'}</td>`;
           html += `<td>${t.notional ? '$' + t.notional : '—'}</td>`;
+          html += `<td>${ref}</td>`;
           html += `<td>${dd}</td>`;
-          html += `<td style="color:#f85149;font-size:0.75rem">${t.error || ''}</td>`;
+          html += `<td style="color:#f85149;font-size:0.72rem">${t.error || ''}</td>`;
           html += '</tr>';
         }
       }
@@ -250,21 +319,26 @@
       document.getElementById('content').innerHTML = html;
     }
 
-    function updateCountdown() {
+    function updateTimers() {
       const now = new Date();
-      const next = new Date(now);
-      next.setUTCMinutes(45, 0, 0);
+      // Next check (:45 past)
+      const next = new Date(now); next.setUTCMinutes(45, 0, 0);
       if (now >= next) next.setUTCHours(next.getUTCHours() + 1);
-      const diff = next - now;
-      const m = Math.floor(diff / 60000);
-      const s = Math.floor((diff % 60000) / 1000);
-      const pad = n => String(n).padStart(2, '0');
-      document.getElementById('nextRun').textContent = `${pad(m)}m ${pad(s)}s`;
+      const checkDiff = next - now;
+      const cm = Math.floor(checkDiff / 60000), cs = Math.floor((checkDiff % 60000) / 1000);
+      document.getElementById('nextRun').textContent = `${String(cm).padStart(2,'0')}m ${String(cs).padStart(2,'0')}s`;
+      // Deadline countdown
+      const dl = new Date(now); dl.setUTCHours(DEADLINE_HOUR, 0, 0, 0);
+      if (now >= dl) dl.setUTCDate(dl.getUTCDate() + 1);
+      const dlDiff = dl - now;
+      const dh = Math.floor(dlDiff / 3600000), dm = Math.floor((dlDiff % 3600000) / 60000);
+      document.getElementById('deadlineIn').textContent = `${String(dh).padStart(2,'0')}h ${String(dm).padStart(2,'0')}m`;
     }
 
     load();
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
+    updateTimers();
+    setInterval(updateTimers, 1000);
+    setInterval(renderHuntStatus, 60000);
   </script>
 </body>
 </html>
