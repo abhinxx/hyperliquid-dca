@@ -444,5 +444,33 @@
       }
     ],
     "usdc_balance_after": 3415.75
+  },
+  {
+    "timestamp": "2026-04-02T05:23:20.456666+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3402.91,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00067",
+        "price": "66431.0",
+        "notional": 44.51,
+        "trigger": "DIP_TARGET",
+        "ref_price": 68824.0,
+        "drop_pct": 0.0348
+      },
+      {
+        "coin": "xyz:CRCL",
+        "status": "filled",
+        "size": "0.507",
+        "price": "88.692",
+        "notional": 44.97,
+        "trigger": "DIP_TARGET",
+        "ref_price": 91.374,
+        "drop_pct": 0.0304
+      }
+    ],
+    "usdc_balance_after": 3403.07
   }
 ]
