@@ -10,7 +10,7 @@
     h1 { font-size: 1.4rem; margin-bottom: 4px; }
     .subtitle { color: #8b949e; font-size: 0.85rem; margin-bottom: 20px; }
     .cards { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
-    .card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 14px 18px; min-width: 150px; flex: 1; }
+    .card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 14px 18px; min-width: 140px; flex: 1; }
     .card-label { color: #8b949e; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
     .card-value { font-size: 1.2rem; font-weight: 600; }
     .positive { color: #3fb950; }
@@ -45,34 +45,32 @@
     .alloc-pct { font-weight: 600; min-width: 42px; text-align: right; }
     section { margin-bottom: 24px; }
     section h2 { font-size: 0.95rem; margin-bottom: 10px; border-bottom: 1px solid #21262d; padding-bottom: 6px; color: #8b949e; font-weight: 600; }
-    .hunt-waiting { color: #d29922; }
-    .hunt-bought { color: #3fb950; }
-    .hunt-progress { background: #21262d; border-radius: 4px; height: 6px; width: 80px; display: inline-block; overflow: hidden; vertical-align: middle; margin-left: 6px; }
-    .hunt-progress-bar { height: 100%; border-radius: 4px; }
+    .hunt-waiting { color: #d29922; font-weight: 600; }
+    .hunt-done { color: #3fb950; font-weight: 600; }
   </style>
 </head>
 <body>
   <h1>Hyperliquid DCA Dashboard</h1>
-  <div class="subtitle">Smart DCA — $15/asset, 3x leverage | buys on dips within 24h window, deadline 19:00 UTC</div>
+  <div class="subtitle">Smart DCA — $15 margin/asset, 3x leverage | buys on dips, deadline 19:00 UTC</div>
 
   <div class="cards">
-    <div class="card"><div class="card-label">Total Runs</div><div class="card-value" id="totalRuns">—</div></div>
-    <div class="card"><div class="card-label">Total Notional</div><div class="card-value" id="totalInvested">—</div></div>
-    <div class="card"><div class="card-label">Filled / Failed</div><div class="card-value" id="filledFailed">—</div></div>
+    <div class="card"><div class="card-label">Margin Invested</div><div class="card-value" id="marginInvested">—</div></div>
+    <div class="card"><div class="card-label">Total Notional</div><div class="card-value" id="totalNotional">—</div></div>
+    <div class="card"><div class="card-label">Trades</div><div class="card-value" id="filledFailed">—</div></div>
     <div class="card"><div class="card-label">Last Trade</div><div class="card-value" id="lastRun">—</div></div>
     <div class="card"><div class="card-label">Next Check</div><div class="card-value" id="nextRun">—</div></div>
-    <div class="card"><div class="card-label">Deadline In</div><div class="card-value" id="deadlineIn">—</div></div>
+    <div class="card"><div class="card-label">Deadline</div><div class="card-value" id="deadlineIn">—</div></div>
   </div>
 
   <section>
-    <h2>Live Dip Hunting — Current Window</h2>
-    <div id="huntStatus"><div class="empty">Loading live prices...</div></div>
+    <h2>Dip Hunting — Current 24h Window</h2>
+    <div id="huntStatus"><div class="empty">Loading...</div></div>
   </section>
 
   <section>
-    <h2>Portfolio Allocation (Live)</h2>
+    <h2>Portfolio (Live)</h2>
     <div class="alloc-section">
-      <div class="alloc-chart"><canvas id="pieChart" width="200" height="200"></canvas><div class="alloc-center"><div class="amount" id="allocTotal">—</div><div class="label">live positions</div></div></div>
+      <div class="alloc-chart"><canvas id="pieChart" width="200" height="200"></canvas><div class="alloc-center"><div class="amount" id="allocTotal">—</div><div class="label">live notional</div></div></div>
       <div class="alloc-legend" id="allocLegend"></div>
     </div>
   </section>
@@ -81,8 +79,8 @@
     <h2>Trade History</h2>
     <div class="filter-bar">
       <select id="filterAsset"><option value="">All Assets</option></select>
-      <select id="filterStatus"><option value="">All Statuses</option><option value="filled">Filled</option><option value="error">Error</option></select>
-      <select id="filterType"><option value="">All Types</option><option value="dca">DCA</option><option value="dip">Dip Buy</option></select>
+      <select id="filterStatus"><option value="">All</option><option value="filled">Filled</option><option value="error">Error</option></select>
+      <select id="filterType"><option value="">All</option><option value="dca">DCA</option><option value="dip">Dip Buy</option></select>
     </div>
     <div id="content"><div class="empty">Loading...</div></div>
   </section>
@@ -97,13 +95,10 @@
     const COLORS = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#f778ba', '#79c0ff', '#ffa657', '#7ee787', '#d2a8ff'];
     const WINDOW_START_HOUR = 20;
     const DEADLINE_HOUR = 19;
-
-    let allData = [];
-    let config = null;
+    let allData = [], config = null;
 
     async function hlPost(body) {
-      const res = await fetch(HL_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-      return res.json();
+      return fetch(HL_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(r => r.json());
     }
 
     async function fetchLivePositions() {
@@ -114,12 +109,9 @@
         try {
           const state = await hlPost(body);
           for (const ap of (state.assetPositions || [])) {
-            const p = ap.position;
-            const szi = parseFloat(p.szi);
-            if (szi === 0) continue;
-            positions.push({ coin: p.coin, direction: szi >= 0 ? 'Long' : 'Short', size: Math.abs(szi),
-              entryPx: parseFloat(p.entryPx), positionValue: parseFloat(p.positionValue),
-              unrealizedPnl: parseFloat(p.unrealizedPnl), leverage: p.leverage, marginUsed: parseFloat(p.marginUsed || 0) });
+            const p = ap.position; const szi = parseFloat(p.szi); if (szi === 0) continue;
+            positions.push({ coin: p.coin, size: Math.abs(szi), entryPx: parseFloat(p.entryPx),
+              positionValue: parseFloat(p.positionValue), unrealizedPnl: parseFloat(p.unrealizedPnl), marginUsed: parseFloat(p.marginUsed || 0) });
           }
         } catch (e) {}
       }
@@ -127,30 +119,24 @@
     }
 
     function getWindowStart(now) {
-      const ws = new Date(now);
-      ws.setUTCHours(WINDOW_START_HOUR, 0, 0, 0);
+      const ws = new Date(now); ws.setUTCHours(WINDOW_START_HOUR, 0, 0, 0);
       if (now < ws) ws.setUTCDate(ws.getUTCDate() - 1);
       return ws;
     }
 
     function lastEntryPrice(coin) {
-      for (let i = allData.length - 1; i >= 0; i--) {
-        for (const t of (allData[i].trades || [])) {
+      for (let i = allData.length - 1; i >= 0; i--)
+        for (const t of (allData[i].trades || []))
           if (t.coin === coin && t.status === 'filled' && t.price) return parseFloat(t.price);
-        }
-      }
       return null;
     }
 
     function boughtInWindow(coin, windowStart) {
       for (let i = allData.length - 1; i >= 0; i--) {
-        const run = allData[i];
-        if (run.type !== 'dca') continue;
-        const rt = new Date(run.timestamp);
-        if (rt < windowStart) break;
-        for (const t of (run.trades || [])) {
+        const run = allData[i]; if (run.type !== 'dca') continue;
+        if (new Date(run.timestamp) < windowStart) break;
+        for (const t of (run.trades || []))
           if (t.coin === coin && t.status === 'filled') return t;
-        }
       }
       return null;
     }
@@ -159,14 +145,10 @@
       if (!config || !allData) return;
       const now = new Date();
       const windowStart = getWindowStart(now);
+      const [mN, mX, mV] = await Promise.all([hlPost({type:'allMids'}), hlPost({type:'allMids',dex:'xyz'}), hlPost({type:'allMids',dex:'vntl'})]);
+      const allMids = { ...mN, ...mX, ...mV };
 
-      const midsNative = await hlPost({ type: 'allMids' });
-      const midsXyz = await hlPost({ type: 'allMids', dex: 'xyz' });
-      const midsVntl = await hlPost({ type: 'allMids', dex: 'vntl' });
-      const allMids = { ...midsNative, ...midsXyz, ...midsVntl };
-
-      let html = '<table><thead><tr><th>Asset</th><th>Status</th><th>Last Buy</th><th>Target</th><th>Current</th><th>Distance</th><th>Progress</th></tr></thead><tbody>';
-
+      let html = '<table><thead><tr><th>Asset</th><th>Status</th><th>Threshold</th><th>Buy Target</th><th>Current Price</th></tr></thead><tbody>';
       for (const asset of config.assets) {
         const coin = asset.coin;
         const threshold = asset.intraday_drop || 0.03;
@@ -175,27 +157,20 @@
         const current = parseFloat(allMids[coin] || 0);
 
         if (bought) {
-          const trigger = bought.trigger || 'DCA';
-          const tCls = trigger === 'DIP_TARGET' ? 'tag-target' : trigger === 'DEADLINE' ? 'tag-deadline' : 'tag-first';
-          html += `<tr><td>${coin}</td><td><span class="hunt-bought">BOUGHT</span></td>`;
-          html += `<td>$${parseFloat(bought.price).toLocaleString()}</td><td>—</td>`;
-          html += `<td>$${current.toLocaleString()}</td>`;
-          html += `<td><span class="${tCls}">${trigger}</span></td><td>—</td></tr>`;
+          html += `<tr><td>${coin}</td><td><span class="hunt-done">DONE</span></td>`;
+          html += `<td>${(threshold*100).toFixed(1)}%</td>`;
+          html += `<td>—</td>`;
+          html += `<td>$${current.toLocaleString()}</td></tr>`;
         } else if (refPrice && current) {
           const target = refPrice * (1 - threshold);
-          const drop = (refPrice - current) / refPrice;
-          const progress = Math.min(drop / threshold, 1);
-          const pctDone = (progress * 100).toFixed(0);
-          const barColor = progress >= 1 ? '#3fb950' : progress > 0.7 ? '#d29922' : '#484f58';
           html += `<tr><td>${coin}</td><td><span class="hunt-waiting">HUNTING</span></td>`;
-          html += `<td>$${refPrice.toLocaleString()}</td>`;
+          html += `<td>${(threshold*100).toFixed(1)}%</td>`;
           html += `<td>$${target.toLocaleString()}</td>`;
-          html += `<td>$${current.toLocaleString()}</td>`;
-          html += `<td>${drop >= 0 ? '-' : '+'}${Math.abs(drop * 100).toFixed(2)}% / ${(threshold * 100).toFixed(1)}%</td>`;
-          html += `<td><div class="hunt-progress"><div class="hunt-progress-bar" style="width:${pctDone}%;background:${barColor}"></div></div> ${pctDone}%</td></tr>`;
+          html += `<td>$${current.toLocaleString()}</td></tr>`;
         } else {
-          html += `<tr><td>${coin}</td><td><span class="tag-first">FIRST ENTRY</span></td>`;
-          html += `<td>—</td><td>—</td><td>${current ? '$' + current.toLocaleString() : '—'}</td><td>—</td><td>—</td></tr>`;
+          html += `<tr><td>${coin}</td><td><span class="tag-first">FIRST</span></td>`;
+          html += `<td>${(threshold*100).toFixed(1)}%</td><td>—</td>`;
+          html += `<td>${current ? '$'+current.toLocaleString() : '—'}</td></tr>`;
         }
       }
       html += '</tbody></table>';
@@ -208,37 +183,32 @@
         fetchLivePositions(),
         fetch(CONFIG_URL).then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
-      allData = historyResult;
-      config = configResult;
+      allData = historyResult; config = configResult;
 
       drawAllocation(positions);
       renderHuntStatus();
 
-      if (!allData.length) {
-        document.getElementById('content').innerHTML = '<div class="empty">No trades yet</div>';
-        return;
-      }
+      if (!allData.length) { document.getElementById('content').innerHTML = '<div class="empty">No trades yet</div>'; return; }
 
       const coins = new Set();
-      let totalFilled = 0, totalFailed = 0, totalSpent = 0;
+      let totalFilled = 0, totalFailed = 0, totalNotional = 0, totalMargin = 0;
+      const leverage = config ? config.leverage : 3;
       for (const run of allData) {
         for (const t of run.trades || []) {
           coins.add(t.coin);
-          if (t.status === 'filled') { totalFilled++; totalSpent += parseFloat(t.notional || 0); }
+          if (t.status === 'filled') { totalFilled++; const ntl = parseFloat(t.notional || 0); totalNotional += ntl; totalMargin += ntl / leverage; }
           else totalFailed++;
         }
       }
 
-      document.getElementById('totalRuns').textContent = allData.length;
-      document.getElementById('totalInvested').textContent = `$${totalSpent.toFixed(0)}`;
+      document.getElementById('marginInvested').textContent = `$${totalMargin.toFixed(0)}`;
+      document.getElementById('totalNotional').textContent = `$${totalNotional.toFixed(0)}`;
       document.getElementById('filledFailed').innerHTML = `<span class="positive">${totalFilled}</span> / <span class="negative">${totalFailed}</span>`;
       const last = allData[allData.length - 1];
       document.getElementById('lastRun').textContent = new Date(last.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 
       const sel = document.getElementById('filterAsset');
-      for (const c of [...coins].sort()) {
-        const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o);
-      }
+      for (const c of [...coins].sort()) { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); }
 
       renderTable();
       document.getElementById('filterAsset').addEventListener('change', renderTable);
@@ -250,6 +220,7 @@
       if (!positions.length) { document.getElementById('allocLegend').innerHTML = '<div style="color:#484f58">No open positions</div>'; return; }
       const sorted = positions.sort((a, b) => b.positionValue - a.positionValue);
       const total = sorted.reduce((s, p) => s + p.positionValue, 0);
+      const totalMargin = sorted.reduce((s, p) => s + p.marginUsed, 0);
       const totalPnl = sorted.reduce((s, p) => s + p.unrealizedPnl, 0);
       const pnlCls = totalPnl >= 0 ? 'positive' : 'negative';
       document.getElementById('allocTotal').innerHTML = `$${total.toFixed(0)}<div class="label ${pnlCls}" style="font-size:0.72rem;font-weight:600">${totalPnl >= 0 ? '+' : ''}$${totalPnl.toFixed(2)}</div>`;
@@ -267,72 +238,48 @@
         ctx.beginPath(); ctx.moveTo(cx + inner * Math.cos(startAngle), cy + inner * Math.sin(startAngle));
         ctx.arc(cx, cy, r, startAngle, startAngle + sweep); ctx.arc(cx, cy, inner, startAngle + sweep, startAngle, true);
         ctx.closePath(); ctx.fillStyle = color; ctx.fill(); startAngle += sweep;
-        const pnlSign = pos.unrealizedPnl >= 0 ? '+' : '';
         const pnlColor = pos.unrealizedPnl >= 0 ? '#3fb950' : '#f85149';
         const row = document.createElement('div'); row.className = 'alloc-row';
-        row.innerHTML = `<div class="alloc-dot" style="background:${color}"></div><div class="alloc-name">${pos.coin}</div><div class="alloc-val">$${pos.positionValue.toFixed(0)}</div><div class="alloc-pct">${(pct * 100).toFixed(1)}%</div><div style="min-width:60px;text-align:right;font-size:0.75rem;color:${pnlColor}">${pnlSign}$${pos.unrealizedPnl.toFixed(2)}</div>`;
+        row.innerHTML = `<div class="alloc-dot" style="background:${color}"></div><div class="alloc-name">${pos.coin}</div><div class="alloc-val">$${pos.positionValue.toFixed(0)}</div><div class="alloc-pct">${(pct*100).toFixed(1)}%</div><div style="min-width:55px;text-align:right;font-size:0.75rem;color:${pnlColor}">${pos.unrealizedPnl >= 0 ? '+' : ''}$${pos.unrealizedPnl.toFixed(2)}</div>`;
         legend.appendChild(row);
       });
     }
 
     function renderTable() {
-      const fAsset = document.getElementById('filterAsset').value;
-      const fStatus = document.getElementById('filterStatus').value;
-      const fType = document.getElementById('filterType').value;
-      let html = '<table><thead><tr><th>Date</th><th>Type</th><th>Trigger</th><th>Asset</th><th>Status</th><th>Size</th><th>Price</th><th>Notional</th><th>Ref Price</th><th>Drop</th><th>Error</th></tr></thead><tbody>';
-      const runs = [...allData].reverse();
-      for (const run of runs) {
-        const runType = run.type || 'dca';
-        if (fType && runType !== fType) continue;
-        const ts = new Date(run.timestamp).toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-        const trades = (run.trades || []).filter(t => {
-          if (fAsset && t.coin !== fAsset) return false;
-          if (fStatus && t.status !== fStatus) return false;
-          return true;
-        });
+      const fA = document.getElementById('filterAsset').value;
+      const fS = document.getElementById('filterStatus').value;
+      const fT = document.getElementById('filterType').value;
+      let html = '<table><thead><tr><th>Date</th><th>Type</th><th>Trigger</th><th>Asset</th><th>Status</th><th>Size</th><th>Price</th><th>Notional</th><th>Drop</th><th>Error</th></tr></thead><tbody>';
+      for (const run of [...allData].reverse()) {
+        const rt = run.type || 'dca';
+        if (fT && rt !== fT) continue;
+        const ts = new Date(run.timestamp).toLocaleString(undefined, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+        const trades = (run.trades||[]).filter(t => (!fA || t.coin===fA) && (!fS || t.status===fS));
         if (!trades.length) continue;
-        const typeTag = runType === 'dip' ? '<span class="tag-dip">DIP</span>' : '<span class="tag-dca">DCA</span>';
-        html += `<tr class="run-header"><td colspan="11">${typeTag} ${ts} — USDC: $${run.usdc_balance_before ?? '?'} → $${run.usdc_balance_after ?? '?'}</td></tr>`;
+        const typeTag = rt === 'dip' ? '<span class="tag-dip">DIP</span>' : '<span class="tag-dca">DCA</span>';
+        html += `<tr class="run-header"><td colspan="10">${typeTag} ${ts} — USDC: $${run.usdc_balance_before??'?'} → $${run.usdc_balance_after??'?'}</td></tr>`;
         for (const t of trades) {
           const cls = t.status === 'filled' ? 'status-filled' : 'status-error';
-          const trigger = t.trigger || '—';
-          const trigCls = trigger === 'DIP_TARGET' ? 'tag-target' : trigger === 'DEADLINE' ? 'tag-deadline' : trigger === 'FIRST' ? 'tag-first' : 'tag-dca';
-          const dd = t.drop_pct ? `-${(t.drop_pct * 100).toFixed(1)}%` : '—';
-          const ref = t.ref_price ? '$' + parseFloat(t.ref_price).toLocaleString() : '—';
-          html += '<tr>';
-          html += `<td>${ts}</td>`;
-          html += `<td>${typeTag}</td>`;
-          html += `<td><span class="${trigCls}">${trigger}</span></td>`;
-          html += `<td>${t.coin}</td>`;
-          html += `<td class="${cls}">${t.status}</td>`;
-          html += `<td>${t.size || '—'}</td>`;
-          html += `<td>${t.price ? '$' + parseFloat(t.price).toLocaleString() : '—'}</td>`;
-          html += `<td>${t.notional ? '$' + t.notional : '—'}</td>`;
-          html += `<td>${ref}</td>`;
-          html += `<td>${dd}</td>`;
-          html += `<td style="color:#f85149;font-size:0.72rem">${t.error || ''}</td>`;
-          html += '</tr>';
+          const trig = t.trigger || '—';
+          const trigCls = trig === 'DIP_TARGET' ? 'tag-target' : trig === 'DEADLINE' ? 'tag-deadline' : trig === 'FIRST' ? 'tag-first' : 'tag-dca';
+          html += `<tr><td>${ts}</td><td>${typeTag}</td><td><span class="${trigCls}">${trig}</span></td><td>${t.coin}</td><td class="${cls}">${t.status}</td><td>${t.size||'—'}</td><td>${t.price?'$'+parseFloat(t.price).toLocaleString():'—'}</td><td>${t.notional?'$'+t.notional:'—'}</td><td>${t.drop_pct?`-${(t.drop_pct*100).toFixed(1)}%`:'—'}</td><td style="color:#f85149;font-size:0.72rem">${t.error||''}</td></tr>`;
         }
       }
       html += '</tbody></table>';
-      if (runs.length === 0 || html.includes('<tbody></tbody>')) html = '<div class="empty">No matching trades</div>';
+      if (html.includes('<tbody></tbody>')) html = '<div class="empty">No matching trades</div>';
       document.getElementById('content').innerHTML = html;
     }
 
     function updateTimers() {
       const now = new Date();
-      // Next check (:45 past)
       const next = new Date(now); next.setUTCMinutes(45, 0, 0);
       if (now >= next) next.setUTCHours(next.getUTCHours() + 1);
-      const checkDiff = next - now;
-      const cm = Math.floor(checkDiff / 60000), cs = Math.floor((checkDiff % 60000) / 1000);
-      document.getElementById('nextRun').textContent = `${String(cm).padStart(2,'0')}m ${String(cs).padStart(2,'0')}s`;
-      // Deadline countdown
+      const cd = next - now;
+      document.getElementById('nextRun').textContent = `${String(Math.floor(cd/60000)).padStart(2,'0')}m ${String(Math.floor((cd%60000)/1000)).padStart(2,'0')}s`;
       const dl = new Date(now); dl.setUTCHours(DEADLINE_HOUR, 0, 0, 0);
       if (now >= dl) dl.setUTCDate(dl.getUTCDate() + 1);
-      const dlDiff = dl - now;
-      const dh = Math.floor(dlDiff / 3600000), dm = Math.floor((dlDiff % 3600000) / 60000);
-      document.getElementById('deadlineIn').textContent = `${String(dh).padStart(2,'0')}h ${String(dm).padStart(2,'0')}m`;
+      const dd = dl - now;
+      document.getElementById('deadlineIn').textContent = `${String(Math.floor(dd/3600000)).padStart(2,'0')}h ${String(Math.floor((dd%3600000)/60000)).padStart(2,'0')}m`;
     }
 
     load();
