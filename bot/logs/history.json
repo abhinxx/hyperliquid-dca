@@ -506,5 +506,23 @@
       }
     ],
     "usdc_balance_after": 3397.91
+  },
+  {
+    "timestamp": "2026-04-02T20:06:58.991106+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3405.63,
+    "trades": [
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "1.28",
+        "price": "34.915",
+        "notional": 44.69,
+        "trigger": "DIP_TARGET",
+        "ref_price": 36.084,
+        "drop_pct": 0.0326
+      }
+    ],
+    "usdc_balance_after": 3405.62
   }
 ]
