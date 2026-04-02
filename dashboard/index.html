@@ -131,6 +131,16 @@
       return null;
     }
 
+    function entryPriceBeforeWindow(coin, windowStart) {
+      for (let i = allData.length - 1; i >= 0; i--) {
+        const rt = new Date(allData[i].timestamp);
+        if (rt >= windowStart) continue;
+        for (const t of (allData[i].trades || []))
+          if (t.coin === coin && t.status === 'filled' && t.price) return parseFloat(t.price);
+      }
+      return null;
+    }
+
     function boughtInWindow(coin, windowStart) {
       for (let i = allData.length - 1; i >= 0; i--) {
         const run = allData[i]; if (run.type !== 'dca') continue;
@@ -148,21 +158,33 @@
       const [mN, mX, mV] = await Promise.all([hlPost({type:'allMids'}), hlPost({type:'allMids',dex:'xyz'}), hlPost({type:'allMids',dex:'vntl'})]);
       const allMids = { ...mN, ...mX, ...mV };
 
-      let html = '<table><thead><tr><th>Asset</th><th>Status</th><th>Last Buy Price</th><th>Threshold</th><th>Buy Target</th><th>Current Price</th></tr></thead><tbody>';
+      let html = '<table><thead><tr><th>Asset</th><th>Status</th><th>Reference Price</th><th>Threshold</th><th>Target Was</th><th>Filled At</th><th>Current Price</th></tr></thead><tbody>';
       for (const asset of config.assets) {
         const coin = asset.coin;
         const threshold = asset.intraday_drop || 0.03;
         const bought = boughtInWindow(coin, windowStart);
-        const refPrice = lastEntryPrice(coin);
         const current = parseFloat(allMids[coin] || 0);
-        const target = refPrice ? refPrice * (1 - threshold) : null;
 
-        const statusHtml = bought ? '<span class="hunt-done">DONE</span>' : refPrice ? '<span class="hunt-waiting">HUNTING</span>' : '<span class="tag-first">FIRST</span>';
-        html += `<tr><td>${coin}</td><td>${statusHtml}</td>`;
-        html += `<td>${refPrice ? '$' + refPrice.toLocaleString() : '—'}</td>`;
-        html += `<td>${(threshold*100).toFixed(1)}%</td>`;
-        html += `<td>${target ? '$' + target.toLocaleString() : '—'}</td>`;
-        html += `<td>${current ? '$' + current.toLocaleString() : '—'}</td></tr>`;
+        if (bought) {
+          const ref = entryPriceBeforeWindow(coin, windowStart);
+          const target = ref ? ref * (1 - threshold) : null;
+          html += `<tr><td>${coin}</td><td><span class="hunt-done">DONE</span></td>`;
+          html += `<td>${ref ? '$' + ref.toLocaleString() : '—'}</td>`;
+          html += `<td>${(threshold*100).toFixed(1)}%</td>`;
+          html += `<td>${target ? '$' + target.toLocaleString() : '—'}</td>`;
+          html += `<td class="positive">$${parseFloat(bought.price).toLocaleString()}</td>`;
+          html += `<td>$${current.toLocaleString()}</td></tr>`;
+        } else {
+          const ref = lastEntryPrice(coin);
+          const target = ref ? ref * (1 - threshold) : null;
+          const statusHtml = ref ? '<span class="hunt-waiting">HUNTING</span>' : '<span class="tag-first">FIRST</span>';
+          html += `<tr><td>${coin}</td><td>${statusHtml}</td>`;
+          html += `<td>${ref ? '$' + ref.toLocaleString() : '—'}</td>`;
+          html += `<td>${(threshold*100).toFixed(1)}%</td>`;
+          html += `<td>${target ? '$' + target.toLocaleString() : '—'}</td>`;
+          html += `<td>—</td>`;
+          html += `<td>$${current.toLocaleString()}</td></tr>`;
+        }
       }
       html += '</tbody></table>';
       document.getElementById('huntStatus').innerHTML = html;
