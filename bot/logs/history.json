@@ -718,5 +718,19 @@
       }
     ],
     "usdc_balance_after": 3312.69
+  },
+  {
+    "timestamp": "2026-04-05T19:59:22.654240+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3311.88,
+    "trades": [
+      {
+        "coin": "vntl:ENERGY",
+        "status": "error",
+        "error": "Order could not immediately match against any resting orders. asset=130009",
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 3296.88
   }
 ]
