@@ -656,5 +656,67 @@
       }
     ],
     "usdc_balance_after": 3351.74
+  },
+  {
+    "timestamp": "2026-04-05T19:22:12.308296+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3342.92,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00066",
+        "price": "67461.0",
+        "notional": 44.52,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "1.25",
+        "price": "35.778",
+        "notional": 44.72,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "filled",
+        "size": "0.776",
+        "price": "57.99",
+        "notional": 45.0,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.62",
+        "price": "72.373",
+        "notional": 44.87,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:CRCL",
+        "status": "filled",
+        "size": "0.496",
+        "price": "90.671",
+        "notional": 44.97,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.078",
+        "price": "573.953",
+        "notional": 44.77,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:ENERGY",
+        "status": "error",
+        "error": "Order could not immediately match against any resting orders. asset=130009",
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 3312.69
   }
 ]
