@@ -831,5 +831,33 @@
       }
     ],
     "usdc_balance_after": 3293.96
+  },
+  {
+    "timestamp": "2026-04-07T14:14:08.289232+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3248.87,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "filled",
+        "size": "0.785",
+        "price": "57.292",
+        "notional": 44.97,
+        "trigger": "DIP_TARGET",
+        "ref_price": 58.35,
+        "drop_pct": 0.0184
+      },
+      {
+        "coin": "xyz:CRCL",
+        "status": "filled",
+        "size": "0.505",
+        "price": "89.033",
+        "notional": 44.96,
+        "trigger": "DIP_TARGET",
+        "ref_price": 92.234,
+        "drop_pct": 0.0351
+      }
+    ],
+    "usdc_balance_after": 3233.82
   }
 ]
