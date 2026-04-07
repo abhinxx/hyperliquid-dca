@@ -859,5 +859,45 @@
       }
     ],
     "usdc_balance_after": 3233.82
+  },
+  {
+    "timestamp": "2026-04-07T19:41:52.463362+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3294.2,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00065",
+        "price": "68476.0",
+        "notional": 44.51,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.62",
+        "price": "72.424",
+        "notional": 44.9,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.074",
+        "price": "607.37",
+        "notional": 44.95,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:ENERGY",
+        "status": "filled",
+        "size": "0.74",
+        "price": "60.054",
+        "notional": 44.44,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 3279.24
   }
 ]
