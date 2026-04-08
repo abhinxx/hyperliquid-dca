@@ -932,5 +932,21 @@
       }
     ],
     "usdc_balance_after": 3487.16
+  },
+  {
+    "timestamp": "2026-04-08T12:41:35.541338+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3502.88,
+    "trades": [
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "312.0",
+        "price": "0.1441",
+        "notional": 44.96,
+        "trigger": "FIRST"
+      }
+    ],
+    "usdc_balance_after": 3502.7
   }
 ]
