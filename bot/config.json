@@ -11,7 +11,7 @@
     {"coin": "xyz:SILVER", "dex": "xyz", "sz_decimals": 2, "cross": true, "dip_threshold": 0.10, "intraday_drop": 0.03},
     {"coin": "xyz:CRCL", "dex": "xyz", "sz_decimals": 3, "cross": false, "dip_threshold": 0.07, "intraday_drop": 0.025},
     {"coin": "xyz:SKHX", "dex": "xyz", "sz_decimals": 3, "cross": false, "dip_threshold": 0.07, "intraday_drop": 0.02},
-    {"coin": "vntl:ANTHROPIC", "dex": "vntl", "sz_decimals": 3, "cross": false, "collateral": "USDH", "swap_pair": "@230", "dip_threshold": 0.10, "intraday_drop": 0.015},
+    {"coin": "vntl:ANTHROPIC", "dex": "vntl", "sz_decimals": 3, "cross": false, "collateral": "USDH", "swap_pair": "@230", "dip_threshold": 0.10, "intraday_drop": 0.05, "slippage": 0.02},
     {"coin": "CC", "dex": "", "sz_decimals": 0, "cross": true, "dip_threshold": 0.10, "intraday_drop": 0.03}
   ]
 }

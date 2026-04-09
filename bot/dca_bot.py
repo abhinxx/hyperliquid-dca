@@ -219,7 +219,7 @@ def main():
                 run["trades"].append({"coin": coin, "status": "error", "error": f"USDH swap failed: {swap.get('error', '')}"})
                 continue
 
-        trade = execute_trade(exchange, coin, asset["dex"], asset["sz_decimals"], asset.get("cross", True), margin, leverage, slippage)
+        trade = execute_trade(exchange, coin, asset["dex"], asset["sz_decimals"], asset.get("cross", True), margin, leverage, asset.get("slippage", slippage))
         trade["trigger"] = trigger_label
         if ref_price:
             trade["ref_price"] = ref_price

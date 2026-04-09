@@ -181,7 +181,7 @@ def main():
                 run["trades"].append({"coin": coin, "status": "error", "error": f"USDH swap failed: {swap.get('error')}"})
                 continue
 
-        trade = execute_trade(exchange, coin, asset["dex"], asset["sz_decimals"], asset.get("cross", True), margin, leverage, slippage)
+        trade = execute_trade(exchange, coin, asset["dex"], asset["sz_decimals"], asset.get("cross", True), margin, leverage, asset.get("slippage", slippage))
         trade["ref_price"] = ref_price
         trade["drop_pct"] = round(drop, 4)
         print(f"  {coin}: {trade['status']} {trade.get('size', '')} @ ${trade.get('price', '')} (was ${ref_price:,.2f}, -{drop*100:.1f}%) {trade.get('error', '')}")
