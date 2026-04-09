@@ -948,5 +948,21 @@
       }
     ],
     "usdc_balance_after": 3502.7
+  },
+  {
+    "timestamp": "2026-04-09T03:37:50.340372+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3382.54,
+    "trades": [
+      {
+        "coin": "vntl:ANTHROPIC",
+        "status": "error",
+        "error": "Order could not immediately match against any resting orders. asset=130002",
+        "trigger": "DIP_TARGET",
+        "ref_price": 716.0,
+        "drop_pct": 0.0403
+      }
+    ],
+    "usdc_balance_after": 3367.61
   }
 ]
