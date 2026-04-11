@@ -194,10 +194,10 @@ def main():
     usdc_after = get_spot_balance(main_wallet, "USDC")
     run["usdc_balance_after"] = round(usdc_after, 2)
 
-    history.append(run)
-    save_history(history)
-
     filled = sum(1 for t in run["trades"] if t["status"] == "filled")
+    if filled > 0 or any(t["status"] == "error" for t in run["trades"]):
+        history.append(run)
+        save_history(history)
     print(f"\nDone: {filled}/{len(run['trades'])} dip-buys filled")
 
 

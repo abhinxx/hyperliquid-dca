@@ -112,7 +112,7 @@
     const CONFIG_URL = `https://raw.githubusercontent.com/${REPO}/main/bot/config.json?t=${Date.now()}`;
     const HL_API = 'https://api.hyperliquid.xyz/info';
     const WALLET = '0x8256E29428Ff7b448a9B636151d9e73788459e83';
-    const DEXES = ['', 'xyz', 'vntl'];
+    let DEXES = ['', 'xyz', 'vntl'];
     const COLORS = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#f778ba', '#79c0ff', '#ffa657', '#7ee787', '#d2a8ff'];
     const WINDOW_START_HOUR = 20;
     const DEADLINE_HOUR = 19;
@@ -174,10 +174,15 @@
 
     async function renderHuntStatus() {
       if (!config || !allData) return;
+      if (config.paused) {
+        document.getElementById('huntStatus').innerHTML = '<div class="empty" style="color:#f85149">Bot is paused — no dip hunting active</div>';
+        return;
+      }
       const now = new Date();
       const windowStart = getWindowStart(now);
-      const [mN, mX, mV] = await Promise.all([hlPost({type:'allMids'}), hlPost({type:'allMids',dex:'xyz'}), hlPost({type:'allMids',dex:'vntl'})]);
-      const allMids = { ...mN, ...mX, ...mV };
+      const dexes = new Set(config.assets.map(a => a.dex || ''));
+      const midResults = await Promise.all([...dexes].map(d => d ? hlPost({type:'allMids',dex:d}) : hlPost({type:'allMids'})));
+      const allMids = Object.assign({}, ...midResults);
 
       let html = '<table><thead><tr><th>Asset</th><th>Status</th><th>Reference Price</th><th>Threshold</th><th>Target Was</th><th>Filled At</th><th>Current Price</th></tr></thead><tbody>';
       for (const asset of config.assets) {
@@ -212,12 +217,13 @@
     }
 
     async function load() {
-      const [historyResult, positions, configResult] = await Promise.all([
+      const [historyResult, configResult] = await Promise.all([
         fetch(HISTORY_URL).then(r => r.ok ? r.json() : []).catch(() => []),
-        fetchLivePositions(),
         fetch(CONFIG_URL).then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
       allData = historyResult; config = configResult;
+      if (config) DEXES = [...new Set(['', ...config.assets.map(a => a.dex || '')])];
+      const positions = await fetchLivePositions();
 
       drawAllocation(positions);
       renderHuntStatus();
@@ -305,9 +311,22 @@
     }
 
     function updateTimers() {
+      if (config && config.paused) {
+        document.getElementById('nextRun').textContent = 'PAUSED';
+        document.getElementById('nextRun').style.color = '#f85149';
+        document.getElementById('deadlineIn').textContent = 'PAUSED';
+        document.getElementById('deadlineIn').style.color = '#f85149';
+        return;
+      }
+      document.getElementById('nextRun').style.color = '';
+      document.getElementById('deadlineIn').style.color = '';
       const now = new Date();
-      const next = new Date(now); next.setUTCMinutes(45, 0, 0);
-      if (now >= next) next.setUTCHours(next.getUTCHours() + 1);
+      const min = now.getUTCMinutes();
+      const next = new Date(now);
+      const slots = [0, 15, 30, 45];
+      const nextSlot = slots.find(s => s > min);
+      if (nextSlot !== undefined) { next.setUTCMinutes(nextSlot, 0, 0); }
+      else { next.setUTCHours(next.getUTCHours() + 1); next.setUTCMinutes(0, 0, 0); }
       const cd = next - now;
       document.getElementById('nextRun').textContent = `${String(Math.floor(cd/60000)).padStart(2,'0')}m ${String(Math.floor((cd%60000)/1000)).padStart(2,'0')}s`;
       const dl = new Date(now); dl.setUTCHours(DEADLINE_HOUR, 0, 0, 0);
@@ -350,6 +369,8 @@
         if (res.status === 204) {
           config.paused = !isPaused;
           updatePauseUI(config.paused);
+          updateTimers();
+          renderHuntStatus();
           localStorage.setItem('gh_token', token);
         } else {
           const err = await res.json().catch(() => ({}));
