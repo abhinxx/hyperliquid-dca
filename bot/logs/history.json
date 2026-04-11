@@ -1144,5 +1144,21 @@
       }
     ],
     "usdc_balance_after": 3244.18
+  },
+  {
+    "timestamp": "2026-04-11T05:15:02.728682+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3219.91,
+    "trades": [
+      {
+        "coin": "xyz:SKHX",
+        "status": "error",
+        "error": "Order could not immediately match against any resting orders. asset=110022",
+        "trigger": "DIP_TARGET",
+        "ref_price": 689.113,
+        "drop_pct": 0.0233
+      }
+    ],
+    "usdc_balance_after": 3219.91
   }
 ]
