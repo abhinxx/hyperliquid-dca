@@ -1178,5 +1178,23 @@
       }
     ],
     "usdc_balance_after": 3229.39
+  },
+  {
+    "timestamp": "2026-04-11T11:05:42.480126+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3228.02,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "filled",
+        "size": "0.597",
+        "price": "60.12",
+        "notional": 35.89,
+        "trigger": "DIP_TARGET",
+        "ref_price": 61.091,
+        "drop_pct": 0.0175
+      }
+    ],
+    "usdc_balance_after": 3213.21
   }
 ]
