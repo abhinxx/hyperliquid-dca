@@ -47,11 +47,32 @@
     section h2 { font-size: 0.95rem; margin-bottom: 10px; border-bottom: 1px solid #21262d; padding-bottom: 6px; color: #8b949e; font-weight: 600; }
     .hunt-waiting { color: #d29922; font-weight: 600; }
     .hunt-done { color: #3fb950; font-weight: 600; }
+    .pause-btn { padding: 8px 20px; border-radius: 8px; border: 1px solid #21262d; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+    .pause-btn.running { background: #f8514922; color: #f85149; border-color: #f8514944; }
+    .pause-btn.running:hover { background: #f8514944; }
+    .pause-btn.paused { background: #3fb95022; color: #3fb950; border-color: #3fb95044; }
+    .pause-btn.paused:hover { background: #3fb95044; }
+    .pause-btn:disabled { opacity: 0.5; cursor: wait; }
+    .pause-status { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 0.72rem; font-weight: 600; margin-left: 10px; vertical-align: middle; }
+    .pause-status.active { background: #3fb95022; color: #3fb950; }
+    .pause-status.is-paused { background: #f8514922; color: #f85149; }
+    .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; }
+    .header-right { display: flex; align-items: center; gap: 10px; }
+    .token-input { background: #161b22; border: 1px solid #21262d; color: #c9d1d9; padding: 5px 10px; border-radius: 6px; font-size: 0.75rem; width: 200px; }
+    .token-input::placeholder { color: #484f58; }
   </style>
 </head>
 <body>
-  <h1>Hyperliquid DCA Dashboard</h1>
-  <div class="subtitle">Smart DCA — $15 margin/asset, 3x leverage | buys on dips, deadline 19:00 UTC</div>
+  <div class="header-row">
+    <div>
+      <h1>Hyperliquid DCA Dashboard <span class="pause-status" id="pauseStatus"></span></h1>
+      <div class="subtitle">Smart DCA — $15 margin/asset, 3x leverage | buys on dips, deadline 19:00 UTC</div>
+    </div>
+    <div class="header-right">
+      <input type="password" class="token-input" id="ghToken" placeholder="GitHub token (to toggle)" title="Fine-grained token with Actions write scope">
+      <button class="pause-btn" id="pauseBtn" disabled>—</button>
+    </div>
+  </div>
 
   <div class="cards">
     <div class="card"><div class="card-label">Margin Invested</div><div class="card-value" id="marginInvested">—</div></div>
@@ -295,7 +316,60 @@
       document.getElementById('deadlineIn').textContent = `${String(Math.floor(dd/3600000)).padStart(2,'0')}h ${String(Math.floor((dd%3600000)/60000)).padStart(2,'0')}m`;
     }
 
-    load();
+    function updatePauseUI(paused) {
+      const btn = document.getElementById('pauseBtn');
+      const status = document.getElementById('pauseStatus');
+      btn.disabled = false;
+      if (paused) {
+        btn.className = 'pause-btn paused';
+        btn.textContent = 'Resume';
+        status.className = 'pause-status is-paused';
+        status.textContent = 'PAUSED';
+      } else {
+        btn.className = 'pause-btn running';
+        btn.textContent = 'Pause';
+        status.className = 'pause-status active';
+        status.textContent = 'ACTIVE';
+      }
+    }
+
+    document.getElementById('pauseBtn').addEventListener('click', async () => {
+      const token = document.getElementById('ghToken').value.trim();
+      if (!token) { alert('Paste a GitHub token with Actions write permission'); return; }
+      const btn = document.getElementById('pauseBtn');
+      const isPaused = config && config.paused;
+      const action = isPaused ? 'resume' : 'pause';
+      btn.disabled = true;
+      btn.textContent = action === 'pause' ? 'Pausing...' : 'Resuming...';
+      try {
+        const res = await fetch(`https://api.github.com/repos/${REPO}/actions/workflows/toggle-pause.yml/dispatches`, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ref: 'main', inputs: { action } }),
+        });
+        if (res.status === 204) {
+          config.paused = !isPaused;
+          updatePauseUI(config.paused);
+          localStorage.setItem('gh_token', token);
+        } else {
+          const err = await res.json().catch(() => ({}));
+          alert(`GitHub API error ${res.status}: ${err.message || 'Check token permissions'}`);
+          btn.disabled = false;
+          btn.textContent = isPaused ? 'Resume' : 'Pause';
+        }
+      } catch (e) {
+        alert('Request failed: ' + e.message);
+        btn.disabled = false;
+        btn.textContent = isPaused ? 'Resume' : 'Pause';
+      }
+    });
+
+    const savedToken = localStorage.getItem('gh_token');
+    if (savedToken) document.getElementById('ghToken').value = savedToken;
+
+    load().then(() => {
+      if (config) updatePauseUI(!!config.paused);
+    });
     updateTimers();
     setInterval(updateTimers, 1000);
     setInterval(renderHuntStatus, 60000);
