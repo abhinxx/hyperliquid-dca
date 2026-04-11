@@ -2,7 +2,7 @@ name: Hourly Smart DCA
 
 on:
   schedule:
-    - cron: '45 * * * *'  # :45 past every hour
+    - cron: '15,45 * * * *'  # every 30 mins
   workflow_dispatch: {}
 
 permissions:

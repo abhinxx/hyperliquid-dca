@@ -2,7 +2,7 @@ name: Hourly Dip Check
 
 on:
   schedule:
-    - cron: '15 * * * *'  # :15 past every hour (avoids collision with daily DCA at :00)
+    - cron: '0,30 * * * *'  # every 30 mins
   workflow_dispatch: {}
 
 permissions:
