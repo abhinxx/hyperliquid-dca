@@ -135,6 +135,10 @@ def main():
         sys.exit(1)
 
     config = load_config()
+    if config.get("paused"):
+        print("DCA is PAUSED. Toggle via config.json or the pause workflow.")
+        return
+
     margin = config["daily_margin_usd"]
     leverage = config["leverage"]
     slippage = config["slippage"]

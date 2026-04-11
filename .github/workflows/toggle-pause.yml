@@ -1,0 +1,51 @@
+name: Toggle DCA Pause
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'Pause or Resume'
+        required: true
+        type: choice
+        options:
+          - pause
+          - resume
+
+permissions:
+  contents: write
+
+jobs:
+  toggle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Toggle pause state
+        run: |
+          if [ "${{ inputs.action }}" = "pause" ]; then
+            python3 -c "
+          import json, pathlib
+          p = pathlib.Path('bot/config.json')
+          c = json.loads(p.read_text())
+          c['paused'] = True
+          p.write_text(json.dumps(c, indent=2) + '\n')
+          print('DCA PAUSED')
+          "
+          else
+            python3 -c "
+          import json, pathlib
+          p = pathlib.Path('bot/config.json')
+          c = json.loads(p.read_text())
+          c['paused'] = False
+          p.write_text(json.dumps(c, indent=2) + '\n')
+          print('DCA RESUMED')
+          "
+          fi
+
+      - name: Commit
+        run: |
+          git config user.name "dca-bot"
+          git config user.email "bot@hyperliquid-dca"
+          git add bot/config.json
+          git diff --cached --quiet || git commit -m "dca: ${{ inputs.action }}d"
+          git push

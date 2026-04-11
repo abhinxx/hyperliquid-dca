@@ -1,4 +1,5 @@
 {
+  "paused": false,
   "daily_margin_usd": 15,
   "leverage": 3,
   "slippage": 0.01,
