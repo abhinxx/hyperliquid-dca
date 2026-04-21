@@ -1,6 +1,6 @@
 {
-  "paused": true,
-  "daily_margin_usd": 15,
+  "paused": false,
+  "daily_margin_usd": 10,
   "leverage": 3,
   "slippage": 0.01,
   "window_start_utc": 20,
@@ -23,6 +23,30 @@
       "intraday_drop": 0.03
     },
     {
+      "coin": "SOL",
+      "dex": "",
+      "sz_decimals": 2,
+      "cross": true,
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.03
+    },
+    {
+      "coin": "TRX",
+      "dex": "",
+      "sz_decimals": 0,
+      "cross": true,
+      "dip_threshold": 0.05,
+      "intraday_drop": 0.015
+    },
+    {
+      "coin": "CC",
+      "dex": "",
+      "sz_decimals": 0,
+      "cross": true,
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.03
+    },
+    {
       "coin": "vntl:MAG7",
       "dex": "vntl",
       "sz_decimals": 3,
@@ -31,6 +55,17 @@
       "swap_pair": "@230",
       "dip_threshold": 0.05,
       "intraday_drop": 0.015
+    },
+    {
+      "coin": "vntl:ANTHROPIC",
+      "dex": "vntl",
+      "sz_decimals": 3,
+      "cross": false,
+      "collateral": "USDH",
+      "swap_pair": "@230",
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.05,
+      "slippage": 0.02
     },
     {
       "coin": "xyz:SILVER",
@@ -57,23 +92,12 @@
       "intraday_drop": 0.02
     },
     {
-      "coin": "vntl:ANTHROPIC",
-      "dex": "vntl",
-      "sz_decimals": 3,
+      "coin": "xyz:COPPER",
+      "dex": "xyz",
+      "sz_decimals": 2,
       "cross": false,
-      "collateral": "USDH",
-      "swap_pair": "@230",
-      "dip_threshold": 0.1,
-      "intraday_drop": 0.05,
-      "slippage": 0.02
-    },
-    {
-      "coin": "CC",
-      "dex": "",
-      "sz_decimals": 0,
-      "cross": true,
-      "dip_threshold": 0.1,
-      "intraday_drop": 0.03
+      "dip_threshold": 0.06,
+      "intraday_drop": 0.02
     }
   ]
 }
