@@ -1,1 +1,98 @@
-[]
+[
+  {
+    "timestamp": "2026-04-21T18:03:31.069645+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4494.65,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00039",
+        "price": "75593.0",
+        "notional": 29.48,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.75",
+        "price": "39.596",
+        "notional": 29.7,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.35",
+        "price": "85.324",
+        "notional": 29.86,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "90.0",
+        "price": "0.33178",
+        "notional": 29.86,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "196.0",
+        "price": "0.15299",
+        "notional": 29.99,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "filled",
+        "size": "0.456",
+        "price": "65.651",
+        "notional": 29.94,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "vntl:ANTHROPIC",
+        "status": "filled",
+        "size": "0.027",
+        "price": "1104.111",
+        "notional": 29.81,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.39",
+        "price": "76.75",
+        "notional": 29.93,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "xyz:CRCL",
+        "status": "filled",
+        "size": "0.302",
+        "price": "99.329",
+        "notional": 30.0,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.036",
+        "price": "822.42",
+        "notional": 29.61,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.94",
+        "price": "6.0635",
+        "notional": 29.95,
+        "trigger": "FIRST"
+      }
+    ],
+    "usdc_balance_after": 4474.45
+  }
+]
