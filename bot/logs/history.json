@@ -208,5 +208,23 @@
       }
     ],
     "usdc_balance_after": 4453.88
+  },
+  {
+    "timestamp": "2026-04-23T10:09:16.174466+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4443.22,
+    "trades": [
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.39",
+        "price": "75.2036",
+        "notional": 29.33,
+        "trigger": "DIP_TARGET",
+        "ref_price": 77.76,
+        "drop_pct": 0.033
+      }
+    ],
+    "usdc_balance_after": 4443.24
   }
 ]
