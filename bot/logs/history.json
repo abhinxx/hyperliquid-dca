@@ -262,5 +262,69 @@
       }
     ],
     "usdc_balance_after": 4439.85
+  },
+  {
+    "timestamp": "2026-04-23T19:53:41.610469+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4434.43,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00038",
+        "price": "77786.0",
+        "notional": 29.56,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.73",
+        "price": "40.941",
+        "notional": 29.89,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.35",
+        "price": "85.428",
+        "notional": 29.9,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "91.0",
+        "price": "0.32862",
+        "notional": 29.9,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "200.0",
+        "price": "0.14969",
+        "notional": 29.94,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "filled",
+        "size": "0.458",
+        "price": "65.414",
+        "notional": 29.96,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.91",
+        "price": "6.1069",
+        "notional": 29.98,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 4424.37
   }
 ]
