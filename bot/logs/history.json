@@ -326,5 +326,35 @@
       }
     ],
     "usdc_balance_after": 4424.37
+  },
+  {
+    "timestamp": "2026-04-24T18:00:03.442738+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4320.84,
+    "trades": [
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.31",
+        "price": "93.912",
+        "notional": 29.11,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "ZEC",
+        "status": "filled",
+        "size": "0.08",
+        "price": "365.01",
+        "notional": 29.2,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "CHIP",
+        "status": "error",
+        "error": "Order has invalid size.",
+        "trigger": "FIRST"
+      }
+    ],
+    "usdc_balance_after": 4320.63
   }
 ]
