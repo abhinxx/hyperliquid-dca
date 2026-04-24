@@ -47,6 +47,30 @@
       "intraday_drop": 0.03
     },
     {
+      "coin": "AAVE",
+      "dex": "",
+      "sz_decimals": 2,
+      "cross": true,
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.03
+    },
+    {
+      "coin": "ZEC",
+      "dex": "",
+      "sz_decimals": 2,
+      "cross": true,
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.03
+    },
+    {
+      "coin": "CHIP",
+      "dex": "",
+      "sz_decimals": 3,
+      "cross": true,
+      "dip_threshold": 0.12,
+      "intraday_drop": 0.04
+    },
+    {
       "coin": "vntl:MAG7",
       "dex": "vntl",
       "sz_decimals": 3,
@@ -74,14 +98,6 @@
       "cross": true,
       "dip_threshold": 0.1,
       "intraday_drop": 0.03
-    },
-    {
-      "coin": "xyz:CRCL",
-      "dex": "xyz",
-      "sz_decimals": 3,
-      "cross": false,
-      "dip_threshold": 0.07,
-      "intraday_drop": 0.025
     },
     {
       "coin": "xyz:SKHX",
