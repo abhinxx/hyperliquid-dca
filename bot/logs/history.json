@@ -712,5 +712,29 @@
       }
     ],
     "usdc_balance_after": 4295.99
+  },
+  {
+    "timestamp": "2026-04-25T18:26:41.453048+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4296.15,
+    "trades": [
+      {
+        "coin": "ZEC",
+        "status": "filled",
+        "size": "0.08",
+        "price": "352.7",
+        "notional": 28.22,
+        "trigger": "DIP_TARGET",
+        "ref_price": 365.01,
+        "drop_pct": 0.0337
+      },
+      {
+        "coin": "CHIP",
+        "status": "error",
+        "error": "Order has invalid size.",
+        "trigger": "FIRST"
+      }
+    ],
+    "usdc_balance_after": 4296.14
   }
 ]
