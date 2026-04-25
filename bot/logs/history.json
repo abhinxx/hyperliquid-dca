@@ -642,5 +642,19 @@
       }
     ],
     "usdc_balance_after": 4296.44
+  },
+  {
+    "timestamp": "2026-04-25T13:38:26.953068+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4296.23,
+    "trades": [
+      {
+        "coin": "CHIP",
+        "status": "error",
+        "error": "Order has invalid size.",
+        "trigger": "FIRST"
+      }
+    ],
+    "usdc_balance_after": 4296.23
   }
 ]
