@@ -604,5 +604,29 @@
       }
     ],
     "usdc_balance_after": 4295.77
+  },
+  {
+    "timestamp": "2026-04-25T11:03:37.629117+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4295.76,
+    "trades": [
+      {
+        "coin": "CHIP",
+        "status": "error",
+        "error": "Order has invalid size.",
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.036",
+        "price": "824.04",
+        "notional": 29.67,
+        "trigger": "DIP_TARGET",
+        "ref_price": 842.99,
+        "drop_pct": 0.027
+      }
+    ],
+    "usdc_balance_after": 4295.79
   }
 ]
