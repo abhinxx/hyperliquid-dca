@@ -736,5 +736,93 @@
       }
     ],
     "usdc_balance_after": 4296.14
+  },
+  {
+    "timestamp": "2026-04-25T19:32:57.251140+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4295.37,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00038",
+        "price": "77196.0",
+        "notional": 29.33,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.72",
+        "price": "41.287",
+        "notional": 29.73,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.35",
+        "price": "85.5589",
+        "notional": 29.95,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "92.0",
+        "price": "0.3236",
+        "notional": 29.77,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "198.0",
+        "price": "0.15129",
+        "notional": 29.96,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.31",
+        "price": "94.294",
+        "notional": 29.23,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "CHIP",
+        "status": "error",
+        "error": "Order has invalid size.",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "USDH swap failed: Order must have minimum value of 10 USDC. asset=10230"
+      },
+      {
+        "coin": "vntl:ANTHROPIC",
+        "status": "error",
+        "error": "USDH swap failed: Order must have minimum value of 10 USDC. asset=10230"
+      },
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.39",
+        "price": "75.671",
+        "notional": 29.51,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.92",
+        "price": "6.0921",
+        "notional": 29.97,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 4295.09
   }
 ]
