@@ -59,8 +59,9 @@ def last_entry_price(history, coin):
 
 
 def swap_usdc_to_usdh(exchange_client, amount):
+    sz = round(max(amount + 1, 11), 2)
     result = exchange_client.order(
-        name="@230", is_buy=True, sz=round(amount, 2),
+        name="@230", is_buy=True, sz=sz,
         limit_px=1.02, order_type={"limit": {"tif": "Ioc"}},
     )
     status = result.get("status", "unknown")

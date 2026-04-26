@@ -65,7 +65,7 @@
     {
       "coin": "CHIP",
       "dex": "",
-      "sz_decimals": 3,
+      "sz_decimals": 0,
       "cross": true,
       "dip_threshold": 0.12,
       "intraday_drop": 0.04
