@@ -994,5 +994,109 @@
       }
     ],
     "usdc_balance_after": 4297.69
+  },
+  {
+    "timestamp": "2026-04-26T19:34:42.317710+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4311.39,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00038",
+        "price": "78066.0",
+        "notional": 29.67,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.71",
+        "price": "41.762",
+        "notional": 29.65,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.34",
+        "price": "86.697",
+        "notional": 29.48,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "92.0",
+        "price": "0.32374",
+        "notional": 29.78,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "200.0",
+        "price": "0.14965",
+        "notional": 29.93,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.3",
+        "price": "97.047",
+        "notional": 29.11,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ZEC",
+        "status": "filled",
+        "size": "0.08",
+        "price": "358.13",
+        "notional": 28.65,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "filled",
+        "size": "0.448",
+        "price": "66.999",
+        "notional": 30.02,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:ANTHROPIC",
+        "status": "filled",
+        "size": "0.027",
+        "price": "1088.9",
+        "notional": 29.4,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.39",
+        "price": "76.199",
+        "notional": 29.72,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.036",
+        "price": "828.99",
+        "notional": 29.84,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.88",
+        "price": "6.1433",
+        "notional": 29.98,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 4290.07
   }
 ]
