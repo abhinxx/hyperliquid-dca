@@ -1126,5 +1126,33 @@
       }
     ],
     "usdc_balance_after": 4274.69
+  },
+  {
+    "timestamp": "2026-04-28T07:41:10.445458+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4260.93,
+    "trades": [
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.74",
+        "price": "40.472",
+        "notional": 29.95,
+        "trigger": "DIP_TARGET",
+        "ref_price": 41.762,
+        "drop_pct": 0.0309
+      },
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.4",
+        "price": "73.241",
+        "notional": 29.3,
+        "trigger": "DIP_TARGET",
+        "ref_price": 76.199,
+        "drop_pct": 0.0386
+      }
+    ],
+    "usdc_balance_after": 4260.81
   }
 ]
