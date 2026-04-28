@@ -1154,5 +1154,23 @@
       }
     ],
     "usdc_balance_after": 4260.81
+  },
+  {
+    "timestamp": "2026-04-28T10:00:07.213274+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4252.21,
+    "trades": [
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "5.01",
+        "price": "5.9773",
+        "notional": 29.95,
+        "trigger": "DIP_TARGET",
+        "ref_price": 6.1433,
+        "drop_pct": 0.0272
+      }
+    ],
+    "usdc_balance_after": 4252.41
   }
 ]
