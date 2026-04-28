@@ -1098,5 +1098,33 @@
       }
     ],
     "usdc_balance_after": 4290.07
+  },
+  {
+    "timestamp": "2026-04-28T05:02:42.839325+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4274.65,
+    "trades": [
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.35",
+        "price": "84.054",
+        "notional": 29.42,
+        "trigger": "DIP_TARGET",
+        "ref_price": 86.697,
+        "drop_pct": 0.0305
+      },
+      {
+        "coin": "ZEC",
+        "status": "filled",
+        "size": "0.08",
+        "price": "340.0",
+        "notional": 27.2,
+        "trigger": "DIP_TARGET",
+        "ref_price": 358.13,
+        "drop_pct": 0.0507
+      }
+    ],
+    "usdc_balance_after": 4274.69
   }
 ]
