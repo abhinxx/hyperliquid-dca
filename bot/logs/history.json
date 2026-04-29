@@ -1262,5 +1262,23 @@
       }
     ],
     "usdc_balance_after": 4223.57
+  },
+  {
+    "timestamp": "2026-04-29T11:54:24.636758+00:00",
+    "type": "dca",
+    "usdc_balance_before": 4228.76,
+    "trades": [
+      {
+        "coin": "vntl:ANTHROPIC",
+        "status": "filled",
+        "size": "0.031",
+        "price": "969.59",
+        "notional": 30.06,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1046.9,
+        "drop_pct": 0.0804
+      }
+    ],
+    "usdc_balance_after": 4217.77
   }
 ]
