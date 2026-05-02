@@ -1534,5 +1534,21 @@
       }
     ],
     "usdc_balance_after": 3215.08
+  },
+  {
+    "timestamp": "2026-05-02T08:43:30.378382+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3243.42,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Order could not immediately match against any resting orders. asset=130003",
+        "trigger": "DIP_TARGET",
+        "ref_price": 67.209,
+        "drop_pct": 0.0179
+      }
+    ],
+    "usdc_balance_after": 3232.4
   }
 ]
