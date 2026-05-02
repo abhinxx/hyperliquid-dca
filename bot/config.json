@@ -114,6 +114,14 @@
       "cross": false,
       "dip_threshold": 0.06,
       "intraday_drop": 0.02
+    },
+    {
+      "coin": "xyz:CBRS",
+      "dex": "xyz",
+      "sz_decimals": 2,
+      "cross": false,
+      "dip_threshold": 0.10,
+      "intraday_drop": 0.035
     }
   ]
 }
