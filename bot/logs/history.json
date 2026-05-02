@@ -1688,5 +1688,23 @@
       }
     ],
     "usdc_balance_after": 3208.2
+  },
+  {
+    "timestamp": "2026-05-02T21:24:38.265762+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3199.35,
+    "trades": [
+      {
+        "coin": "CHIP",
+        "status": "filled",
+        "size": "479.0",
+        "price": "0.062566",
+        "notional": 29.97,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.066412,
+        "drop_pct": 0.0581
+      }
+    ],
+    "usdc_balance_after": 3199.33
   }
 ]
