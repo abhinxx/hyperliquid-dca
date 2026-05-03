@@ -63,14 +63,6 @@
       "intraday_drop": 0.03
     },
     {
-      "coin": "CHIP",
-      "dex": "",
-      "sz_decimals": 0,
-      "cross": true,
-      "dip_threshold": 0.12,
-      "intraday_drop": 0.04
-    },
-    {
       "coin": "vntl:MAG7",
       "dex": "vntl",
       "sz_decimals": 3,
