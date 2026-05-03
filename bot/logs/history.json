@@ -1828,5 +1828,23 @@
       }
     ],
     "usdc_balance_after": 3186.83
+  },
+  {
+    "timestamp": "2026-05-03T23:27:55.725443+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3175.61,
+    "trades": [
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.032",
+        "price": "911.248",
+        "notional": 29.16,
+        "trigger": "DIP_TARGET",
+        "ref_price": 944.8,
+        "drop_pct": 0.0367
+      }
+    ],
+    "usdc_balance_after": 3175.83
   }
 ]
