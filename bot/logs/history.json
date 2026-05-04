@@ -1892,5 +1892,22 @@
       }
     ],
     "usdc_balance_after": 3182.84
+  },
+  {
+    "timestamp": "2026-05-04T18:22:12.191583+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3151.84,
+    "trades": [
+      {
+        "coin": "xyz:CBRS",
+        "status": "filled",
+        "size": "0.13",
+        "price": "221.9",
+        "notional": 28.85,
+        "ref_price": 259.8,
+        "drop_pct": 0.1507
+      }
+    ],
+    "usdc_balance_after": 3151.74
   }
 ]
