@@ -73,15 +73,12 @@
       "intraday_drop": 0.015
     },
     {
-      "coin": "vntl:ANTHROPIC",
-      "dex": "vntl",
-      "sz_decimals": 3,
-      "cross": false,
-      "collateral": "USDH",
-      "swap_pair": "@230",
+      "coin": "ETH",
+      "dex": "",
+      "sz_decimals": 4,
+      "cross": true,
       "dip_threshold": 0.1,
-      "intraday_drop": 0.05,
-      "slippage": 0.02
+      "intraday_drop": 0.03
     },
     {
       "coin": "xyz:SILVER",
