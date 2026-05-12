@@ -2673,5 +2673,23 @@
       }
     ],
     "usdc_balance_after": 1673.77
+  },
+  {
+    "timestamp": "2026-05-12T08:13:03.768982+00:00",
+    "type": "dca",
+    "usdc_balance_before": 1637.67,
+    "trades": [
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0131",
+        "price": "2284.1",
+        "notional": 29.92,
+        "trigger": "DIP_TARGET",
+        "ref_price": 2364.4,
+        "drop_pct": 0.0335
+      }
+    ],
+    "usdc_balance_after": 1637.19
   }
 ]
