@@ -2691,5 +2691,33 @@
       }
     ],
     "usdc_balance_after": 1637.19
+  },
+  {
+    "timestamp": "2026-05-12T10:42:34.079763+00:00",
+    "type": "dca",
+    "usdc_balance_before": 1606.88,
+    "trades": [
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.73",
+        "price": "40.898",
+        "notional": 29.86,
+        "trigger": "DIP_TARGET",
+        "ref_price": 42.173,
+        "drop_pct": 0.0302
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.3",
+        "price": "98.229",
+        "notional": 29.47,
+        "trigger": "DIP_TARGET",
+        "ref_price": 102.28,
+        "drop_pct": 0.0396
+      }
+    ],
+    "usdc_balance_after": 1606.61
   }
 ]
