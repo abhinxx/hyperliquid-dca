@@ -2655,5 +2655,23 @@
       }
     ],
     "usdc_balance_after": 1620.37
+  },
+  {
+    "timestamp": "2026-05-12T01:23:36.170099+00:00",
+    "type": "dca",
+    "usdc_balance_before": 1673.22,
+    "trades": [
+      {
+        "coin": "ZEC",
+        "status": "filled",
+        "size": "0.05",
+        "price": "550.6",
+        "notional": 27.53,
+        "trigger": "DIP_TARGET",
+        "ref_price": 569.8,
+        "drop_pct": 0.0341
+      }
+    ],
+    "usdc_balance_after": 1673.77
   }
 ]
