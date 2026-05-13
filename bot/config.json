@@ -1,5 +1,5 @@
 {
-  "paused": false,
+  "paused": true,
   "daily_margin_usd": 10,
   "leverage": 3,
   "slippage": 0.01,
@@ -109,7 +109,7 @@
       "dex": "xyz",
       "sz_decimals": 2,
       "cross": false,
-      "dip_threshold": 0.10,
+      "dip_threshold": 0.1,
       "intraday_drop": 0.035
     }
   ]
