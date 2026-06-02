@@ -1,2 +1,2 @@
-hyperliquid-python-sdk==0.22.0
+hyperliquid-python-sdk==0.23.0
 eth-account
