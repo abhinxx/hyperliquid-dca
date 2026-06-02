@@ -2836,5 +2836,22 @@
       }
     ],
     "usdc_balance_after": 3672.34
+  },
+  {
+    "timestamp": "2026-06-02T23:17:17.563801+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3667.32,
+    "trades": [
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "90.0",
+        "price": "0.33209",
+        "notional": 29.89,
+        "ref_price": 0.35157,
+        "drop_pct": 0.0554
+      }
+    ],
+    "usdc_balance_after": 3667.32
   }
 ]
