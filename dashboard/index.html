@@ -13,6 +13,7 @@
     .card { background: #161b22; border: 1px solid #21262d; border-radius: 8px; padding: 14px 18px; min-width: 140px; flex: 1; }
     .card-label { color: #8b949e; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
     .card-value { font-size: 1.2rem; font-weight: 600; }
+    .card-sub { color: #8b949e; font-size: 0.68rem; margin-top: 4px; line-height: 1.3; }
     .positive { color: #3fb950; }
     .negative { color: #f85149; }
     table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-bottom: 20px; }
@@ -79,8 +80,8 @@
     <div class="card"><div class="card-label">Total Notional</div><div class="card-value" id="totalNotional">—</div></div>
     <div class="card"><div class="card-label">Trades</div><div class="card-value" id="filledFailed">—</div></div>
     <div class="card"><div class="card-label">Last Trade</div><div class="card-value" id="lastRun">—</div></div>
-    <div class="card"><div class="card-label">Next Check</div><div class="card-value" id="nextRun">—</div></div>
-    <div class="card"><div class="card-label">Deadline</div><div class="card-value" id="deadlineIn">—</div></div>
+    <div class="card"><div class="card-label">Next GH Run</div><div class="card-value" id="nextRun">—</div><div class="card-sub" id="nextRunSub">—</div></div>
+    <div class="card"><div class="card-label">DCA Deadline</div><div class="card-value" id="deadlineIn">—</div><div class="card-sub" id="deadlineSub">—</div></div>
   </div>
 
   <section>
@@ -114,9 +115,102 @@
     const WALLET = '0x8256E29428Ff7b448a9B636151d9e73788459e83';
     let DEXES = ['', 'xyz', 'vntl'];
     const COLORS = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#f778ba', '#79c0ff', '#ffa657', '#7ee787', '#d2a8ff'];
-    const WINDOW_START_HOUR = 20;
-    const DEADLINE_HOUR = 19;
+    let WINDOW_START_HOUR = 20;
+    let DEADLINE_HOUR = 19;
     let allData = [], config = null;
+    let workflowSchedules = [
+      { name: 'Smart DCA', file: 'dca.yml', minutes: [15, 45] },
+      { name: 'Dip Check', file: 'dip-buy.yml', minutes: [0, 30] },
+    ];
+    let lastGhRuns = { dca: null, dip: null };
+
+    function parseCronMinutes(ymlText) {
+      const m = ymlText.match(/cron:\s*['"]([^'"]+)['"]/);
+      if (!m) return null;
+      return m[1].trim().split(/\s+/)[0].split(',').map((n) => parseInt(n, 10)).filter((n) => !isNaN(n));
+    }
+
+    async function syncWorkflowSchedulesFromRepo() {
+      try {
+        const ts = Date.now();
+        const [dcaYml, dipYml] = await Promise.all([
+          fetch(`https://raw.githubusercontent.com/${REPO}/main/.github/workflows/dca.yml?t=${ts}`).then((r) => r.ok ? r.text() : ''),
+          fetch(`https://raw.githubusercontent.com/${REPO}/main/.github/workflows/dip-buy.yml?t=${ts}`).then((r) => r.ok ? r.text() : ''),
+        ]);
+        const dcaM = parseCronMinutes(dcaYml);
+        const dipM = parseCronMinutes(dipYml);
+        if (dcaM?.length) workflowSchedules[0].minutes = dcaM;
+        if (dipM?.length) workflowSchedules[1].minutes = dipM;
+      } catch (_) {}
+    }
+
+    async function fetchLastGhRuns() {
+      const headers = { Accept: 'application/vnd.github+json' };
+      try {
+        const [dcaRes, dipRes] = await Promise.all([
+          fetch(`https://api.github.com/repos/${REPO}/actions/workflows/dca.yml/runs?per_page=1`, { headers }),
+          fetch(`https://api.github.com/repos/${REPO}/actions/workflows/dip-buy.yml/runs?per_page=1`, { headers }),
+        ]);
+        if (dcaRes.ok) {
+          const j = await dcaRes.json();
+          lastGhRuns.dca = j.workflow_runs?.[0] || null;
+        }
+        if (dipRes.ok) {
+          const j = await dipRes.json();
+          lastGhRuns.dip = j.workflow_runs?.[0] || null;
+        }
+      } catch (_) {}
+    }
+
+    function applyConfigHours() {
+      if (!config) return;
+      if (config.window_start_utc != null) WINDOW_START_HOUR = config.window_start_utc;
+      if (config.deadline_utc != null) DEADLINE_HOUR = config.deadline_utc;
+    }
+
+    function nextCronRunAt(minutes, now) {
+      const slots = [...minutes].sort((a, b) => a - b);
+      const y = now.getUTCFullYear();
+      const mo = now.getUTCMonth();
+      const d = now.getUTCDate();
+      const h = now.getUTCHours();
+      const min = now.getUTCMinutes();
+      for (const m of slots) {
+        if (m > min) return new Date(Date.UTC(y, mo, d, h, m, 0, 0));
+      }
+      return new Date(Date.UTC(y, mo, d, h + 1, slots[0], 0, 0));
+    }
+
+    function getNextWorkflowRun(now) {
+      let best = null;
+      for (const wf of workflowSchedules) {
+        const at = nextCronRunAt(wf.minutes, now);
+        if (!best || at < best.at) best = { ...wf, at };
+      }
+      return best;
+    }
+
+    function formatCountdown(ms) {
+      if (ms < 0) ms = 0;
+      const h = Math.floor(ms / 3600000);
+      const m = Math.floor((ms % 3600000) / 60000);
+      const s = Math.floor((ms % 60000) / 1000);
+      if (h > 0) return `${h}h ${String(m).padStart(2, '0')}m`;
+      return `${String(m).padStart(2, '0')}m ${String(s).padStart(2, '0')}s`;
+    }
+
+    function formatGhRunAgo(iso) {
+      if (!iso) return '';
+      const ms = Date.now() - new Date(iso).getTime();
+      if (ms < 60000) return 'just now';
+      if (ms < 3600000) return `${Math.floor(ms / 60000)}m ago`;
+      if (ms < 86400000) return `${Math.floor(ms / 3600000)}h ago`;
+      return `${Math.floor(ms / 86400000)}d ago`;
+    }
+
+    function cronLabel(minutes) {
+      return ':' + minutes.map((m) => String(m).padStart(2, '0')).join(', :');
+    }
 
     async function hlPost(body) {
       return fetch(HL_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(r => r.json());
@@ -220,8 +314,11 @@
       const [historyResult, configResult] = await Promise.all([
         fetch(HISTORY_URL).then(r => r.ok ? r.json() : []).catch(() => []),
         fetch(CONFIG_URL).then(r => r.ok ? r.json() : null).catch(() => null),
+        syncWorkflowSchedulesFromRepo(),
+        fetchLastGhRuns(),
       ]);
       allData = historyResult; config = configResult;
+      applyConfigHours();
       if (config) DEXES = [...new Set(['', ...config.assets.map(a => a.dex || '')])];
       const positions = await fetchLivePositions();
 
@@ -311,28 +408,48 @@
     }
 
     function updateTimers() {
+      const nextSub = document.getElementById('nextRunSub');
+      const deadlineSub = document.getElementById('deadlineSub');
       if (config && config.paused) {
         document.getElementById('nextRun').textContent = 'PAUSED';
         document.getElementById('nextRun').style.color = '#f85149';
+        nextSub.textContent = 'GitHub workflows still run; bot exits early';
         document.getElementById('deadlineIn').textContent = 'PAUSED';
         document.getElementById('deadlineIn').style.color = '#f85149';
+        deadlineSub.textContent = '';
         return;
       }
       document.getElementById('nextRun').style.color = '';
       document.getElementById('deadlineIn').style.color = '';
       const now = new Date();
-      const min = now.getUTCMinutes();
-      const next = new Date(now);
-      const slots = [0, 15, 30, 45];
-      const nextSlot = slots.find(s => s > min);
-      if (nextSlot !== undefined) { next.setUTCMinutes(nextSlot, 0, 0); }
-      else { next.setUTCHours(next.getUTCHours() + 1); next.setUTCMinutes(0, 0, 0); }
-      const cd = next - now;
-      document.getElementById('nextRun').textContent = `${String(Math.floor(cd/60000)).padStart(2,'0')}m ${String(Math.floor((cd%60000)/1000)).padStart(2,'0')}s`;
-      const dl = new Date(now); dl.setUTCHours(DEADLINE_HOUR, 0, 0, 0);
+      const nextWf = getNextWorkflowRun(now);
+      const cd = nextWf.at - now;
+      document.getElementById('nextRun').textContent = formatCountdown(cd);
+      const atUtc = nextWf.at.toISOString().slice(11, 16);
+      const dcaKey = workflowSchedules[0].file;
+      const dipKey = workflowSchedules[1].file;
+      const lastSame = nextWf.file === dcaKey ? lastGhRuns.dca : lastGhRuns.dip;
+      const lastOther = nextWf.file === dcaKey ? lastGhRuns.dip : lastGhRuns.dca;
+      const otherWf = workflowSchedules.find((w) => w.file !== nextWf.file);
+      const subParts = [`${nextWf.name} @ ${atUtc} UTC (cron${cronLabel(nextWf.minutes)})`];
+      if (lastSame) {
+        subParts.push(`Last ${nextWf.name}: ${formatGhRunAgo(lastSame.run_started_at || lastSame.created_at)} (${lastSame.conclusion || '—'})`);
+      }
+      if (otherWf && lastOther) {
+        subParts.push(`Last ${otherWf.name}: ${formatGhRunAgo(lastOther.run_started_at || lastOther.created_at)} (${lastOther.conclusion || '—'})`);
+      }
+      nextSub.textContent = subParts.join(' · ');
+
+      const dl = new Date(now);
+      dl.setUTCHours(DEADLINE_HOUR, 0, 0, 0);
       if (now >= dl) dl.setUTCDate(dl.getUTCDate() + 1);
       const dd = dl - now;
-      document.getElementById('deadlineIn').textContent = `${String(Math.floor(dd/3600000)).padStart(2,'0')}h ${String(Math.floor((dd%3600000)/60000)).padStart(2,'0')}m`;
+      document.getElementById('deadlineIn').textContent = formatCountdown(dd);
+      const dlUtc = `${String(DEADLINE_HOUR).padStart(2, '0')}:00 UTC`;
+      const dcaCron = workflowSchedules.find((w) => w.file === dcaKey);
+      deadlineSub.textContent = dcaCron
+        ? `Forced buys in DCA ${dlUtc} hour · cron${cronLabel(dcaCron.minutes)}`
+        : `Forced buys at ${dlUtc}`;
     }
 
     function updatePauseUI(paused) {
@@ -390,10 +507,15 @@
 
     load().then(() => {
       if (config) updatePauseUI(!!config.paused);
+      updateTimers();
     });
     updateTimers();
     setInterval(updateTimers, 1000);
     setInterval(renderHuntStatus, 60000);
+    setInterval(async () => {
+      await fetchLastGhRuns();
+      updateTimers();
+    }, 60000);
   </script>
 </body>
 </html>
