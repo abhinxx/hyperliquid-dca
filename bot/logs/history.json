@@ -2871,5 +2871,43 @@
       }
     ],
     "usdc_balance_after": 3664.41
+  },
+  {
+    "timestamp": "2026-06-03T17:17:28.656566+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3674.33,
+    "trades": [
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.41",
+        "price": "72.745",
+        "notional": 29.83,
+        "trigger": "DIP_TARGET",
+        "ref_price": 75.4612,
+        "drop_pct": 0.036
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0164",
+        "price": "1821.0",
+        "notional": 29.86,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1897.4,
+        "drop_pct": 0.0403
+      },
+      {
+        "coin": "xyz:CBRS",
+        "status": "filled",
+        "size": "0.13",
+        "price": "214.67",
+        "notional": 27.91,
+        "trigger": "DIP_TARGET",
+        "ref_price": 237.75,
+        "drop_pct": 0.0974
+      }
+    ],
+    "usdc_balance_after": 3674.35
   }
 ]
