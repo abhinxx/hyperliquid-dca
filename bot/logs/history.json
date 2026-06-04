@@ -3019,5 +3019,37 @@
       }
     ],
     "usdc_balance_after": 3630.95
+  },
+  {
+    "timestamp": "2026-06-04T19:47:17.923765+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3619.5,
+    "trades": [
+      {
+        "coin": "NEAR",
+        "status": "filled",
+        "size": "12.8",
+        "price": "2.3449",
+        "notional": 30.01,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "16.4",
+        "price": "1.8267",
+        "notional": 29.96,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.016",
+        "price": "1782.1",
+        "notional": 28.51,
+        "trigger": "FIRST"
+      }
+    ],
+    "usdc_balance_after": 3619.52
   }
 ]
