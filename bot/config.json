@@ -110,5 +110,6 @@
       "dip_threshold": 0.1,
       "intraday_drop": 0.035
     }
-  ]
+  ],
+  "session_started_at": "2026-06-04T14:56:01+00:00"
 }
