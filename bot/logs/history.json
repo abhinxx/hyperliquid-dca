@@ -2955,5 +2955,33 @@
       }
     ],
     "usdc_balance_after": 3652.3
+  },
+  {
+    "timestamp": "2026-06-04T10:43:59.312813+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3633.16,
+    "trades": [
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "91.0",
+        "price": "0.32626",
+        "notional": 29.69,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.33209,
+        "drop_pct": 0.0176
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.017",
+        "price": "1754.3",
+        "notional": 29.82,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1821.0,
+        "drop_pct": 0.0359
+      }
+    ],
+    "usdc_balance_after": 3632.9
   }
 ]
