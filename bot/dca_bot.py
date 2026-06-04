@@ -1,8 +1,7 @@
-"""Hyperliquid Smart DCA — runs hourly, buys each asset once per 24h window at the best price.
+"""Hyperliquid Smart DCA — buys each asset once per session (24h from Resume).
 
-Window: 20:00 UTC to 19:00 UTC next day.
-Each hour: if current price is X% below last buy price for that asset, buy immediately.
-At 19:00 UTC (deadline): buy any asset not yet bought today at market.
+Hours 0–23: buy on intraday dip vs last fill (or first entry).
+Hour 23–24: market-buy any asset not yet bought this session.
 """
 
 import json
@@ -106,21 +105,38 @@ def last_entry_price(history, coin):
     return None
 
 
-def get_current_window_start(now, window_start_hour):
-    """Return the datetime of the current window's start (most recent window_start_hour)."""
-    ws = now.replace(hour=window_start_hour, minute=0, second=0, microsecond=0)
-    if now < ws:
-        ws -= timedelta(days=1)
-    return ws
+def as_utc(dt):
+    if dt.tzinfo is None:
+        return dt.replace(tzinfo=timezone.utc)
+    return dt.astimezone(timezone.utc)
 
 
-def already_bought_today(history, coin, window_start):
-    """Check if this asset has a DCA fill within the current window."""
+def parse_session_start(config):
+    raw = config.get("session_started_at")
+    if not raw:
+        return None
+    return as_utc(datetime.fromisoformat(raw.replace("Z", "+00:00")))
+
+
+def session_deadline_at(session_start):
+    return session_start + timedelta(hours=23)
+
+
+def session_ends_at(session_start):
+    return session_start + timedelta(hours=24)
+
+
+def in_deadline_hour(now, session_start):
+    return session_deadline_at(session_start) <= now < session_ends_at(session_start)
+
+
+def already_bought_session(history, coin, session_start):
+    """DCA fill since session start."""
     for run in reversed(history):
         if run.get("type") != "dca":
             continue
-        run_time = datetime.fromisoformat(run["timestamp"])
-        if run_time < window_start:
+        run_time = as_utc(datetime.fromisoformat(run["timestamp"]))
+        if run_time < session_start:
             break
         for t in run.get("trades", []):
             if t["coin"] == coin and t["status"] == "filled":
@@ -143,16 +159,23 @@ def main():
     margin = config["daily_margin_usd"]
     leverage = config["leverage"]
     slippage = config["slippage"]
-    window_start_hour = config.get("window_start_utc", 20)
-    deadline_hour = config.get("deadline_utc", 19)
     assets = config["assets"]
     history = load_history()
     now = datetime.now(timezone.utc)
 
-    window_start = get_current_window_start(now, window_start_hour)
-    is_deadline = now.hour == deadline_hour
+    session_start = parse_session_start(config)
+    if session_start is None:
+        print("No session_started_at — Resume via toggle-pause (no trades until then)")
+        return
+    if now >= session_ends_at(session_start):
+        print("Session ended — Resume to start a new 24h cycle")
+        return
 
-    print(f"Time: {now.strftime('%H:%M UTC')} | Window start: {window_start.strftime('%Y-%m-%d %H:%M')} | Deadline: {'YES' if is_deadline else 'no'}")
+    is_deadline = in_deadline_hour(now, session_start)
+    dl_at = session_deadline_at(session_start)
+    dl_tag = "YES" if is_deadline else f"no (from {dl_at.strftime('%Y-%m-%d %H:%M')} UTC)"
+
+    print(f"Time: {now.strftime('%H:%M UTC')} | Session: {session_start.strftime('%Y-%m-%d %H:%M')} | Force-buy hour: {dl_tag}")
 
     to_buy = []
     skipped = []
@@ -160,7 +183,7 @@ def main():
     for asset in assets:
         coin = asset["coin"]
 
-        if already_bought_today(history, coin, window_start):
+        if already_bought_session(history, coin, session_start):
             skipped.append(coin)
             continue
 
@@ -187,7 +210,7 @@ def main():
             print(f"  {coin}: ${current:,.2f} (ref=${ref_price:,.2f}, drop={drop*100:+.1f}%, need {intraday_threshold*100:.1f}%) — waiting")
 
     if skipped:
-        print(f"Already bought today: {', '.join(skipped)}")
+        print(f"Already bought this session: {', '.join(skipped)}")
 
     if not to_buy:
         print("Nothing to buy this hour.")

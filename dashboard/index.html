@@ -67,7 +67,7 @@
   <div class="header-row">
     <div>
       <h1>Hyperliquid DCA Dashboard <span class="pause-status" id="pauseStatus"></span></h1>
-      <div class="subtitle">Smart DCA — $10 margin/asset, 3x leverage | buys on dips, deadline 19:00 UTC</div>
+      <div class="subtitle">Smart DCA — $10 margin/asset, 3x leverage | 24h session from Resume, force-buy in last hour</div>
     </div>
     <div class="header-right">
       <input type="password" class="token-input" id="ghToken" placeholder="GitHub token (to toggle)" title="Fine-grained token with Actions write scope">
@@ -85,7 +85,7 @@
   </div>
 
   <section>
-    <h2>Dip Hunting — Current 24h Window</h2>
+    <h2>Dip Hunting — Current Session</h2>
     <div id="huntStatus"><div class="empty">Loading...</div></div>
   </section>
 
@@ -109,14 +109,12 @@
 
   <script>
     const REPO = 'abhinxx/hyperliquid-dca';
-    const HISTORY_URL = `https://raw.githubusercontent.com/${REPO}/main/bot/logs/history.json?t=${Date.now()}`;
-    const CONFIG_URL = `https://raw.githubusercontent.com/${REPO}/main/bot/config.json?t=${Date.now()}`;
+    function historyUrl() { return `https://raw.githubusercontent.com/${REPO}/main/bot/logs/history.json?t=${Date.now()}`; }
+    function configUrl() { return `https://raw.githubusercontent.com/${REPO}/main/bot/config.json?t=${Date.now()}`; }
     const HL_API = 'https://api.hyperliquid.xyz/info';
     const WALLET = '0x8256E29428Ff7b448a9B636151d9e73788459e83';
     let DEXES = ['', 'xyz', 'vntl'];
     const COLORS = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#f778ba', '#79c0ff', '#ffa657', '#7ee787', '#d2a8ff'];
-    let WINDOW_START_HOUR = 20;
-    let DEADLINE_HOUR = 19;
     let allData = [], config = null;
     let workflowSchedules = [
       { name: 'Smart DCA', file: 'dca.yml', minutes: [15, 45] },
@@ -125,9 +123,16 @@
     let lastGhRuns = { dca: null, dip: null };
 
     function parseCronMinutes(ymlText) {
-      const m = ymlText.match(/cron:\s*['"]([^'"]+)['"]/);
-      if (!m) return null;
-      return m[1].trim().split(/\s+/)[0].split(',').map((n) => parseInt(n, 10)).filter((n) => !isNaN(n));
+      const re = /cron:\s*['"]([^'"]+)['"]/g;
+      const minutes = new Set();
+      let m;
+      while ((m = re.exec(ymlText)) !== null) {
+        for (const part of m[1].trim().split(/\s+/)[0].split(',')) {
+          const n = parseInt(part, 10);
+          if (!isNaN(n)) minutes.add(n);
+        }
+      }
+      return minutes.size ? [...minutes].sort((a, b) => a - b) : null;
     }
 
     async function syncWorkflowSchedulesFromRepo() {
@@ -162,10 +167,44 @@
       } catch (_) {}
     }
 
-    function applyConfigHours() {
-      if (!config) return;
-      if (config.window_start_utc != null) WINDOW_START_HOUR = config.window_start_utc;
-      if (config.deadline_utc != null) DEADLINE_HOUR = config.deadline_utc;
+    async function fetchConfig() {
+      const r = await fetch(configUrl());
+      return r.ok ? r.json() : null;
+    }
+
+    /** Wait for toggle-pause workflow to commit config.json (source of truth for bot). */
+    async function waitForConfigSync(expectPaused) {
+      for (let i = 0; i < 20; i++) {
+        const fresh = await fetchConfig();
+        if (!fresh || fresh.paused !== expectPaused) {
+          await new Promise((r) => setTimeout(r, 2000));
+          continue;
+        }
+        if (expectPaused && fresh.session_started_at) {
+          await new Promise((r) => setTimeout(r, 2000));
+          continue;
+        }
+        if (!expectPaused && !fresh.session_started_at) {
+          await new Promise((r) => setTimeout(r, 2000));
+          continue;
+        }
+        config = fresh;
+        return true;
+      }
+      return false;
+    }
+
+    function getSessionStart() {
+      if (!config || !config.session_started_at) return null;
+      return new Date(config.session_started_at);
+    }
+
+    function sessionDeadlineAt(ss) { return new Date(ss.getTime() + 23 * 3600000); }
+    function sessionEndsAt(ss) { return new Date(ss.getTime() + 24 * 3600000); }
+    function needsSessionResume() {
+      if (!config || config.paused) return false;
+      const ss = getSessionStart();
+      return !ss || new Date() >= sessionEndsAt(ss);
     }
 
     function nextCronRunAt(minutes, now) {
@@ -233,12 +272,6 @@
       return positions;
     }
 
-    function getWindowStart(now) {
-      const ws = new Date(now); ws.setUTCHours(WINDOW_START_HOUR, 0, 0, 0);
-      if (now < ws) ws.setUTCDate(ws.getUTCDate() - 1);
-      return ws;
-    }
-
     function lastEntryPrice(coin) {
       for (let i = allData.length - 1; i >= 0; i--)
         for (const t of (allData[i].trades || []))
@@ -246,20 +279,20 @@
       return null;
     }
 
-    function entryPriceBeforeWindow(coin, windowStart) {
+    function entryPriceBeforeSession(coin, sessionStart) {
       for (let i = allData.length - 1; i >= 0; i--) {
         const rt = new Date(allData[i].timestamp);
-        if (rt >= windowStart) continue;
+        if (rt >= sessionStart) continue;
         for (const t of (allData[i].trades || []))
           if (t.coin === coin && t.status === 'filled' && t.price) return parseFloat(t.price);
       }
       return null;
     }
 
-    function boughtInWindow(coin, windowStart) {
+    function boughtInSession(coin, sessionStart) {
       for (let i = allData.length - 1; i >= 0; i--) {
         const run = allData[i]; if (run.type !== 'dca') continue;
-        if (new Date(run.timestamp) < windowStart) break;
+        if (new Date(run.timestamp) < sessionStart) break;
         for (const t of (run.trades || []))
           if (t.coin === coin && t.status === 'filled') return t;
       }
@@ -273,7 +306,15 @@
         return;
       }
       const now = new Date();
-      const windowStart = getWindowStart(now);
+      const sessionStart = getSessionStart();
+      if (!sessionStart) {
+        document.getElementById('huntStatus').innerHTML = '<div class="empty" style="color:#d29922">No session — Resume to start 24h cycle</div>';
+        return;
+      }
+      if (now >= sessionEndsAt(sessionStart)) {
+        document.getElementById('huntStatus').innerHTML = '<div class="empty" style="color:#d29922">Session ended — Resume for a new cycle</div>';
+        return;
+      }
       const dexes = new Set(config.assets.map(a => a.dex || ''));
       const midResults = await Promise.all([...dexes].map(d => d ? hlPost({type:'allMids',dex:d}) : hlPost({type:'allMids'})));
       const allMids = Object.assign({}, ...midResults);
@@ -282,11 +323,11 @@
       for (const asset of config.assets) {
         const coin = asset.coin;
         const threshold = asset.intraday_drop || 0.03;
-        const bought = boughtInWindow(coin, windowStart);
+        const bought = boughtInSession(coin, sessionStart);
         const current = parseFloat(allMids[coin] || 0);
 
         if (bought) {
-          const ref = entryPriceBeforeWindow(coin, windowStart);
+          const ref = entryPriceBeforeSession(coin, sessionStart);
           const target = ref ? ref * (1 - threshold) : null;
           html += `<tr><td>${coin}</td><td><span class="hunt-done">DONE</span></td>`;
           html += `<td>${ref ? '$' + ref.toLocaleString() : '—'}</td>`;
@@ -312,13 +353,12 @@
 
     async function load() {
       const [historyResult, configResult] = await Promise.all([
-        fetch(HISTORY_URL).then(r => r.ok ? r.json() : []).catch(() => []),
-        fetch(CONFIG_URL).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(historyUrl()).then(r => r.ok ? r.json() : []).catch(() => []),
+        fetchConfig().catch(() => null),
         syncWorkflowSchedulesFromRepo(),
         fetchLastGhRuns(),
       ]);
       allData = historyResult; config = configResult;
-      applyConfigHours();
       if (config) DEXES = [...new Set(['', ...config.assets.map(a => a.dex || '')])];
       const positions = await fetchLivePositions();
 
@@ -440,27 +480,41 @@
       }
       nextSub.textContent = subParts.join(' · ');
 
-      const dl = new Date(now);
-      dl.setUTCHours(DEADLINE_HOUR, 0, 0, 0);
-      if (now >= dl) dl.setUTCDate(dl.getUTCDate() + 1);
-      const dd = dl - now;
-      document.getElementById('deadlineIn').textContent = formatCountdown(dd);
-      const dlUtc = `${String(DEADLINE_HOUR).padStart(2, '0')}:00 UTC`;
+      const ss = getSessionStart();
+      if (!ss) {
+        document.getElementById('deadlineIn').textContent = '—';
+        deadlineSub.textContent = 'Resume to set session';
+        return;
+      }
+      const dlAt = sessionDeadlineAt(ss);
+      const endAt = sessionEndsAt(ss);
+      if (now >= endAt) {
+        document.getElementById('deadlineIn').textContent = 'ENDED';
+        deadlineSub.textContent = 'Resume for new session';
+        return;
+      }
+      if (now >= dlAt) {
+        document.getElementById('deadlineIn').textContent = 'ACTIVE';
+        deadlineSub.textContent = `Force-buy until ${endAt.toISOString().slice(11, 16)} UTC`;
+        return;
+      }
+      document.getElementById('deadlineIn').textContent = formatCountdown(dlAt - now);
       const dcaCron = workflowSchedules.find((w) => w.file === dcaKey);
       deadlineSub.textContent = dcaCron
-        ? `Forced buys in DCA ${dlUtc} hour · cron${cronLabel(dcaCron.minutes)}`
-        : `Forced buys at ${dlUtc}`;
+        ? `Last hour from ${dlAt.toISOString().slice(11, 16)} UTC · cron${cronLabel(dcaCron.minutes)}`
+        : `Last hour from ${dlAt.toISOString().slice(11, 16)} UTC`;
     }
 
     function updatePauseUI(paused) {
       const btn = document.getElementById('pauseBtn');
       const status = document.getElementById('pauseStatus');
+      const needsResume = needsSessionResume();
       btn.disabled = false;
-      if (paused) {
+      if (paused || needsResume) {
         btn.className = 'pause-btn paused';
         btn.textContent = 'Resume';
         status.className = 'pause-status is-paused';
-        status.textContent = 'PAUSED';
+        status.textContent = paused ? 'PAUSED' : 'NEEDS RESUME';
       } else {
         btn.className = 'pause-btn running';
         btn.textContent = 'Pause';
@@ -474,7 +528,7 @@
       if (!token) { alert('Paste a GitHub token with Actions write permission'); return; }
       const btn = document.getElementById('pauseBtn');
       const isPaused = config && config.paused;
-      const action = isPaused ? 'resume' : 'pause';
+      const action = isPaused || needsSessionResume() ? 'resume' : 'pause';
       btn.disabled = true;
       btn.textContent = action === 'pause' ? 'Pausing...' : 'Resuming...';
       try {
@@ -484,21 +538,22 @@
           body: JSON.stringify({ ref: 'main', inputs: { action } }),
         });
         if (res.status === 204) {
-          config.paused = !isPaused;
-          updatePauseUI(config.paused);
+          btn.textContent = 'Syncing...';
+          const expectPaused = action === 'pause';
+          const synced = await waitForConfigSync(expectPaused);
+          if (!synced) alert('Workflow started but config not updated yet — refresh in a minute');
+          updatePauseUI(!!config?.paused);
           updateTimers();
           renderHuntStatus();
           localStorage.setItem('gh_token', token);
         } else {
           const err = await res.json().catch(() => ({}));
           alert(`GitHub API error ${res.status}: ${err.message || 'Check token permissions'}`);
-          btn.disabled = false;
-          btn.textContent = isPaused ? 'Resume' : 'Pause';
+          updatePauseUI(!!config?.paused);
         }
       } catch (e) {
         alert('Request failed: ' + e.message);
-        btn.disabled = false;
-        btn.textContent = isPaused ? 'Resume' : 'Pause';
+        updatePauseUI(!!config?.paused);
       }
     });
 

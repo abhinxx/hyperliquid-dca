@@ -28,17 +28,20 @@ jobs:
           p = pathlib.Path('bot/config.json')
           c = json.loads(p.read_text())
           c['paused'] = True
+          c.pop('session_started_at', None)
           p.write_text(json.dumps(c, indent=2) + '\n')
           print('DCA PAUSED')
           "
           else
             python3 -c "
           import json, pathlib
+          from datetime import datetime, timezone
           p = pathlib.Path('bot/config.json')
           c = json.loads(p.read_text())
           c['paused'] = False
+          c['session_started_at'] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S+00:00')
           p.write_text(json.dumps(c, indent=2) + '\n')
-          print('DCA RESUMED')
+          print('DCA RESUMED — session', c['session_started_at'])
           "
           fi
 
