@@ -3069,5 +3069,21 @@
       }
     ],
     "usdc_balance_after": 3597.97
+  },
+  {
+    "timestamp": "2026-06-04T23:35:49.729520+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3588.14,
+    "trades": [
+      {
+        "coin": "VVV",
+        "status": "filled",
+        "size": "1.81",
+        "price": "16.517",
+        "notional": 29.9,
+        "trigger": "FIRST"
+      }
+    ],
+    "usdc_balance_after": 3588.1
   }
 ]
