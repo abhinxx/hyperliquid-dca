@@ -45,12 +45,12 @@
       "intraday_drop": 0.03
     },
     {
-      "coin": "AAVE",
+      "coin": "VVV",
       "dex": "",
       "sz_decimals": 2,
       "cross": true,
-      "dip_threshold": 0.1,
-      "intraday_drop": 0.03
+      "dip_threshold": 0.08,
+      "intraday_drop": 0.026
     },
     {
       "coin": "ZEC",
