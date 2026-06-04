@@ -3001,5 +3001,23 @@
       }
     ],
     "usdc_balance_after": 3645.65
+  },
+  {
+    "timestamp": "2026-06-04T17:21:54.780720+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3630.86,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00047",
+        "price": "63278.0",
+        "notional": 29.74,
+        "trigger": "DIP_TARGET",
+        "ref_price": 65308.0,
+        "drop_pct": 0.0311
+      }
+    ],
+    "usdc_balance_after": 3630.95
   }
 ]
