@@ -2927,5 +2927,33 @@
       }
     ],
     "usdc_balance_after": 3670.51
+  },
+  {
+    "timestamp": "2026-06-04T01:47:39.903996+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3652.37,
+    "trades": [
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.43",
+        "price": "69.341",
+        "notional": 29.82,
+        "trigger": "DIP_TARGET",
+        "ref_price": 72.745,
+        "drop_pct": 0.0464
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.41",
+        "price": "72.324",
+        "notional": 29.65,
+        "trigger": "DIP_TARGET",
+        "ref_price": 74.697,
+        "drop_pct": 0.0321
+      }
+    ],
+    "usdc_balance_after": 3652.3
   }
 ]
