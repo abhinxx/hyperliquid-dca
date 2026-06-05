@@ -1,7 +1,8 @@
-"""Hyperliquid Smart DCA — buys each asset once per session (24h from Resume).
+"""Hyperliquid Smart DCA — buys each asset once per rolling 24h cycle.
 
+Cycle anchor: Resume timestamp. Bot keeps rolling cycles until paused.
 Hours 0–23: buy on intraday dip vs last fill (or first entry).
-Hour 23–24: market-buy any asset not yet bought this session.
+Hour 23–24, or first run after a missed deadline: market-buy pending assets.
 """
 
 import json
@@ -18,6 +19,8 @@ from hyperliquid.utils import constants
 
 API = "https://api.hyperliquid.xyz/info"
 LOGS_PATH = Path(__file__).parent / "logs" / "history.json"
+CYCLE_DURATION = timedelta(hours=24)
+DEADLINE_OFFSET = timedelta(hours=23)
 
 
 def load_config():
@@ -97,8 +100,14 @@ def execute_trade(exchange_client, coin, dex, sz_decimals, is_cross, margin, lev
 
 
 def last_entry_price(history, coin):
-    """Most recent fill price for a coin across all run types."""
+    """Most recent DCA fill price for a coin.
+
+    Dip buys are opportunistic extras; they must not reset the Smart DCA
+    reference or suppress the regular DCA cycle.
+    """
     for run in reversed(history):
+        if run.get("type") != "dca":
+            continue
         for t in run.get("trades", []):
             if t["coin"] == coin and t["status"] == "filled" and t.get("price"):
                 return float(t["price"])
@@ -118,30 +127,88 @@ def parse_session_start(config):
     return as_utc(datetime.fromisoformat(raw.replace("Z", "+00:00")))
 
 
-def session_deadline_at(session_start):
-    return session_start + timedelta(hours=23)
+def cycle_deadline_at(cycle_start):
+    return cycle_start + DEADLINE_OFFSET
 
 
-def session_ends_at(session_start):
-    return session_start + timedelta(hours=24)
+def cycle_ends_at(cycle_start):
+    return cycle_start + CYCLE_DURATION
 
 
-def in_deadline_hour(now, session_start):
-    return session_deadline_at(session_start) <= now < session_ends_at(session_start)
+def current_cycle_start(anchor, now):
+    if now < anchor:
+        return anchor
+    cycles_elapsed = int((now - anchor).total_seconds() // CYCLE_DURATION.total_seconds())
+    return anchor + cycles_elapsed * CYCLE_DURATION
 
 
-def already_bought_session(history, coin, session_start):
-    """DCA fill since session start."""
-    for run in reversed(history):
+def same_cycle(left, right):
+    return as_utc(left) == as_utc(right)
+
+
+def run_belongs_to_cycle(run, cycle_start):
+    run_cycle_start = run.get("cycle_start")
+    cycle_end = cycle_ends_at(cycle_start)
+    if run_cycle_start:
+        return same_cycle(datetime.fromisoformat(run_cycle_start), cycle_start)
+    run_time = as_utc(datetime.fromisoformat(run["timestamp"]))
+    return cycle_start <= run_time < cycle_end
+
+
+def already_bought_cycle(history, coin, cycle_start):
+    """DCA fill assigned to this cycle.
+
+    New runs carry cycle_start explicitly so catch-up buys after a missed deadline
+    do not accidentally count toward the next cycle. Legacy runs fall back to the
+    timestamp window.
+    """
+    for run in history:
         if run.get("type") != "dca":
             continue
-        run_time = as_utc(datetime.fromisoformat(run["timestamp"]))
-        if run_time < session_start:
-            break
+        if not run_belongs_to_cycle(run, cycle_start):
+            continue
         for t in run.get("trades", []):
             if t["coin"] == coin and t["status"] == "filled":
                 return True
     return False
+
+
+def pending_assets(history, assets, cycle_start):
+    return [a for a in assets if not already_bought_cycle(history, a["coin"], cycle_start)]
+
+
+def deadline_attempted_cycle(history, cycle_start):
+    for run in history:
+        if run.get("type") != "dca":
+            continue
+        if not run_belongs_to_cycle(run, cycle_start):
+            continue
+        if run.get("deadline_catch_up"):
+            return True
+        for t in run.get("trades", []):
+            if t.get("trigger") == "DEADLINE":
+                return True
+    return False
+
+
+def select_cycle_for_run(history, assets, anchor, now):
+    """Return (cycle_start, is_deadline, is_catch_up).
+
+    If GitHub skips the final hour, the next DCA run catches up the most recent
+    completed cycle before moving on. It does not backfill multiple missed days.
+    """
+    cycle_start = current_cycle_start(anchor, now)
+
+    if cycle_start > anchor:
+        previous_cycle = cycle_start - CYCLE_DURATION
+        if (
+            now >= cycle_ends_at(previous_cycle)
+            and pending_assets(history, assets, previous_cycle)
+            and not deadline_attempted_cycle(history, previous_cycle)
+        ):
+            return previous_cycle, True, True
+
+    return cycle_start, now >= cycle_deadline_at(cycle_start), False
 
 
 def main():
@@ -167,15 +234,16 @@ def main():
     if session_start is None:
         print("No session_started_at — Resume via toggle-pause (no trades until then)")
         return
-    if now >= session_ends_at(session_start):
-        print("Session ended — Resume to start a new 24h cycle")
-        return
 
-    is_deadline = in_deadline_hour(now, session_start)
-    dl_at = session_deadline_at(session_start)
-    dl_tag = "YES" if is_deadline else f"no (from {dl_at.strftime('%Y-%m-%d %H:%M')} UTC)"
+    cycle_start, is_deadline, is_catch_up = select_cycle_for_run(history, assets, session_start, now)
+    cycle_end = cycle_ends_at(cycle_start)
+    dl_at = cycle_deadline_at(cycle_start)
+    if is_catch_up:
+        dl_tag = f"CATCH-UP (missed {dl_at.strftime('%Y-%m-%d %H:%M')} UTC)"
+    else:
+        dl_tag = "YES" if is_deadline else f"no (from {dl_at.strftime('%Y-%m-%d %H:%M')} UTC)"
 
-    print(f"Time: {now.strftime('%H:%M UTC')} | Session: {session_start.strftime('%Y-%m-%d %H:%M')} | Force-buy hour: {dl_tag}")
+    print(f"Time: {now.strftime('%H:%M UTC')} | Cycle: {cycle_start.strftime('%Y-%m-%d %H:%M')} -> {cycle_end.strftime('%Y-%m-%d %H:%M')} | Force-buy: {dl_tag}")
 
     to_buy = []
     skipped = []
@@ -183,7 +251,7 @@ def main():
     for asset in assets:
         coin = asset["coin"]
 
-        if already_bought_session(history, coin, session_start):
+        if already_bought_cycle(history, coin, cycle_start):
             skipped.append(coin)
             continue
 
@@ -210,7 +278,7 @@ def main():
             print(f"  {coin}: ${current:,.2f} (ref=${ref_price:,.2f}, drop={drop*100:+.1f}%, need {intraday_threshold*100:.1f}%) — waiting")
 
     if skipped:
-        print(f"Already bought this session: {', '.join(skipped)}")
+        print(f"Already bought this cycle: {', '.join(skipped)}")
 
     if not to_buy:
         print("Nothing to buy this hour.")
@@ -228,6 +296,9 @@ def main():
     run = {
         "timestamp": now.isoformat(),
         "type": "dca",
+        "cycle_start": cycle_start.isoformat(),
+        "cycle_end": cycle_end.isoformat(),
+        "deadline_catch_up": is_catch_up,
         "usdc_balance_before": round(usdc_before, 2),
         "trades": [],
     }

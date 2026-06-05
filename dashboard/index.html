@@ -67,7 +67,7 @@
   <div class="header-row">
     <div>
       <h1>Hyperliquid DCA Dashboard <span class="pause-status" id="pauseStatus"></span></h1>
-      <div class="subtitle">Smart DCA — $10 margin/asset, 3x leverage | 24h session from Resume, force-buy in last hour</div>
+      <div class="subtitle">Smart DCA — $10 margin/asset, 3x leverage | rolling 24h cycles, force-buy catch-up</div>
     </div>
     <div class="header-right">
       <input type="password" class="token-input" id="ghToken" placeholder="GitHub token (to toggle)" title="Fine-grained token with Actions write scope">
@@ -199,12 +199,57 @@
       return new Date(config.session_started_at);
     }
 
-    function sessionDeadlineAt(ss) { return new Date(ss.getTime() + 23 * 3600000); }
-    function sessionEndsAt(ss) { return new Date(ss.getTime() + 24 * 3600000); }
+    function cycleDeadlineAt(cs) { return new Date(cs.getTime() + 23 * 3600000); }
+    function cycleEndsAt(cs) { return new Date(cs.getTime() + 24 * 3600000); }
+    function currentCycleStart(anchor, now) {
+      if (now < anchor) return anchor;
+      const cycles = Math.floor((now - anchor) / (24 * 3600000));
+      return new Date(anchor.getTime() + cycles * 24 * 3600000);
+    }
+    function sameCycle(a, b) { return a && b && a.getTime() === b.getTime(); }
+    function runBelongsToCycle(run, cycleStart) {
+      if (run.cycle_start) return sameCycle(new Date(run.cycle_start), cycleStart);
+      const rt = new Date(run.timestamp);
+      return rt >= cycleStart && rt < cycleEndsAt(cycleStart);
+    }
     function needsSessionResume() {
       if (!config || config.paused) return false;
-      const ss = getSessionStart();
-      return !ss || new Date() >= sessionEndsAt(ss);
+      return !getSessionStart();
+    }
+    function boughtInCycle(coin, cycleStart) {
+      for (let i = allData.length - 1; i >= 0; i--) {
+        const run = allData[i]; if (run.type !== 'dca') continue;
+        if (!runBelongsToCycle(run, cycleStart)) continue;
+        for (const t of (run.trades || []))
+          if (t.coin === coin && t.status === 'filled') return t;
+      }
+      return null;
+    }
+    function cyclePendingAssets(cycleStart) {
+      if (!config) return [];
+      return config.assets.filter((asset) => !boughtInCycle(asset.coin, cycleStart));
+    }
+    function deadlineAttemptedCycle(cycleStart) {
+      for (const run of allData) {
+        if (run.type !== 'dca') continue;
+        if (!runBelongsToCycle(run, cycleStart)) continue;
+        if (run.deadline_catch_up) return true;
+        for (const t of (run.trades || []))
+          if (t.trigger === 'DEADLINE') return true;
+      }
+      return false;
+    }
+    function activeCycle(now) {
+      const anchor = getSessionStart();
+      if (!anchor) return null;
+      const current = currentCycleStart(anchor, now);
+      if (current > anchor) {
+        const previous = new Date(current.getTime() - 24 * 3600000);
+        if (now >= cycleEndsAt(previous) && cyclePendingAssets(previous).length && !deadlineAttemptedCycle(previous)) {
+          return { start: previous, catchUp: true };
+        }
+      }
+      return { start: current, catchUp: false };
     }
 
     function nextCronRunAt(minutes, now) {
@@ -272,29 +317,22 @@
       return positions;
     }
 
-    function lastEntryPrice(coin) {
-      for (let i = allData.length - 1; i >= 0; i--)
-        for (const t of (allData[i].trades || []))
-          if (t.coin === coin && t.status === 'filled' && t.price) return parseFloat(t.price);
-      return null;
-    }
-
-    function entryPriceBeforeSession(coin, sessionStart) {
+    function lastDcaEntryPrice(coin) {
       for (let i = allData.length - 1; i >= 0; i--) {
-        const rt = new Date(allData[i].timestamp);
-        if (rt >= sessionStart) continue;
-        for (const t of (allData[i].trades || []))
+        const run = allData[i]; if (run.type !== 'dca') continue;
+        for (const t of (run.trades || []))
           if (t.coin === coin && t.status === 'filled' && t.price) return parseFloat(t.price);
       }
       return null;
     }
 
-    function boughtInSession(coin, sessionStart) {
+    function dcaEntryPriceBeforeCycle(coin, cycleStart) {
       for (let i = allData.length - 1; i >= 0; i--) {
         const run = allData[i]; if (run.type !== 'dca') continue;
-        if (new Date(run.timestamp) < sessionStart) break;
+        const rt = new Date(run.timestamp);
+        if (rt >= cycleStart) continue;
         for (const t of (run.trades || []))
-          if (t.coin === coin && t.status === 'filled') return t;
+          if (t.coin === coin && t.status === 'filled' && t.price) return parseFloat(t.price);
       }
       return null;
     }
@@ -306,15 +344,12 @@
         return;
       }
       const now = new Date();
-      const sessionStart = getSessionStart();
-      if (!sessionStart) {
+      const cycle = activeCycle(now);
+      if (!cycle) {
         document.getElementById('huntStatus').innerHTML = '<div class="empty" style="color:#d29922">No session — Resume to start 24h cycle</div>';
         return;
       }
-      if (now >= sessionEndsAt(sessionStart)) {
-        document.getElementById('huntStatus').innerHTML = '<div class="empty" style="color:#d29922">Session ended — Resume for a new cycle</div>';
-        return;
-      }
+      const cycleStart = cycle.start;
       const dexes = new Set(config.assets.map(a => a.dex || ''));
       const midResults = await Promise.all([...dexes].map(d => d ? hlPost({type:'allMids',dex:d}) : hlPost({type:'allMids'})));
       const allMids = Object.assign({}, ...midResults);
@@ -323,11 +358,11 @@
       for (const asset of config.assets) {
         const coin = asset.coin;
         const threshold = asset.intraday_drop || 0.03;
-        const bought = boughtInSession(coin, sessionStart);
+        const bought = boughtInCycle(coin, cycleStart);
         const current = parseFloat(allMids[coin] || 0);
 
         if (bought) {
-          const ref = entryPriceBeforeSession(coin, sessionStart);
+          const ref = dcaEntryPriceBeforeCycle(coin, cycleStart);
           const target = ref ? ref * (1 - threshold) : null;
           html += `<tr><td>${coin}</td><td><span class="hunt-done">DONE</span></td>`;
           html += `<td>${ref ? '$' + ref.toLocaleString() : '—'}</td>`;
@@ -336,9 +371,11 @@
           html += `<td class="positive">$${parseFloat(bought.price).toLocaleString()}</td>`;
           html += `<td>$${current.toLocaleString()}</td></tr>`;
         } else {
-          const ref = lastEntryPrice(coin);
+          const ref = lastDcaEntryPrice(coin);
           const target = ref ? ref * (1 - threshold) : null;
-          const statusHtml = ref ? '<span class="hunt-waiting">HUNTING</span>' : '<span class="tag-first">FIRST</span>';
+          const statusHtml = cycle.catchUp
+            ? '<span class="tag-deadline">FORCE NEXT</span>'
+            : ref ? '<span class="hunt-waiting">HUNTING</span>' : '<span class="tag-first">FIRST</span>';
           html += `<tr><td>${coin}</td><td>${statusHtml}</td>`;
           html += `<td>${ref ? '$' + ref.toLocaleString() : '—'}</td>`;
           html += `<td>${(threshold*100).toFixed(1)}%</td>`;
@@ -486,11 +523,13 @@
         deadlineSub.textContent = 'Resume to set session';
         return;
       }
-      const dlAt = sessionDeadlineAt(ss);
-      const endAt = sessionEndsAt(ss);
-      if (now >= endAt) {
-        document.getElementById('deadlineIn').textContent = 'ENDED';
-        deadlineSub.textContent = 'Resume for new session';
+      const cycle = activeCycle(now);
+      const cycleStart = cycle ? cycle.start : currentCycleStart(ss, now);
+      const dlAt = cycleDeadlineAt(cycleStart);
+      const endAt = cycleEndsAt(cycleStart);
+      if (cycle?.catchUp) {
+        document.getElementById('deadlineIn').textContent = 'CATCH-UP';
+        deadlineSub.textContent = `Missed ${dlAt.toISOString().slice(11, 16)} UTC force-buy · next DCA buys pending`;
         return;
       }
       if (now >= dlAt) {
