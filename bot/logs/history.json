@@ -3218,5 +3218,22 @@
       }
     ],
     "usdc_balance_after": 3442.45
+  },
+  {
+    "timestamp": "2026-06-05T18:02:18.295426+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3441.24,
+    "trades": [
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.47",
+        "price": "63.339",
+        "notional": 29.77,
+        "ref_price": 72.324,
+        "drop_pct": 0.1242
+      }
+    ],
+    "usdc_balance_after": 3441.04
   }
 ]
