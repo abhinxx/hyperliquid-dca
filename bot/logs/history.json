@@ -3085,5 +3085,23 @@
       }
     ],
     "usdc_balance_after": 3588.1
+  },
+  {
+    "timestamp": "2026-06-05T01:52:46.935016+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3575.54,
+    "trades": [
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "202.0",
+        "price": "0.14787",
+        "notional": 29.87,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.15304,
+        "drop_pct": 0.0342
+      }
+    ],
+    "usdc_balance_after": 3575.5
   }
 ]
