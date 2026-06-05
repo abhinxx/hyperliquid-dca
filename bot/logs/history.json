@@ -3120,5 +3120,33 @@
       }
     ],
     "usdc_balance_after": 3560.1
+  },
+  {
+    "timestamp": "2026-06-05T06:42:53.369245+00:00",
+    "type": "dca",
+    "usdc_balance_before": 3505.15,
+    "trades": [
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.46",
+        "price": "64.819",
+        "notional": 29.82,
+        "trigger": "DIP_TARGET",
+        "ref_price": 69.341,
+        "drop_pct": 0.0649
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0181",
+        "price": "1651.8",
+        "notional": 29.9,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1754.3,
+        "drop_pct": 0.0578
+      }
+    ],
+    "usdc_balance_after": 3505.03
   }
 ]
