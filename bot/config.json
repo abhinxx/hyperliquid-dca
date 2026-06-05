@@ -50,15 +50,15 @@
       "sz_decimals": 2,
       "cross": true,
       "dip_threshold": 0.08,
-      "intraday_drop": 0.026
+      "intraday_drop": 0.03
     },
     {
-      "coin": "ZEC",
+      "coin": "AAVE",
       "dex": "",
       "sz_decimals": 2,
       "cross": true,
       "dip_threshold": 0.1,
-      "intraday_drop": 0.03
+      "intraday_drop": 0.04
     },
     {
       "coin": "vntl:MAG7",
@@ -117,14 +117,6 @@
       "cross": false,
       "dip_threshold": 0.06,
       "intraday_drop": 0.02
-    },
-    {
-      "coin": "xyz:CBRS",
-      "dex": "xyz",
-      "sz_decimals": 2,
-      "cross": false,
-      "dip_threshold": 0.1,
-      "intraday_drop": 0.035
     },
     {
       "coin": "xyz:SNDK",
