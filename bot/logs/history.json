@@ -3103,5 +3103,22 @@
       }
     ],
     "usdc_balance_after": 3575.5
+  },
+  {
+    "timestamp": "2026-06-05T04:27:14.395718+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3560.21,
+    "trades": [
+      {
+        "coin": "ZEC",
+        "status": "filled",
+        "size": "0.07",
+        "price": "407.57",
+        "notional": 28.53,
+        "ref_price": 485.08,
+        "drop_pct": 0.1606
+      }
+    ],
+    "usdc_balance_after": 3560.1
   }
 ]
