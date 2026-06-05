@@ -3192,5 +3192,31 @@
       }
     ],
     "usdc_balance_after": 3496.35
+  },
+  {
+    "timestamp": "2026-06-05T15:36:38.488218+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3442.91,
+    "trades": [
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "18.2",
+        "price": "1.6446",
+        "notional": 29.93,
+        "ref_price": 1.8267,
+        "drop_pct": 0.0996
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.018",
+        "price": "1644.1",
+        "notional": 29.59,
+        "ref_price": 1782.1,
+        "drop_pct": 0.0779
+      }
+    ],
+    "usdc_balance_after": 3442.45
   }
 ]
