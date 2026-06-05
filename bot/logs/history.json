@@ -3294,5 +3294,66 @@
       }
     ],
     "usdc_balance_after": 3437.12
+  },
+  {
+    "timestamp": "2026-06-05T22:05:21.182980+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-05T14:56:01+00:00",
+    "cycle_end": "2026-06-06T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3454.44,
+    "trades": [
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0187",
+        "price": "1596.4",
+        "notional": 29.85,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1651.8,
+        "drop_pct": 0.0331
+      },
+      {
+        "coin": "NEAR",
+        "status": "filled",
+        "size": "15.2",
+        "price": "1.9724",
+        "notional": 29.98,
+        "trigger": "DIP_TARGET",
+        "ref_price": 2.3449,
+        "drop_pct": 0.1581
+      },
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "17.9",
+        "price": "1.6742",
+        "notional": 29.97,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1.8267,
+        "drop_pct": 0.0836
+      },
+      {
+        "coin": "xyz:SILVER",
+        "status": "filled",
+        "size": "0.44",
+        "price": "67.864",
+        "notional": 29.86,
+        "trigger": "DIP_TARGET",
+        "ref_price": 70.398,
+        "drop_pct": 0.036
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.019",
+        "price": "1570.7",
+        "notional": 29.84,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1782.1,
+        "drop_pct": 0.1187
+      }
+    ],
+    "usdc_balance_after": 3453.39
   }
 ]
