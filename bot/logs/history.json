@@ -3439,5 +3439,64 @@
       }
     ],
     "usdc_balance_after": 3435.34
+  },
+  {
+    "timestamp": "2026-06-06T14:07:00.596658+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-05T14:56:01+00:00",
+    "cycle_end": "2026-06-06T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3445.69,
+    "trades": [
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.5",
+        "price": "58.834",
+        "notional": 29.42,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "93.0",
+        "price": "0.3206",
+        "notional": 29.82,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "193.0",
+        "price": "0.15498",
+        "notional": 29.91,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.49",
+        "price": "61.12",
+        "notional": 29.95,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "filled",
+        "size": "0.455",
+        "price": "65.83",
+        "notional": 29.95,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.96",
+        "price": "6.0762",
+        "notional": 30.14,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 3435.1
   }
 ]
