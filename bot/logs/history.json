@@ -4016,5 +4016,36 @@
       }
     ],
     "usdc_balance_after": 3460.6
+  },
+  {
+    "timestamp": "2026-06-09T18:21:04.488471+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-09T14:56:01+00:00",
+    "cycle_end": "2026-06-10T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3509.07,
+    "trades": [
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.5",
+        "price": "59.33",
+        "notional": 29.66,
+        "trigger": "DIP_TARGET",
+        "ref_price": 62.448,
+        "drop_pct": 0.0503
+      },
+      {
+        "coin": "VVV",
+        "status": "filled",
+        "size": "1.92",
+        "price": "15.585",
+        "notional": 29.92,
+        "trigger": "DIP_TARGET",
+        "ref_price": 17.528,
+        "drop_pct": 0.111
+      }
+    ],
+    "usdc_balance_after": 3509.22
   }
 ]
