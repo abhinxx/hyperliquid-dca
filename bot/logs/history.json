@@ -3887,5 +3887,22 @@
       }
     ],
     "usdc_balance_after": 3530.22
+  },
+  {
+    "timestamp": "2026-06-09T08:36:11.684582+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3580.96,
+    "trades": [
+      {
+        "coin": "VVV",
+        "status": "filled",
+        "size": "1.89",
+        "price": "15.847",
+        "notional": 29.95,
+        "ref_price": 17.528,
+        "drop_pct": 0.0959
+      }
+    ],
+    "usdc_balance_after": 3580.95
   }
 ]
