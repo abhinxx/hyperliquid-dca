@@ -3904,5 +3904,26 @@
       }
     ],
     "usdc_balance_after": 3580.95
+  },
+  {
+    "timestamp": "2026-06-09T10:01:50.941227+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-08T14:56:01+00:00",
+    "cycle_end": "2026-06-09T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3567.45,
+    "trades": [
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "93.0",
+        "price": "0.32058",
+        "notional": 29.81,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.3264,
+        "drop_pct": 0.0178
+      }
+    ],
+    "usdc_balance_after": 3567.44
   }
 ]
