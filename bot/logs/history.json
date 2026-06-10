@@ -4241,5 +4241,66 @@
       }
     ],
     "usdc_balance_after": 3384.04
+  },
+  {
+    "timestamp": "2026-06-10T22:19:50.902961+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-10T14:56:01+00:00",
+    "cycle_end": "2026-06-11T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3324.37,
+    "trades": [
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.48",
+        "price": "62.34",
+        "notional": 29.92,
+        "trigger": "DIP_TARGET",
+        "ref_price": 64.956,
+        "drop_pct": 0.0394
+      },
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "183.0",
+        "price": "0.16359",
+        "notional": 29.94,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.1692,
+        "drop_pct": 0.033
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.022",
+        "price": "1307.4",
+        "notional": 28.76,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1363.1,
+        "drop_pct": 0.0407
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.82",
+        "price": "6.2208",
+        "notional": 29.98,
+        "trigger": "DIP_TARGET",
+        "ref_price": 6.3617,
+        "drop_pct": 0.0223
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.018",
+        "price": "1620.5",
+        "notional": 29.17,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1682.411,
+        "drop_pct": 0.0366
+      }
+    ],
+    "usdc_balance_after": 3321.83
   }
 ]
