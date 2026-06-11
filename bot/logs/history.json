@@ -4345,5 +4345,26 @@
       }
     ],
     "usdc_balance_after": 3404.92
+  },
+  {
+    "timestamp": "2026-06-11T19:44:23.854897+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-11T14:56:01+00:00",
+    "cycle_end": "2026-06-12T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3473.25,
+    "trades": [
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "15.6",
+        "price": "1.9187",
+        "notional": 29.93,
+        "trigger": "DIP_TARGET",
+        "ref_price": 2.0236,
+        "drop_pct": 0.0517
+      }
+    ],
+    "usdc_balance_after": 3473.41
   }
 ]
