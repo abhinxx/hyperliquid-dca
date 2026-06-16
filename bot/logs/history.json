@@ -4886,5 +4886,36 @@
       }
     ],
     "usdc_balance_after": 3681.44
+  },
+  {
+    "timestamp": "2026-06-16T07:42:57.424988+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-15T14:56:01+00:00",
+    "cycle_end": "2026-06-16T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3731.24,
+    "trades": [
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "182.0",
+        "price": "0.16404",
+        "notional": 29.86,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.17018,
+        "drop_pct": 0.036
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0169",
+        "price": "1771.9",
+        "notional": 29.95,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1830.4,
+        "drop_pct": 0.0323
+      }
+    ],
+    "usdc_balance_after": 3731.65
   }
 ]
