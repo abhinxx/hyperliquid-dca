@@ -4917,5 +4917,88 @@
       }
     ],
     "usdc_balance_after": 3731.65
+  },
+  {
+    "timestamp": "2026-06-16T17:48:25.948204+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-15T14:56:01+00:00",
+    "cycle_end": "2026-06-16T14:56:01+00:00",
+    "deadline_catch_up": true,
+    "usdc_balance_before": 3679.58,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00045",
+        "price": "65841.0",
+        "notional": 29.63,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.4",
+        "price": "73.756",
+        "notional": 29.5,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.4",
+        "price": "73.536",
+        "notional": 29.41,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "94.0",
+        "price": "0.317704",
+        "notional": 29.86,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.4",
+        "price": "74.875",
+        "notional": 29.95,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "filled",
+        "size": "0.452",
+        "price": "66.387",
+        "notional": 30.01,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "15.4",
+        "price": "1.9407",
+        "notional": 29.89,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.57",
+        "price": "6.563",
+        "notional": 29.99,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.014",
+        "price": "2041.6",
+        "notional": 28.58,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 3671.15
   }
 ]
