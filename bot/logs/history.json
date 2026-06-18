@@ -5130,5 +5130,54 @@
       }
     ],
     "usdc_balance_after": 3720.69
+  },
+  {
+    "timestamp": "2026-06-18T06:27:02.650223+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-17T14:56:01+00:00",
+    "cycle_end": "2026-06-18T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3604.34,
+    "trades": [
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.42",
+        "price": "71.07",
+        "notional": 29.85,
+        "trigger": "DIP_TARGET",
+        "ref_price": 73.88,
+        "drop_pct": 0.0378
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.4",
+        "price": "73.303",
+        "notional": 29.32,
+        "trigger": "DIP_TARGET",
+        "ref_price": 76.57,
+        "drop_pct": 0.0429
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Order could not immediately match against any resting orders. asset=130003",
+        "trigger": "DIP_TARGET",
+        "ref_price": 65.373,
+        "drop_pct": 0.0187
+      },
+      {
+        "coin": "NEAR",
+        "status": "filled",
+        "size": "13.8",
+        "price": "2.1679",
+        "notional": 29.92,
+        "trigger": "DIP_TARGET",
+        "ref_price": 2.2907,
+        "drop_pct": 0.0537
+      }
+    ],
+    "usdc_balance_after": 3594.05
   }
 ]
