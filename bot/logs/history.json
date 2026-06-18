@@ -5270,5 +5270,46 @@
       }
     ],
     "usdc_balance_after": 3664.36
+  },
+  {
+    "timestamp": "2026-06-18T17:47:02.298955+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-18T14:56:01+00:00",
+    "cycle_end": "2026-06-19T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3552.11,
+    "trades": [
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.44",
+        "price": "67.036",
+        "notional": 29.5,
+        "trigger": "DIP_TARGET",
+        "ref_price": 70.685,
+        "drop_pct": 0.0514
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.43",
+        "price": "68.723",
+        "notional": 29.55,
+        "trigger": "DIP_TARGET",
+        "ref_price": 71.07,
+        "drop_pct": 0.0333
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0178",
+        "price": "1681.3",
+        "notional": 29.93,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1738.6,
+        "drop_pct": 0.0333
+      }
+    ],
+    "usdc_balance_after": 3553.91
   }
 ]
