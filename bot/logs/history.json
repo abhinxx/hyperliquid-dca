@@ -5398,5 +5398,70 @@
       }
     ],
     "usdc_balance_after": 3556.89
+  },
+  {
+    "timestamp": "2026-06-19T16:40:50.323724+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-18T14:56:01+00:00",
+    "cycle_end": "2026-06-19T14:56:01+00:00",
+    "deadline_catch_up": true,
+    "usdc_balance_before": 3553.98,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00047",
+        "price": "63251.0",
+        "notional": 29.73,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "93.0",
+        "price": "0.32193",
+        "notional": 29.94,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.4",
+        "price": "73.381",
+        "notional": 29.35,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "NEAR",
+        "status": "filled",
+        "size": "13.9",
+        "price": "2.1582",
+        "notional": 30.0,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.68",
+        "price": "6.4039",
+        "notional": 29.97,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.013",
+        "price": "2197.2",
+        "notional": 28.56,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 3542.53
   }
 ]
