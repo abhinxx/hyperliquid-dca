@@ -6073,5 +6073,24 @@
       }
     ],
     "usdc_balance_after": 3373.15
+  },
+  {
+    "timestamp": "2026-06-21T20:01:10.017763+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-21T14:56:01+00:00",
+    "cycle_end": "2026-06-22T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3395.89,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DIP_TARGET",
+        "ref_price": 64.883,
+        "drop_pct": 0.0188
+      }
+    ],
+    "usdc_balance_after": 3384.85
   }
 ]
