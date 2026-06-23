@@ -6408,5 +6408,31 @@
       }
     ],
     "usdc_balance_after": 3108.07
+  },
+  {
+    "timestamp": "2026-06-23T08:04:21.268637+00:00",
+    "type": "dip",
+    "usdc_balance_before": 2953.34,
+    "trades": [
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.017",
+        "price": "1686.8",
+        "notional": 28.68,
+        "ref_price": 1881.3,
+        "drop_pct": 0.1031
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.014",
+        "price": "2098.9",
+        "notional": 29.38,
+        "ref_price": 2263.2,
+        "drop_pct": 0.0718
+      }
+    ],
+    "usdc_balance_after": 2952.52
   }
 ]
