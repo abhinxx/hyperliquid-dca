@@ -6434,5 +6434,94 @@
       }
     ],
     "usdc_balance_after": 2952.52
+  },
+  {
+    "timestamp": "2026-06-23T08:37:19.787510+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-22T14:56:01+00:00",
+    "cycle_end": "2026-06-23T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2883.78,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00048",
+        "price": "62284.0",
+        "notional": 29.9,
+        "trigger": "DIP_TARGET",
+        "ref_price": 64446.0,
+        "drop_pct": 0.0332
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.47",
+        "price": "63.422",
+        "notional": 29.81,
+        "trigger": "DIP_TARGET",
+        "ref_price": 67.804,
+        "drop_pct": 0.0643
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.43",
+        "price": "68.68",
+        "notional": 29.53,
+        "trigger": "DIP_TARGET",
+        "ref_price": 73.04,
+        "drop_pct": 0.0595
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.42",
+        "price": "71.419",
+        "notional": 30.0,
+        "trigger": "DIP_TARGET",
+        "ref_price": 75.545,
+        "drop_pct": 0.055
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DIP_TARGET",
+        "ref_price": 64.883,
+        "drop_pct": 0.0188
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0182",
+        "price": "1647.4",
+        "notional": 29.98,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1735.8,
+        "drop_pct": 0.0508
+      },
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "17.4",
+        "price": "1.7188",
+        "notional": 29.91,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1.8209,
+        "drop_pct": 0.056
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.79",
+        "price": "6.2554",
+        "notional": 29.96,
+        "trigger": "DIP_TARGET",
+        "ref_price": 6.4245,
+        "drop_pct": 0.0263
+      }
+    ],
+    "usdc_balance_after": 2871.75
   }
 ]
