@@ -6869,5 +6869,94 @@
       }
     ],
     "usdc_balance_after": 2676.54
+  },
+  {
+    "timestamp": "2026-06-24T17:31:30.258735+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-24T14:56:01+00:00",
+    "cycle_end": "2026-06-25T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2489.07,
+    "trades": [
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.45",
+        "price": "65.362",
+        "notional": 29.41,
+        "trigger": "DIP_TARGET",
+        "ref_price": 68.515,
+        "drop_pct": 0.0445
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.4",
+        "price": "73.524",
+        "notional": 29.41,
+        "trigger": "DIP_TARGET",
+        "ref_price": 77.052,
+        "drop_pct": 0.0428
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DIP_TARGET",
+        "ref_price": 64.883,
+        "drop_pct": 0.0188
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.019",
+        "price": "1573.0",
+        "notional": 29.89,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1646.9,
+        "drop_pct": 0.0458
+      },
+      {
+        "coin": "NEAR",
+        "status": "filled",
+        "size": "16.0",
+        "price": "1.8745",
+        "notional": 29.99,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1.9549,
+        "drop_pct": 0.0424
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.018",
+        "price": "1644.4",
+        "notional": 29.6,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1720.7,
+        "drop_pct": 0.0446
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "5.01",
+        "price": "5.9871",
+        "notional": 30.0,
+        "trigger": "DIP_TARGET",
+        "ref_price": 6.1109,
+        "drop_pct": 0.0202
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.016",
+        "price": "1871.1",
+        "notional": 29.94,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1996.4,
+        "drop_pct": 0.0642
+      }
+    ],
+    "usdc_balance_after": 2484.36
   }
 ]
