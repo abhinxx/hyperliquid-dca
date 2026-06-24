@@ -6796,5 +6796,78 @@
       }
     ],
     "usdc_balance_after": 2807.27
+  },
+  {
+    "timestamp": "2026-06-24T15:23:01.848609+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-23T14:56:01+00:00",
+    "cycle_end": "2026-06-24T14:56:01+00:00",
+    "deadline_catch_up": true,
+    "usdc_balance_before": 2693.42,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00049",
+        "price": "61019.0",
+        "notional": 29.9,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.49",
+        "price": "60.657",
+        "notional": 29.72,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.43",
+        "price": "68.515",
+        "notional": 29.46,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "91.0",
+        "price": "0.32907",
+        "notional": 29.95,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "199.0",
+        "price": "0.15025",
+        "notional": 29.9,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.38",
+        "price": "77.052",
+        "notional": 29.28,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0182",
+        "price": "1646.9",
+        "notional": 29.97,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 2676.54
   }
 ]
