@@ -8178,5 +8178,34 @@
       }
     ],
     "usdc_balance_after": 2533.3
+  },
+  {
+    "timestamp": "2026-06-29T04:58:24.479572+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-28T14:56:01+00:00",
+    "cycle_end": "2026-06-29T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2532.11,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DIP_TARGET",
+        "ref_price": 64.883,
+        "drop_pct": 0.0188
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.018",
+        "price": "1659.2",
+        "notional": 29.87,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1793.6,
+        "drop_pct": 0.0749
+      }
+    ],
+    "usdc_balance_after": 2521.09
   }
 ]
