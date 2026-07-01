@@ -8785,5 +8785,102 @@
       }
     ],
     "usdc_balance_after": 2308.61
+  },
+  {
+    "timestamp": "2026-07-01T15:28:14.152513+00:00",
+    "type": "dca",
+    "cycle_start": "2026-06-30T14:56:01+00:00",
+    "cycle_end": "2026-07-01T14:56:01+00:00",
+    "deadline_catch_up": true,
+    "usdc_balance_before": 2321.45,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00049",
+        "price": "60319.0",
+        "notional": 29.56,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.46",
+        "price": "64.386",
+        "notional": 29.62,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.38",
+        "price": "77.69",
+        "notional": 29.52,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "94.0",
+        "price": "0.31831",
+        "notional": 29.92,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "208.0",
+        "price": "0.14415",
+        "notional": 29.98,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.34",
+        "price": "87.408",
+        "notional": 29.72,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0184",
+        "price": "1623.5",
+        "notional": 29.87,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "NEAR",
+        "status": "filled",
+        "size": "16.2",
+        "price": "1.851",
+        "notional": 29.99,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "14.4",
+        "price": "2.0803",
+        "notional": 29.96,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.014",
+        "price": "2073.9",
+        "notional": 29.03,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 2310.18
   }
 ]
