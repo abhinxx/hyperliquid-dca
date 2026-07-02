@@ -9193,5 +9193,22 @@
       }
     ],
     "usdc_balance_after": 2188.36
+  },
+  {
+    "timestamp": "2026-07-02T15:53:04.873315+00:00",
+    "type": "dip",
+    "usdc_balance_before": 2187.13,
+    "trades": [
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.016",
+        "price": "1811.5",
+        "notional": 28.98,
+        "ref_price": 2020.4,
+        "drop_pct": 0.1048
+      }
+    ],
+    "usdc_balance_after": 2187.08
   }
 ]
