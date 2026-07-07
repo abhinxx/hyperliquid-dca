@@ -10730,5 +10730,94 @@
       }
     ],
     "usdc_balance_after": 1590.35
+  },
+  {
+    "timestamp": "2026-07-07T15:34:20.277567+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-06T14:56:01+00:00",
+    "cycle_end": "2026-07-07T14:56:01+00:00",
+    "deadline_catch_up": true,
+    "usdc_balance_before": 1591.39,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00047",
+        "price": "63800.0",
+        "notional": 29.99,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.41",
+        "price": "72.468",
+        "notional": 29.71,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.36",
+        "price": "82.017",
+        "notional": 29.53,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "90.0",
+        "price": "0.3316",
+        "notional": 29.84,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.32",
+        "price": "91.67",
+        "notional": 29.33,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0167",
+        "price": "1794.7",
+        "notional": 29.97,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "NEAR",
+        "status": "filled",
+        "size": "14.6",
+        "price": "2.0503",
+        "notional": 29.93,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "14.9",
+        "price": "2.0052",
+        "notional": 29.88,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.82",
+        "price": "6.222",
+        "notional": 29.99,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 1581.16
   }
 ]
