@@ -10845,5 +10845,54 @@
       }
     ],
     "usdc_balance_after": 1586.81
+  },
+  {
+    "timestamp": "2026-07-07T17:35:53.093759+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-07T14:56:01+00:00",
+    "cycle_end": "2026-07-08T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1589.34,
+    "trades": [
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "228.0",
+        "price": "0.13157",
+        "notional": 30.0,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.13596,
+        "drop_pct": 0.0325
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DIP_TARGET",
+        "ref_price": 64.883,
+        "drop_pct": 0.0188
+      },
+      {
+        "coin": "xyz:SKHX",
+        "status": "filled",
+        "size": "0.02",
+        "price": "1440.6",
+        "notional": 28.81,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1532.6,
+        "drop_pct": 0.0611
+      },
+      {
+        "coin": "xyz:SNDK",
+        "status": "filled",
+        "size": "0.018",
+        "price": "1612.7",
+        "notional": 29.03,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1736.1,
+        "drop_pct": 0.0727
+      }
+    ],
+    "usdc_balance_after": 1579.31
   }
 ]
