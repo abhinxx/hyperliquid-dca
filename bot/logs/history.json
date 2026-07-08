@@ -11144,5 +11144,46 @@
       }
     ],
     "usdc_balance_after": 1336.55
+  },
+  {
+    "timestamp": "2026-07-08T15:36:30.124703+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-07T14:56:01+00:00",
+    "cycle_end": "2026-07-08T14:56:01+00:00",
+    "deadline_catch_up": true,
+    "usdc_balance_before": 1320.53,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00048",
+        "price": "61735.0",
+        "notional": 29.63,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "91.0",
+        "price": "0.32815",
+        "notional": 29.86,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "14.5",
+        "price": "2.0642",
+        "notional": 29.93,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 1309.76
   }
 ]
