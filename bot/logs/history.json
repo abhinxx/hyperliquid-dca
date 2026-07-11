@@ -11799,5 +11799,21 @@
       }
     ],
     "usdc_balance_after": 1247.51
+  },
+  {
+    "timestamp": "2026-07-11T04:26:41.009178+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-10T14:56:01+00:00",
+    "cycle_end": "2026-07-11T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1238.35,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "USDH swap failed: Insufficient spot balance asset=10230"
+      }
+    ],
+    "usdc_balance_after": 1237.39
   }
 ]
