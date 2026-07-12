@@ -12458,5 +12458,29 @@
       }
     ],
     "usdc_balance_after": 1222.82
+  },
+  {
+    "timestamp": "2026-07-12T23:08:18.441516+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-12T14:56:01+00:00",
+    "cycle_end": "2026-07-13T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1215.49,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "USDH swap failed: Insufficient spot balance asset=10230"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=173",
+        "trigger": "DIP_TARGET",
+        "ref_price": 2.0727,
+        "drop_pct": 0.0483
+      }
+    ],
+    "usdc_balance_after": 1215.18
   }
 ]
