@@ -12854,5 +12854,53 @@
       }
     ],
     "usdc_balance_after": 1119.83
+  },
+  {
+    "timestamp": "2026-07-13T23:11:27.933835+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-13T14:56:01+00:00",
+    "cycle_end": "2026-07-14T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1110.39,
+    "trades": [
+      {
+        "coin": "HYPE",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=159",
+        "trigger": "DIP_TARGET",
+        "ref_price": 66.762,
+        "drop_pct": 0.0532
+      },
+      {
+        "coin": "SOL",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=5",
+        "trigger": "DIP_TARGET",
+        "ref_price": 77.996,
+        "drop_pct": 0.0453
+      },
+      {
+        "coin": "TRX",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=37",
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.33116,
+        "drop_pct": 0.0207
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "USDH swap failed: Insufficient spot balance asset=10230"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=173",
+        "trigger": "DIP_TARGET",
+        "ref_price": 2.0727,
+        "drop_pct": 0.0446
+      }
+    ],
+    "usdc_balance_after": 1110.5
   }
 ]
