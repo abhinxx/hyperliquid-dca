@@ -14273,5 +14273,54 @@
       }
     ],
     "usdc_balance_after": 2560.74
+  },
+  {
+    "timestamp": "2026-07-17T14:15:23.764568+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-16T14:56:01+00:00",
+    "cycle_end": "2026-07-17T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2583.04,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00047",
+        "price": "63390.0",
+        "notional": 29.79,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.4",
+        "price": "74.527",
+        "notional": 29.81,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "92.0",
+        "price": "0.323193",
+        "notional": 29.73,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.32",
+        "price": "91.55",
+        "notional": 29.3,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 2576.43
   }
 ]
