@@ -14158,5 +14158,34 @@
       }
     ],
     "usdc_balance_after": 2699.27
+  },
+  {
+    "timestamp": "2026-07-17T04:24:34.469112+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-16T14:56:01+00:00",
+    "cycle_end": "2026-07-17T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2653.57,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DIP_TARGET",
+        "ref_price": 64.883,
+        "drop_pct": 0.0188
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.81",
+        "price": "6.2326",
+        "notional": 29.98,
+        "trigger": "DIP_TARGET",
+        "ref_price": 6.3658,
+        "drop_pct": 0.021
+      }
+    ],
+    "usdc_balance_after": 2642.49
   }
 ]
