@@ -14542,5 +14542,34 @@
       }
     ],
     "usdc_balance_after": 2418.55
+  },
+  {
+    "timestamp": "2026-07-18T08:07:00.518239+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-17T14:56:01+00:00",
+    "cycle_end": "2026-07-18T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2409.23,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DIP_TARGET",
+        "ref_price": 64.883,
+        "drop_pct": 0.0188
+      },
+      {
+        "coin": "NEAR",
+        "status": "filled",
+        "size": "15.7",
+        "price": "1.9067",
+        "notional": 29.94,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1.9684,
+        "drop_pct": 0.0315
+      }
+    ],
+    "usdc_balance_after": 2398.33
   }
 ]
