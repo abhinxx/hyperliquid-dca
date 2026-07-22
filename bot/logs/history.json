@@ -15975,5 +15975,78 @@
       }
     ],
     "usdc_balance_after": 2066.06
+  },
+  {
+    "timestamp": "2026-07-22T14:20:20.177270+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-21T14:56:01+00:00",
+    "cycle_end": "2026-07-22T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2077.56,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00045",
+        "price": "65724.0",
+        "notional": 29.58,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.38",
+        "price": "77.811",
+        "notional": 29.57,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "82.0",
+        "price": "0.32922",
+        "notional": 27.0,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "CC",
+        "status": "filled",
+        "size": "9.0",
+        "price": "0.12409",
+        "notional": 1.12,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=28",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=1",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=173",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=110030",
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 2076.31
   }
 ]
