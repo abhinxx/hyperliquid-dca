@@ -16304,5 +16304,81 @@
       }
     ],
     "usdc_balance_after": 2029.94
+  },
+  {
+    "timestamp": "2026-07-23T14:29:24.399419+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-22T14:56:01+00:00",
+    "cycle_end": "2026-07-23T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2001.88,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=0",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=159",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=5",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=37",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "CC",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=218",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=28",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "USDH swap failed: Insufficient spot balance asset=10230"
+      },
+      {
+        "coin": "ETH",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=1",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "NEAR",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=74",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=173",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=110030",
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 2002.69
   }
 ]
