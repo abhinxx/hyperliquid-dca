@@ -16412,5 +16412,29 @@
       }
     ],
     "usdc_balance_after": 1980.72
+  },
+  {
+    "timestamp": "2026-07-23T17:46:59.184082+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-23T14:56:01+00:00",
+    "cycle_end": "2026-07-24T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1986.07,
+    "trades": [
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "USDH swap failed: Insufficient spot balance asset=10230"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=110030",
+        "trigger": "DIP_TARGET",
+        "ref_price": 6.5339,
+        "drop_pct": 0.0311
+      }
+    ],
+    "usdc_balance_after": 1986.3
   }
 ]
