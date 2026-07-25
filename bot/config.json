@@ -37,11 +37,11 @@
       "intraday_drop": 0.015
     },
     {
-      "coin": "CC",
+      "coin": "VVV",
       "dex": "",
-      "sz_decimals": 0,
+      "sz_decimals": 2,
       "cross": true,
-      "dip_threshold": 0.1,
+      "dip_threshold": 0.08,
       "intraday_drop": 0.03
     },
     {
@@ -97,11 +97,11 @@
   ],
   "disabled_assets": [
     {
-      "coin": "VVV",
+      "coin": "CC",
       "dex": "",
-      "sz_decimals": 2,
+      "sz_decimals": 0,
       "cross": true,
-      "dip_threshold": 0.08,
+      "dip_threshold": 0.1,
       "intraday_drop": 0.03
     },
     {
