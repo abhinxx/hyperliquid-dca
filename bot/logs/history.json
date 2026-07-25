@@ -17721,5 +17721,34 @@
       }
     ],
     "usdc_balance_after": 2729.62
+  },
+  {
+    "timestamp": "2026-07-25T19:55:37.282563+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-25T14:56:01+00:00",
+    "cycle_end": "2026-07-26T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2722.57,
+    "trades": [
+      {
+        "coin": "VVV",
+        "status": "filled",
+        "size": "2.21",
+        "price": "13.56",
+        "notional": 29.97,
+        "trigger": "DIP_TARGET",
+        "ref_price": 15.585,
+        "drop_pct": 0.1301
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DIP_TARGET",
+        "ref_price": 64.883,
+        "drop_pct": 0.0188
+      }
+    ],
+    "usdc_balance_after": 2711.61
   }
 ]
