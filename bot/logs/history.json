@@ -17931,5 +17931,86 @@
       }
     ],
     "usdc_balance_after": 2666.65
+  },
+  {
+    "timestamp": "2026-07-26T14:13:31.853724+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-25T14:56:01+00:00",
+    "cycle_end": "2026-07-26T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2661.25,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00046",
+        "price": "64660.0",
+        "notional": 29.74,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "filled",
+        "size": "0.51",
+        "price": "58.839",
+        "notional": 30.01,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "filled",
+        "size": "0.39",
+        "price": "75.087",
+        "notional": 29.28,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "TRX",
+        "status": "filled",
+        "size": "90.0",
+        "price": "0.33264",
+        "notional": 29.94,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.31",
+        "price": "96.28",
+        "notional": 29.85,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "status": "filled",
+        "size": "0.0158",
+        "price": "1894.3",
+        "notional": 29.93,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "NEAR",
+        "status": "filled",
+        "size": "16.7",
+        "price": "1.7922",
+        "notional": 29.93,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.7",
+        "price": "6.3699",
+        "notional": 29.94,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 2649.62
   }
 ]
