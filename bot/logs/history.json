@@ -18690,5 +18690,54 @@
       }
     ],
     "usdc_balance_after": 2613.63
+  },
+  {
+    "timestamp": "2026-07-28T14:40:52.463532+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-27T14:56:01+00:00",
+    "cycle_end": "2026-07-28T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2606.34,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "filled",
+        "size": "0.00047",
+        "price": "63285.0",
+        "notional": 29.74,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "AAVE",
+        "status": "filled",
+        "size": "0.3",
+        "price": "98.25",
+        "notional": 29.47,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "Trading is halted.",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "MORPHO",
+        "status": "filled",
+        "size": "15.2",
+        "price": "1.9701",
+        "notional": 29.95,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "xyz:COPPER",
+        "status": "filled",
+        "size": "4.74",
+        "price": "6.3266",
+        "notional": 29.99,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 2597.79
   }
 ]
