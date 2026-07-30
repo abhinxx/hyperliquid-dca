@@ -19233,5 +19233,29 @@
       }
     ],
     "usdc_balance_after": 2438.41
+  },
+  {
+    "timestamp": "2026-07-30T07:19:22.977858+00:00",
+    "type": "dca",
+    "cycle_start": "2026-07-29T14:56:01+00:00",
+    "cycle_end": "2026-07-30T14:56:01+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2448.28,
+    "trades": [
+      {
+        "coin": "VVV",
+        "status": "error",
+        "error": "Insufficient margin to place order. asset=178",
+        "trigger": "DIP_TARGET",
+        "ref_price": 12.726,
+        "drop_pct": 0.0486
+      },
+      {
+        "coin": "vntl:MAG7",
+        "status": "error",
+        "error": "USDH swap failed: Insufficient spot balance asset=10230"
+      }
+    ],
+    "usdc_balance_after": 2448.41
   }
 ]
