@@ -1,5 +1,5 @@
 {
-  "paused": true,
+  "paused": false,
   "market": "spot",
   "daily_margin_usd": 10,
   "leverage": 1,
@@ -154,5 +154,6 @@
       "dip_threshold": 0.07,
       "intraday_drop": 0.025
     }
-  ]
+  ],
+  "session_started_at": "2026-08-05T15:33:52+00:00"
 }
