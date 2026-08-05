@@ -1,7 +1,7 @@
 {
   "paused": true,
   "market": "spot",
-  "daily_margin_usd": 20,
+  "daily_margin_usd": 10,
   "leverage": 1,
   "slippage": 0.01,
   "assets": [
@@ -10,6 +10,7 @@
       "spot_pair": "@142",
       "spot_token": "UBTC",
       "sz_decimals": 5,
+      "buy_usd": 20,
       "dip_threshold": 0.1,
       "intraday_drop": 0.03
     },

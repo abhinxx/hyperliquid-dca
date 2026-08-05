@@ -15,7 +15,7 @@ import eth_account
 from hyperliquid.exchange import Exchange
 from hyperliquid.utils import constants
 
-from trade_exec import asset_mid_price, execute_spot_buy, get_spot_balance
+from trade_exec import asset_mid_price, buy_usd_for_asset, execute_spot_buy, get_spot_balance
 
 LOGS_PATH = Path(__file__).parent / "logs" / "history.json"
 CYCLE_DURATION = timedelta(hours=24)
@@ -244,7 +244,7 @@ def main():
         drop_str = f" ({drop*100:+.1f}% from ${ref_price:,.2f})" if drop else ""
         print(f"\n  {coin} [{trigger_label}]{drop_str}")
 
-        trade = execute_spot_buy(exchange, asset, margin, asset.get("slippage", slippage))
+        trade = execute_spot_buy(exchange, asset, buy_usd_for_asset(asset, margin), asset.get("slippage", slippage))
         trade["trigger"] = trigger_label
         if ref_price:
             trade["ref_price"] = ref_price

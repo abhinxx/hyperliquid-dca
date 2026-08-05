@@ -10,7 +10,7 @@ import eth_account
 from hyperliquid.exchange import Exchange
 from hyperliquid.utils import constants
 
-from trade_exec import asset_mid_price, execute_spot_buy, get_spot_balance
+from trade_exec import asset_mid_price, buy_usd_for_asset, execute_spot_buy, get_spot_balance
 
 LOGS_PATH = Path(__file__).parent / "logs" / "history.json"
 
@@ -110,7 +110,7 @@ def main():
 
     for asset, ref_price, current, drop in triggered:
         coin = asset["coin"]
-        trade = execute_spot_buy(exchange, asset, margin, asset.get("slippage", slippage))
+        trade = execute_spot_buy(exchange, asset, buy_usd_for_asset(asset, margin), asset.get("slippage", slippage))
         trade["ref_price"] = ref_price
         trade["drop_pct"] = round(drop, 4)
         print(f"  {coin}: {trade['status']} {trade.get('size', '')} @ ${trade.get('price', '')} (was ${ref_price:,.2f}, -{drop*100:.1f}%) {trade.get('error', '')}")

@@ -8,6 +8,10 @@ import requests
 API = "https://api.hyperliquid.xyz/info"
 
 
+def buy_usd_for_asset(asset, default_usd):
+    return asset.get("buy_usd", default_usd)
+
+
 def get_spot_mids():
     return requests.post(API, json={"type": "allMids"}, timeout=10).json()
 
