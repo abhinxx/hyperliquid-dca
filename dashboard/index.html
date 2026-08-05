@@ -67,7 +67,7 @@
   <div class="header-row">
     <div>
       <h1>Hyperliquid DCA Dashboard <span class="pause-status" id="pauseStatus"></span></h1>
-      <div class="subtitle">Smart DCA — $10 margin/asset, 3x leverage | rolling 24h cycles, force-buy catch-up</div>
+      <div class="subtitle">Smart DCA — $20 spot/asset | rolling 24h cycles, force-buy catch-up</div>
     </div>
     <div class="header-right">
       <input type="password" class="token-input" id="ghToken" placeholder="GitHub token (to toggle)" title="Fine-grained token with Actions write scope">
@@ -76,8 +76,8 @@
   </div>
 
   <div class="cards">
-    <div class="card"><div class="card-label">Margin Invested</div><div class="card-value" id="marginInvested">—</div></div>
-    <div class="card"><div class="card-label">Total Notional</div><div class="card-value" id="totalNotional">—</div></div>
+    <div class="card"><div class="card-label">Spot Invested</div><div class="card-value" id="marginInvested">—</div></div>
+    <div class="card"><div class="card-label">Spot Value</div><div class="card-value" id="totalNotional">—</div></div>
     <div class="card"><div class="card-label">Trades</div><div class="card-value" id="filledFailed">—</div></div>
     <div class="card"><div class="card-label">Last Trade</div><div class="card-value" id="lastRun">—</div></div>
     <div class="card"><div class="card-label">Next GH Run</div><div class="card-value" id="nextRun">—</div><div class="card-sub" id="nextRunSub">—</div></div>
@@ -90,9 +90,9 @@
   </section>
 
   <section>
-    <h2>Portfolio (Live)</h2>
+    <h2>Spot Holdings (Live)</h2>
     <div class="alloc-section">
-      <div class="alloc-chart"><canvas id="pieChart" width="200" height="200"></canvas><div class="alloc-center"><div class="amount" id="allocTotal">—</div><div class="label">live notional</div></div></div>
+      <div class="alloc-chart"><canvas id="pieChart" width="200" height="200"></canvas><div class="alloc-center"><div class="amount" id="allocTotal">—</div><div class="label">spot value</div></div></div>
       <div class="alloc-legend" id="allocLegend"></div>
     </div>
   </section>
@@ -113,7 +113,6 @@
     function configUrl() { return `https://raw.githubusercontent.com/${REPO}/main/bot/config.json?t=${Date.now()}`; }
     const HL_API = 'https://api.hyperliquid.xyz/info';
     const WALLET = '0x8256E29428Ff7b448a9B636151d9e73788459e83';
-    let DEXES = ['', 'xyz', 'vntl'];
     const COLORS = ['#58a6ff', '#3fb950', '#d29922', '#f85149', '#bc8cff', '#f778ba', '#79c0ff', '#ffa657', '#7ee787', '#d2a8ff'];
     let allData = [], config = null;
     let workflowSchedules = [
@@ -300,21 +299,29 @@
       return fetch(HL_API, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).then(r => r.json());
     }
 
-    async function fetchLivePositions() {
+    async function fetchSpotHoldings() {
+      const [state, mids] = await Promise.all([
+        hlPost({ type: 'spotClearinghouseState', user: WALLET }),
+        hlPost({ type: 'allMids' }),
+      ]);
       const positions = [];
-      for (const dex of DEXES) {
-        const body = { type: 'clearinghouseState', user: WALLET };
-        if (dex) body.dex = dex;
-        try {
-          const state = await hlPost(body);
-          for (const ap of (state.assetPositions || [])) {
-            const p = ap.position; const szi = parseFloat(p.szi); if (szi === 0) continue;
-            positions.push({ coin: p.coin, size: Math.abs(szi), entryPx: parseFloat(p.entryPx),
-              positionValue: parseFloat(p.positionValue), unrealizedPnl: parseFloat(p.unrealizedPnl), marginUsed: parseFloat(p.marginUsed || 0) });
-          }
-        } catch (e) {}
+      for (const b of (state.balances || [])) {
+        const total = parseFloat(b.total);
+        if (total <= 0 || b.coin === 'USDC') continue;
+        const asset = config?.assets?.find((a) => a.spot_token === b.coin || a.coin === b.coin);
+        const pair = asset?.spot_pair;
+        const price = pair ? parseFloat(mids[pair] || 0) : 0;
+        const value = price > 0 ? total * price : parseFloat(b.entryNtl || 0);
+        positions.push({
+          coin: asset?.coin || b.coin,
+          size: total,
+          entryPx: total > 0 ? value / total : 0,
+          positionValue: value,
+          unrealizedPnl: 0,
+          marginUsed: value,
+        });
       }
-      return positions;
+      return positions.sort((a, b) => b.positionValue - a.positionValue);
     }
 
     function lastDcaEntryPrice(coin) {
@@ -350,16 +357,14 @@
         return;
       }
       const cycleStart = cycle.start;
-      const dexes = new Set(config.assets.map(a => a.dex || ''));
-      const midResults = await Promise.all([...dexes].map(d => d ? hlPost({type:'allMids',dex:d}) : hlPost({type:'allMids'})));
-      const allMids = Object.assign({}, ...midResults);
+      const allMids = await hlPost({ type: 'allMids' });
 
       let html = '<table><thead><tr><th>Asset</th><th>Status</th><th>Reference Price</th><th>Threshold</th><th>Target Was</th><th>Filled At</th><th>Current Price</th></tr></thead><tbody>';
       for (const asset of config.assets) {
         const coin = asset.coin;
         const threshold = asset.intraday_drop || 0.03;
         const bought = boughtInCycle(coin, cycleStart);
-        const current = parseFloat(allMids[coin] || 0);
+        const current = parseFloat(allMids[asset.spot_pair || coin] || 0);
 
         if (bought) {
           const ref = dcaEntryPriceBeforeCycle(coin, cycleStart);
@@ -396,8 +401,7 @@
         fetchLastGhRuns(),
       ]);
       allData = historyResult; config = configResult;
-      if (config) DEXES = [...new Set(['', ...config.assets.map(a => a.dex || '')])];
-      const positions = await fetchLivePositions();
+      const positions = await fetchSpotHoldings();
 
       drawAllocation(positions);
       renderHuntStatus();
@@ -405,18 +409,17 @@
       if (!allData.length) { document.getElementById('content').innerHTML = '<div class="empty">No trades yet</div>'; return; }
 
       const coins = new Set();
-      let totalFilled = 0, totalFailed = 0, totalNotional = 0, totalMargin = 0;
-      const leverage = config ? config.leverage : 3;
+      let totalFilled = 0, totalFailed = 0, totalNotional = 0, totalInvested = 0;
       for (const run of allData) {
         for (const t of run.trades || []) {
           coins.add(t.coin);
-          if (t.status === 'filled') { totalFilled++; const ntl = parseFloat(t.notional || 0); totalNotional += ntl; totalMargin += ntl / leverage; }
+          if (t.status === 'filled') { totalFilled++; const ntl = parseFloat(t.notional || 0); totalNotional += ntl; totalInvested += ntl; }
           else totalFailed++;
         }
       }
 
-      document.getElementById('marginInvested').textContent = `$${totalMargin.toFixed(0)}`;
-      document.getElementById('totalNotional').textContent = `$${totalNotional.toFixed(0)}`;
+      document.getElementById('marginInvested').textContent = `$${totalInvested.toFixed(0)}`;
+      document.getElementById('totalNotional').textContent = `$${positions.reduce((s, p) => s + p.positionValue, 0).toFixed(0)}`;
       document.getElementById('filledFailed').innerHTML = `<span class="positive">${totalFilled}</span> / <span class="negative">${totalFailed}</span>`;
       const last = allData[allData.length - 1];
       document.getElementById('lastRun').textContent = new Date(last.timestamp).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });

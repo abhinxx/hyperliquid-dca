@@ -6,18 +6,17 @@ Hour 23–24, or first run after a missed deadline: market-buy pending assets.
 """
 
 import json
-import math
 import os
 import sys
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
 import eth_account
-import requests
 from hyperliquid.exchange import Exchange
 from hyperliquid.utils import constants
 
-API = "https://api.hyperliquid.xyz/info"
+from trade_exec import asset_mid_price, execute_spot_buy, get_spot_balance
+
 LOGS_PATH = Path(__file__).parent / "logs" / "history.json"
 CYCLE_DURATION = timedelta(hours=24)
 DEADLINE_OFFSET = timedelta(hours=23)
@@ -39,64 +38,6 @@ def save_history(history):
     LOGS_PATH.parent.mkdir(parents=True, exist_ok=True)
     with open(LOGS_PATH, "w") as f:
         json.dump(history, f, indent=2)
-
-
-def get_mids(dex=""):
-    body = {"type": "allMids"}
-    if dex:
-        body["dex"] = dex
-    return requests.post(API, json=body, timeout=10).json()
-
-
-def get_spot_balance(wallet, coin="USDC"):
-    data = requests.post(API, json={"type": "spotClearinghouseState", "user": wallet}, timeout=10).json()
-    for b in data.get("balances", []):
-        if b["coin"] == coin:
-            return float(b["total"])
-    return 0.0
-
-
-def swap_usdc_to_usdh(exchange_client, amount):
-    sz = round(max(amount + 1, 11), 2)
-    result = exchange_client.order(
-        name="@230", is_buy=True, sz=sz,
-        limit_px=1.02, order_type={"limit": {"tif": "Ioc"}},
-    )
-    status = result.get("status", "unknown")
-    if status == "ok":
-        for s in result.get("response", {}).get("data", {}).get("statuses", []):
-            if "filled" in s:
-                return {"status": "filled", "size": s["filled"]["totalSz"], "price": s["filled"]["avgPx"]}
-            if "error" in s:
-                return {"status": "error", "error": s["error"]}
-    return {"status": "error", "error": f"swap status: {status}"}
-
-
-def execute_trade(exchange_client, coin, dex, sz_decimals, is_cross, margin, leverage, slippage):
-    mids = get_mids(dex)
-    price = float(mids.get(coin, 0))
-    if price == 0:
-        return {"coin": coin, "status": "error", "error": f"no price found for {coin}"}
-
-    notional = margin * leverage
-    size = math.floor((notional / price) * (10 ** sz_decimals)) / (10 ** sz_decimals)
-    if size <= 0:
-        return {"coin": coin, "status": "error", "error": f"size too small"}
-
-    lev_result = exchange_client.update_leverage(leverage, coin, is_cross=is_cross)
-    if lev_result.get("status") != "ok":
-        exchange_client.update_leverage(leverage, coin, is_cross=not is_cross)
-
-    result = exchange_client.market_open(coin, is_buy=True, sz=size, px=None, slippage=slippage)
-    if result.get("status") == "ok":
-        for s in result.get("response", {}).get("data", {}).get("statuses", []):
-            if "filled" in s:
-                f = s["filled"]
-                return {"coin": coin, "status": "filled", "size": f["totalSz"], "price": f["avgPx"],
-                        "notional": round(float(f["totalSz"]) * float(f["avgPx"]), 2)}
-            if "error" in s:
-                return {"coin": coin, "status": "error", "error": s["error"]}
-    return {"coin": coin, "status": "error", "error": f"order failed: {json.dumps(result)}"}
 
 
 def last_entry_price(history, coin):
@@ -224,7 +165,6 @@ def main():
         return
 
     margin = config["daily_margin_usd"]
-    leverage = config["leverage"]
     slippage = config["slippage"]
     assets = config["assets"]
     history = load_history()
@@ -264,8 +204,7 @@ def main():
             to_buy.append((asset, "first_entry", None, None))
             continue
 
-        mids = get_mids(asset["dex"])
-        current = float(mids.get(coin, 0))
+        current = asset_mid_price(asset)
         if current == 0:
             continue
 
@@ -284,13 +223,8 @@ def main():
         print("Nothing to buy this hour.")
         return
 
-    all_dexes = list({a["dex"] for a, _, _, _ in to_buy})
-    perp_dexs = [d if d else "" for d in all_dexes]
-    if "" not in perp_dexs:
-        perp_dexs.insert(0, "")
-
     agent_wallet = eth_account.Account.from_key(agent_key)
-    exchange = Exchange(agent_wallet, constants.MAINNET_API_URL, account_address=main_wallet, perp_dexs=perp_dexs)
+    exchange = Exchange(agent_wallet, constants.MAINNET_API_URL, account_address=main_wallet)
 
     usdc_before = get_spot_balance(main_wallet, "USDC")
     run = {
@@ -305,20 +239,12 @@ def main():
 
     for asset, reason, ref_price, drop in to_buy:
         coin = asset["coin"]
-        collateral = asset.get("collateral")
-        swap_pair = asset.get("swap_pair")
 
         trigger_label = {"deadline": "DEADLINE", "first_entry": "FIRST", "dip_target": "DIP_TARGET"}[reason]
         drop_str = f" ({drop*100:+.1f}% from ${ref_price:,.2f})" if drop else ""
         print(f"\n  {coin} [{trigger_label}]{drop_str}")
 
-        if collateral == "USDH" and swap_pair:
-            swap = swap_usdc_to_usdh(exchange, margin)
-            if swap["status"] != "filled":
-                run["trades"].append({"coin": coin, "status": "error", "error": f"USDH swap failed: {swap.get('error', '')}"})
-                continue
-
-        trade = execute_trade(exchange, coin, asset["dex"], asset["sz_decimals"], asset.get("cross", True), margin, leverage, asset.get("slippage", slippage))
+        trade = execute_spot_buy(exchange, asset, margin, asset.get("slippage", slippage))
         trade["trigger"] = trigger_label
         if ref_price:
             trade["ref_price"] = ref_price

@@ -1,33 +1,68 @@
 {
   "paused": true,
-  "daily_margin_usd": 10,
-  "leverage": 3,
+  "market": "spot",
+  "daily_margin_usd": 20,
+  "leverage": 1,
   "slippage": 0.01,
   "assets": [
     {
       "coin": "BTC",
-      "dex": "",
+      "spot_pair": "@142",
+      "spot_token": "UBTC",
       "sz_decimals": 5,
-      "cross": true,
-      "dip_threshold": 0.1,
-      "intraday_drop": 0.03
-    },
-    {
-      "coin": "HYPE",
-      "dex": "",
-      "sz_decimals": 2,
-      "cross": true,
       "dip_threshold": 0.1,
       "intraday_drop": 0.03
     },
     {
       "coin": "SOL",
-      "dex": "",
-      "sz_decimals": 2,
-      "cross": true,
+      "spot_pair": "@156",
+      "spot_token": "USOL",
+      "sz_decimals": 3,
       "dip_threshold": 0.1,
       "intraday_drop": 0.03
     },
+    {
+      "coin": "HYPE",
+      "spot_pair": "@107",
+      "spot_token": "HYPE",
+      "sz_decimals": 2,
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.03
+    },
+    {
+      "coin": "ETH",
+      "spot_pair": "@151",
+      "spot_token": "UETH",
+      "sz_decimals": 4,
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.03
+    },
+    {
+      "coin": "PUMP",
+      "spot_pair": "@188",
+      "spot_token": "UPUMP",
+      "sz_decimals": 0,
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.03
+    },
+    {
+      "coin": "ZEC",
+      "spot_pair": "@272",
+      "spot_token": "UZEC",
+      "sz_decimals": 4,
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.03
+    },
+    {
+      "coin": "SPCXD",
+      "spot_pair": "@465",
+      "spot_token": "SPCXD",
+      "sz_decimals": 2,
+      "dip_threshold": 0.1,
+      "intraday_drop": 0.03
+    }
+  ],
+  "disabled_assets": [
     {
       "coin": "TRX",
       "dex": "",
@@ -63,14 +98,6 @@
       "intraday_drop": 0.015
     },
     {
-      "coin": "ETH",
-      "dex": "",
-      "sz_decimals": 4,
-      "cross": true,
-      "dip_threshold": 0.1,
-      "intraday_drop": 0.03
-    },
-    {
       "coin": "NEAR",
       "dex": "",
       "sz_decimals": 1,
@@ -93,9 +120,7 @@
       "cross": false,
       "dip_threshold": 0.06,
       "intraday_drop": 0.02
-    }
-  ],
-  "disabled_assets": [
+    },
     {
       "coin": "CC",
       "dex": "",

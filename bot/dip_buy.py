@@ -1,18 +1,17 @@
 """Dip-buy checker — runs hourly, buys when price drops X% from last entry."""
 
 import json
-import math
 import os
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 import eth_account
-import requests
 from hyperliquid.exchange import Exchange
 from hyperliquid.utils import constants
 
-API = "https://api.hyperliquid.xyz/info"
+from trade_exec import asset_mid_price, execute_spot_buy, get_spot_balance
+
 LOGS_PATH = Path(__file__).parent / "logs" / "history.json"
 
 
@@ -34,21 +33,6 @@ def save_history(history):
         json.dump(history, f, indent=2)
 
 
-def get_mids(dex=""):
-    body = {"type": "allMids"}
-    if dex:
-        body["dex"] = dex
-    return requests.post(API, json=body, timeout=10).json()
-
-
-def get_spot_balance(wallet, coin="USDC"):
-    data = requests.post(API, json={"type": "spotClearinghouseState", "user": wallet}, timeout=10).json()
-    for b in data.get("balances", []):
-        if b["coin"] == coin:
-            return float(b["total"])
-    return 0.0
-
-
 def last_entry_price(history, coin):
     """Find the fill price of the most recent entry (DCA or dip) for a coin."""
     for run in reversed(history):
@@ -56,49 +40,6 @@ def last_entry_price(history, coin):
             if t["coin"] == coin and t["status"] == "filled" and t.get("price"):
                 return float(t["price"])
     return None
-
-
-def swap_usdc_to_usdh(exchange_client, amount):
-    sz = round(max(amount + 1, 11), 2)
-    result = exchange_client.order(
-        name="@230", is_buy=True, sz=sz,
-        limit_px=1.02, order_type={"limit": {"tif": "Ioc"}},
-    )
-    status = result.get("status", "unknown")
-    if status == "ok":
-        for s in result.get("response", {}).get("data", {}).get("statuses", []):
-            if "filled" in s:
-                return {"status": "filled"}
-            if "error" in s:
-                return {"status": "error", "error": s["error"]}
-    return {"status": "error", "error": f"swap status: {status}"}
-
-
-def execute_trade(exchange_client, coin, dex, sz_decimals, is_cross, margin, leverage, slippage):
-    mids = get_mids(dex)
-    price = float(mids.get(coin, 0))
-    if price == 0:
-        return {"coin": coin, "status": "error", "error": "no price found"}
-
-    notional = margin * leverage
-    size = math.floor((notional / price) * (10 ** sz_decimals)) / (10 ** sz_decimals)
-    if size <= 0:
-        return {"coin": coin, "status": "error", "error": "size too small"}
-
-    lev_result = exchange_client.update_leverage(leverage, coin, is_cross=is_cross)
-    if lev_result.get("status") != "ok":
-        exchange_client.update_leverage(leverage, coin, is_cross=not is_cross)
-
-    result = exchange_client.market_open(coin, is_buy=True, sz=size, px=None, slippage=slippage)
-    if result.get("status") == "ok":
-        for s in result.get("response", {}).get("data", {}).get("statuses", []):
-            if "filled" in s:
-                f = s["filled"]
-                return {"coin": coin, "status": "filled", "size": f["totalSz"], "price": f["avgPx"],
-                        "notional": round(float(f["totalSz"]) * float(f["avgPx"]), 2)}
-            if "error" in s:
-                return {"coin": coin, "status": "error", "error": s["error"]}
-    return {"coin": coin, "status": "error", "error": f"order failed: {json.dumps(result)}"}
 
 
 def main():
@@ -114,7 +55,6 @@ def main():
         return
 
     margin = config["daily_margin_usd"]
-    leverage = config["leverage"]
     slippage = config["slippage"]
     assets = config["assets"]
     history = load_history()
@@ -124,17 +64,11 @@ def main():
         print("No assets with dip thresholds configured")
         return
 
-    all_dexes = list({a["dex"] for a in dip_assets})
-    perp_dexs = [d if d else "" for d in all_dexes]
-    if "" not in perp_dexs:
-        perp_dexs.insert(0, "")
-
     triggered = []
     print(f"Checking {len(dip_assets)} assets for dip triggers (vs last entry price)...")
 
     for asset in dip_assets:
         coin = asset["coin"]
-        dex = asset["dex"]
         threshold = asset["dip_threshold"]
 
         ref_price = last_entry_price(history, coin)
@@ -142,8 +76,7 @@ def main():
             print(f"  {coin}: no previous entry — skipping")
             continue
 
-        mids = get_mids(dex)
-        current = float(mids.get(coin, 0))
+        current = asset_mid_price(asset)
         if current == 0:
             print(f"  {coin}: no price")
             continue
@@ -162,7 +95,7 @@ def main():
         return
 
     agent_wallet = eth_account.Account.from_key(agent_key)
-    exchange = Exchange(agent_wallet, constants.MAINNET_API_URL, account_address=main_wallet, perp_dexs=perp_dexs)
+    exchange = Exchange(agent_wallet, constants.MAINNET_API_URL, account_address=main_wallet)
 
     usdc_before = get_spot_balance(main_wallet, "USDC")
     now = datetime.now(timezone.utc)
@@ -173,20 +106,11 @@ def main():
         "trades": [],
     }
 
-    print(f"\nExecuting {len(triggered)} dip-buys (${margin} each, {leverage}x)...")
+    print(f"\nExecuting {len(triggered)} dip-buys (${margin} each)...")
 
     for asset, ref_price, current, drop in triggered:
         coin = asset["coin"]
-        collateral = asset.get("collateral")
-        swap_pair = asset.get("swap_pair")
-
-        if collateral == "USDH" and swap_pair:
-            swap = swap_usdc_to_usdh(exchange, margin)
-            if swap["status"] != "filled":
-                run["trades"].append({"coin": coin, "status": "error", "error": f"USDH swap failed: {swap.get('error')}"})
-                continue
-
-        trade = execute_trade(exchange, coin, asset["dex"], asset["sz_decimals"], asset.get("cross", True), margin, leverage, asset.get("slippage", slippage))
+        trade = execute_spot_buy(exchange, asset, margin, asset.get("slippage", slippage))
         trade["ref_price"] = ref_price
         trade["drop_pct"] = round(drop, 4)
         print(f"  {coin}: {trade['status']} {trade.get('size', '')} @ ${trade.get('price', '')} (was ${ref_price:,.2f}, -{drop*100:.1f}%) {trade.get('error', '')}")
