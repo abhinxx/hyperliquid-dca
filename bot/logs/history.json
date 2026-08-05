@@ -19607,5 +19607,31 @@
       }
     ],
     "usdc_balance_after": 2380.59
+  },
+  {
+    "timestamp": "2026-08-05T16:51:39.385639+00:00",
+    "type": "dca",
+    "cycle_start": "2026-08-05T15:33:52+00:00",
+    "cycle_end": "2026-08-06T15:33:52+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1856.94,
+    "trades": [
+      {
+        "coin": "PUMP",
+        "spot_pair": "@188",
+        "status": "filled",
+        "size": "4027.0",
+        "price": "0.0024837",
+        "notional": 10.0,
+        "trigger": "FIRST"
+      },
+      {
+        "coin": "SPCXD",
+        "status": "error",
+        "error": "Order must have minimum value of 10 USDC. asset=10465",
+        "trigger": "FIRST"
+      }
+    ],
+    "usdc_balance_after": 1846.94
   }
 ]
