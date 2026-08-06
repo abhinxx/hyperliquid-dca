@@ -1,7 +1,7 @@
 {
   "paused": false,
   "market": "spot",
-  "daily_margin_usd": 10,
+  "daily_margin_usd": 12,
   "leverage": 1,
   "slippage": 0.01,
   "assets": [

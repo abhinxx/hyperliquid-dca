@@ -6,6 +6,18 @@ import math
 import requests
 
 API = "https://api.hyperliquid.xyz/info"
+MIN_ORDER_USDC = 10.0  # Hyperliquid spot minimum notional
+
+
+def spot_size_for_usd(usd_amount, price, sz_decimals):
+    """Size in base token; bump up if floor rounding drops notional below exchange min."""
+    scale = 10 ** sz_decimals
+    size = math.floor((usd_amount / price) * scale) / scale
+    if size <= 0:
+        return 0.0
+    if size * price < MIN_ORDER_USDC:
+        size = math.ceil((MIN_ORDER_USDC / price) * scale) / scale
+    return size
 
 
 def buy_usd_for_asset(asset, default_usd):
@@ -39,9 +51,9 @@ def execute_spot_buy(exchange_client, asset, usd_amount, slippage):
     if price == 0:
         return {"coin": coin, "status": "error", "error": f"no price for {pair}"}
 
-    size = math.floor((usd_amount / price) * (10 ** sz_decimals)) / (10 ** sz_decimals)
-    if size <= 0:
-        return {"coin": coin, "status": "error", "error": "size too small"}
+    size = spot_size_for_usd(usd_amount, price, sz_decimals)
+    if size <= 0 or size * price < MIN_ORDER_USDC:
+        return {"coin": coin, "status": "error", "error": f"size too small (need >= ${MIN_ORDER_USDC} notional)"}
 
     result = exchange_client.market_open(pair, is_buy=True, sz=size, px=None, slippage=slippage)
     if result.get("status") == "ok":
