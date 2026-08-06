@@ -19718,5 +19718,22 @@
       }
     ],
     "usdc_balance_after": 1846.94
+  },
+  {
+    "timestamp": "2026-08-06T04:29:28.984018+00:00",
+    "type": "dca",
+    "cycle_start": "2026-08-05T15:33:52+00:00",
+    "cycle_end": "2026-08-06T15:33:52+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1846.94,
+    "trades": [
+      {
+        "coin": "SPCXD",
+        "status": "error",
+        "error": "Order must have minimum value of 10 USDC. asset=10465",
+        "trigger": "FIRST"
+      }
+    ],
+    "usdc_balance_after": 1846.94
   }
 ]
