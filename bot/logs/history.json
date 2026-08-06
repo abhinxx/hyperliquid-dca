@@ -19786,5 +19786,55 @@
       }
     ],
     "usdc_balance_after": 1846.94
+  },
+  {
+    "timestamp": "2026-08-06T14:59:12.805835+00:00",
+    "type": "dca",
+    "cycle_start": "2026-08-05T15:33:52+00:00",
+    "cycle_end": "2026-08-06T15:33:52+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1846.94,
+    "trades": [
+      {
+        "coin": "BTC",
+        "spot_pair": "@142",
+        "status": "filled",
+        "size": "0.0003",
+        "price": "64723.0",
+        "notional": 19.42,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "error",
+        "error": "Order must have minimum value of 10 USDC. asset=10156",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "error",
+        "error": "Order must have minimum value of 10 USDC. asset=10107",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "status": "error",
+        "error": "Order must have minimum value of 10 USDC. asset=10151",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ZEC",
+        "status": "error",
+        "error": "Order must have minimum value of 10 USDC. asset=10272",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SPCXD",
+        "status": "error",
+        "error": "Order must have minimum value of 10 USDC. asset=10465",
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 1827.52
   }
 ]
