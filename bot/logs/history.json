@@ -21496,5 +21496,58 @@
       }
     ],
     "usdc_balance_after": 36.58
+  },
+  {
+    "timestamp": "2026-08-26T19:18:02.606428+00:00",
+    "type": "dca",
+    "cycle_start": "2026-08-25T19:42:48+00:00",
+    "cycle_end": "2026-08-26T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 36.58,
+    "trades": [
+      {
+        "coin": "BTC",
+        "spot_pair": "@142",
+        "status": "filled",
+        "size": "0.00025",
+        "price": "78412.0",
+        "notional": 19.6,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "spot_pair": "@156",
+        "status": "filled",
+        "size": "0.124",
+        "price": "96.453",
+        "notional": 11.96,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "spot_pair": "@151",
+        "status": "filled",
+        "size": "0.002",
+        "price": "2470.6",
+        "notional": 4.94,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "PUMP",
+        "spot_pair": "@188",
+        "status": "filled",
+        "size": "14.0",
+        "price": "0.004774",
+        "notional": 0.07,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SPCXD",
+        "status": "error",
+        "error": "Insufficient spot balance asset=10465",
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 0.0
   }
 ]
