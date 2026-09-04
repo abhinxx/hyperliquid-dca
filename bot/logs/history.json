@@ -22256,5 +22256,61 @@
       }
     ],
     "usdc_balance_after": 4675.44
+  },
+  {
+    "timestamp": "2026-09-04T19:51:06.807041+00:00",
+    "type": "dca",
+    "cycle_start": "2026-09-03T19:42:48+00:00",
+    "cycle_end": "2026-09-04T19:42:48+00:00",
+    "deadline_catch_up": true,
+    "usdc_balance_before": 4675.44,
+    "trades": [
+      {
+        "coin": "BTC",
+        "spot_pair": "@142",
+        "status": "filled",
+        "size": "0.00025",
+        "price": "79749.0",
+        "notional": 19.94,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "spot_pair": "@107",
+        "status": "filled",
+        "size": "0.14",
+        "price": "84.955",
+        "notional": 11.89,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "spot_pair": "@151",
+        "status": "filled",
+        "size": "0.0048",
+        "price": "2457.8",
+        "notional": 11.8,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ZEC",
+        "spot_pair": "@272",
+        "status": "filled",
+        "size": "0.0115",
+        "price": "1040.8",
+        "notional": 11.97,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SPCXD",
+        "spot_pair": "@465",
+        "status": "filled",
+        "size": "0.08",
+        "price": "148.65",
+        "notional": 11.89,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 4607.95
   }
 ]
