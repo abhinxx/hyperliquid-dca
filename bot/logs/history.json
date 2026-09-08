@@ -22608,5 +22608,27 @@
       }
     ],
     "usdc_balance_after": 4325.06
+  },
+  {
+    "timestamp": "2026-09-08T13:36:57.706611+00:00",
+    "type": "dca",
+    "cycle_start": "2026-09-07T19:42:48+00:00",
+    "cycle_end": "2026-09-08T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 4325.06,
+    "trades": [
+      {
+        "coin": "HYPE",
+        "spot_pair": "@107",
+        "status": "filled",
+        "size": "0.14",
+        "price": "82.513",
+        "notional": 11.55,
+        "trigger": "DIP_TARGET",
+        "ref_price": 85.381,
+        "drop_pct": 0.034
+      }
+    ],
+    "usdc_balance_after": 4313.51
   }
 ]
