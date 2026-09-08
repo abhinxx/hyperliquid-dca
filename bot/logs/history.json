@@ -22586,5 +22586,27 @@
       }
     ],
     "usdc_balance_after": 4337.01
+  },
+  {
+    "timestamp": "2026-09-08T04:38:07.010533+00:00",
+    "type": "dca",
+    "cycle_start": "2026-09-07T19:42:48+00:00",
+    "cycle_end": "2026-09-08T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 4337.01,
+    "trades": [
+      {
+        "coin": "ZEC",
+        "spot_pair": "@272",
+        "status": "filled",
+        "size": "0.0106",
+        "price": "1127.4",
+        "notional": 11.95,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1170.9,
+        "drop_pct": 0.037
+      }
+    ],
+    "usdc_balance_after": 4325.06
   }
 ]
