@@ -22846,5 +22846,27 @@
       }
     ],
     "usdc_balance_after": 4109.32
+  },
+  {
+    "timestamp": "2026-09-10T16:22:43.234480+00:00",
+    "type": "dca",
+    "cycle_start": "2026-09-09T19:42:48+00:00",
+    "cycle_end": "2026-09-10T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 4109.32,
+    "trades": [
+      {
+        "coin": "SOL",
+        "spot_pair": "@156",
+        "status": "filled",
+        "size": "0.12",
+        "price": "99.205",
+        "notional": 11.9,
+        "trigger": "DIP_TARGET",
+        "ref_price": 103.61,
+        "drop_pct": 0.042
+      }
+    ],
+    "usdc_balance_after": 4097.42
   }
 ]
