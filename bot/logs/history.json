@@ -23379,5 +23379,38 @@
       }
     ],
     "usdc_balance_after": 3550.13
+  },
+  {
+    "timestamp": "2026-09-15T22:15:20.526922+00:00",
+    "type": "dca",
+    "cycle_start": "2026-09-15T19:42:48+00:00",
+    "cycle_end": "2026-09-16T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3550.13,
+    "trades": [
+      {
+        "coin": "SOL",
+        "spot_pair": "@156",
+        "status": "filled",
+        "size": "0.124",
+        "price": "96.733",
+        "notional": 11.99,
+        "trigger": "DIP_TARGET",
+        "ref_price": 100.51,
+        "drop_pct": 0.0375
+      },
+      {
+        "coin": "ZEC",
+        "spot_pair": "@272",
+        "status": "filled",
+        "size": "0.0108",
+        "price": "1103.7",
+        "notional": 11.92,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1155.1,
+        "drop_pct": 0.0446
+      }
+    ],
+    "usdc_balance_after": 3526.22
   }
 ]
