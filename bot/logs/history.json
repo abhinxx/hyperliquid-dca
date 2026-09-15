@@ -23315,5 +23315,49 @@
       }
     ],
     "usdc_balance_after": 3605.47
+  },
+  {
+    "timestamp": "2026-09-15T15:42:32.800738+00:00",
+    "type": "dca",
+    "cycle_start": "2026-09-14T19:42:48+00:00",
+    "cycle_end": "2026-09-15T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 3605.47,
+    "trades": [
+      {
+        "coin": "BTC",
+        "spot_pair": "@142",
+        "status": "filled",
+        "size": "0.00026",
+        "price": "76370.0",
+        "notional": 19.86,
+        "trigger": "DIP_TARGET",
+        "ref_price": 79197.0,
+        "drop_pct": 0.0356
+      },
+      {
+        "coin": "ETH",
+        "spot_pair": "@151",
+        "status": "filled",
+        "size": "0.0049",
+        "price": "2426.1",
+        "notional": 11.89,
+        "trigger": "DIP_TARGET",
+        "ref_price": 2543.7,
+        "drop_pct": 0.0461
+      },
+      {
+        "coin": "SPCXD",
+        "spot_pair": "@465",
+        "status": "filled",
+        "size": "0.08",
+        "price": "144.95",
+        "notional": 11.6,
+        "trigger": "DIP_TARGET",
+        "ref_price": 150.44,
+        "drop_pct": 0.0365
+      }
+    ],
+    "usdc_balance_after": 3562.13
   }
 ]
