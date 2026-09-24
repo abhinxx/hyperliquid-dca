@@ -24138,5 +24138,24 @@
       }
     ],
     "usdc_balance_after": 1739.89
+  },
+  {
+    "timestamp": "2026-09-24T23:11:44.213798+00:00",
+    "type": "dca",
+    "cycle_start": "2026-09-24T19:42:48+00:00",
+    "cycle_end": "2026-09-25T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1739.89,
+    "trades": [
+      {
+        "coin": "PUMP",
+        "status": "error",
+        "error": "order failed: {\"status\": \"err\", \"response\": \"User or API Wallet 0x6646d10f5fca293b3ef23e830f607a96f5124208 does not exist.\"}",
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.0040165,
+        "drop_pct": 0.0467
+      }
+    ],
+    "usdc_balance_after": 1739.89
   }
 ]
