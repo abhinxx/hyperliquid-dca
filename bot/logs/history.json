@@ -24157,5 +24157,58 @@
       }
     ],
     "usdc_balance_after": 1739.89
+  },
+  {
+    "timestamp": "2026-09-25T20:45:09.592559+00:00",
+    "type": "dca",
+    "cycle_start": "2026-09-24T19:42:48+00:00",
+    "cycle_end": "2026-09-25T19:42:48+00:00",
+    "deadline_catch_up": true,
+    "usdc_balance_before": 1739.89,
+    "trades": [
+      {
+        "coin": "BTC",
+        "status": "error",
+        "error": "order failed: {\"status\": \"err\", \"response\": \"User or API Wallet 0x6646d10f5fca293b3ef23e830f607a96f5124208 does not exist.\"}",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "status": "error",
+        "error": "order failed: {\"status\": \"err\", \"response\": \"User or API Wallet 0x6646d10f5fca293b3ef23e830f607a96f5124208 does not exist.\"}",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "status": "error",
+        "error": "order failed: {\"status\": \"err\", \"response\": \"User or API Wallet 0x6646d10f5fca293b3ef23e830f607a96f5124208 does not exist.\"}",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "status": "error",
+        "error": "order failed: {\"status\": \"err\", \"response\": \"User or API Wallet 0x6646d10f5fca293b3ef23e830f607a96f5124208 does not exist.\"}",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "PUMP",
+        "status": "error",
+        "error": "order failed: {\"status\": \"err\", \"response\": \"User or API Wallet 0x6646d10f5fca293b3ef23e830f607a96f5124208 does not exist.\"}",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ZEC",
+        "status": "error",
+        "error": "order failed: {\"status\": \"err\", \"response\": \"User or API Wallet 0x6646d10f5fca293b3ef23e830f607a96f5124208 does not exist.\"}",
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SPCXD",
+        "status": "error",
+        "error": "order failed: {\"status\": \"err\", \"response\": \"User or API Wallet 0x6646d10f5fca293b3ef23e830f607a96f5124208 does not exist.\"}",
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 1739.89
   }
 ]
