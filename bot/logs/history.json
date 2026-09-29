@@ -24396,5 +24396,20 @@
       }
     ],
     "usdc_balance_after": 3106.28
+  },
+  {
+    "timestamp": "2026-09-29T06:03:06.532547+00:00",
+    "type": "dip",
+    "usdc_balance_before": 3106.28,
+    "trades": [
+      {
+        "coin": "ZEC",
+        "status": "error",
+        "error": "order failed: {\"status\": \"err\", \"response\": \"User or API Wallet 0x6646d10f5fca293b3ef23e830f607a96f5124208 does not exist.\"}",
+        "ref_price": 1559.1,
+        "drop_pct": 0.1102
+      }
+    ],
+    "usdc_balance_after": 3106.28
   }
 ]
