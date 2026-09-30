@@ -176,6 +176,7 @@ def main():
         return
 
     cycle_start, is_deadline, is_catch_up = select_cycle_for_run(history, assets, session_start, now)
+    is_deadline = is_deadline or os.environ.get("FORCE_BUY") == "true"
     cycle_end = cycle_ends_at(cycle_start)
     dl_at = cycle_deadline_at(cycle_start)
     if is_catch_up:

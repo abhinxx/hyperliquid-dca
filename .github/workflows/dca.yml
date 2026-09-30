@@ -3,7 +3,12 @@ name: Hourly Smart DCA
 on:
   schedule:
     - cron: '15,45 * * * *'  # every 30 mins
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      force:
+        description: 'Buy every asset not yet bought this cycle, now'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -25,6 +30,7 @@ jobs:
         env:
           AGENT_PRIVATE_KEY: ${{ secrets.AGENT_PRIVATE_KEY }}
           MAIN_WALLET_ADDRESS: ${{ secrets.MAIN_WALLET_ADDRESS }}
+          FORCE_BUY: ${{ inputs.force }}
         run: python bot/dca_bot.py
 
       - name: Commit trade log
