@@ -25243,5 +25243,52 @@
       }
     ],
     "usdc_balance_after": 2441.46
+  },
+  {
+    "timestamp": "2026-10-07T19:31:36.826360+00:00",
+    "type": "dca",
+    "cycle_start": "2026-10-06T19:42:48+00:00",
+    "cycle_end": "2026-10-07T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 2441.46,
+    "trades": [
+      {
+        "coin": "BTC",
+        "spot_pair": "@142",
+        "status": "filled",
+        "size": "0.00023",
+        "price": "83450.0",
+        "notional": 19.19,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "PUMP",
+        "spot_pair": "@188",
+        "status": "filled",
+        "size": "1861.0",
+        "price": "0.0064489",
+        "notional": 12.0,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ZEC",
+        "spot_pair": "@272",
+        "status": "filled",
+        "size": "0.0089",
+        "price": "1343.9",
+        "notional": 11.96,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SPCXD",
+        "spot_pair": "@465",
+        "status": "filled",
+        "size": "0.07",
+        "price": "167.6",
+        "notional": 11.73,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 2386.57
   }
 ]
