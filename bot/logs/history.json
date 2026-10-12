@@ -25631,5 +25631,23 @@
       }
     ],
     "usdc_balance_after": 2025.48
+  },
+  {
+    "timestamp": "2026-10-12T19:15:23.527631+00:00",
+    "type": "dip",
+    "usdc_balance_before": 2025.48,
+    "trades": [
+      {
+        "coin": "PUMP",
+        "spot_pair": "@188",
+        "status": "filled",
+        "size": "2346.0",
+        "price": "0.0051129",
+        "notional": 11.99,
+        "ref_price": 0.0057418,
+        "drop_pct": 0.1093
+      }
+    ],
+    "usdc_balance_after": 2013.49
   }
 ]
