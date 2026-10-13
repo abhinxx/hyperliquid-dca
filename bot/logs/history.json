@@ -25778,5 +25778,52 @@
       }
     ],
     "usdc_balance_after": 1887.74
+  },
+  {
+    "timestamp": "2026-10-13T21:50:13.263346+00:00",
+    "type": "dca",
+    "cycle_start": "2026-10-12T19:42:48+00:00",
+    "cycle_end": "2026-10-13T19:42:48+00:00",
+    "deadline_catch_up": true,
+    "usdc_balance_before": 1887.74,
+    "trades": [
+      {
+        "coin": "BTC",
+        "spot_pair": "@142",
+        "status": "filled",
+        "size": "0.00023",
+        "price": "83436.0",
+        "notional": 19.19,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "SOL",
+        "spot_pair": "@156",
+        "status": "filled",
+        "size": "0.112",
+        "price": "107.11",
+        "notional": 12.0,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "HYPE",
+        "spot_pair": "@107",
+        "status": "filled",
+        "size": "0.14",
+        "price": "81.825",
+        "notional": 11.46,
+        "trigger": "DEADLINE"
+      },
+      {
+        "coin": "ETH",
+        "spot_pair": "@151",
+        "status": "filled",
+        "size": "0.0047",
+        "price": "2510.4",
+        "notional": 11.8,
+        "trigger": "DEADLINE"
+      }
+    ],
+    "usdc_balance_after": 1833.3
   }
 ]
