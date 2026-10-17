@@ -26188,5 +26188,27 @@
       }
     ],
     "usdc_balance_after": 1472.05
+  },
+  {
+    "timestamp": "2026-10-17T23:25:22.005641+00:00",
+    "type": "dca",
+    "cycle_start": "2026-10-17T19:42:48+00:00",
+    "cycle_end": "2026-10-18T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 1472.05,
+    "trades": [
+      {
+        "coin": "PUMP",
+        "spot_pair": "@188",
+        "status": "filled",
+        "size": "2788.0",
+        "price": "0.0043033",
+        "notional": 12.0,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.0044609,
+        "drop_pct": 0.0336
+      }
+    ],
+    "usdc_balance_after": 1460.06
   }
 ]
