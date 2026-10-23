@@ -26735,5 +26735,38 @@
       }
     ],
     "usdc_balance_after": 929.73
+  },
+  {
+    "timestamp": "2026-10-23T23:07:19.435737+00:00",
+    "type": "dca",
+    "cycle_start": "2026-10-23T19:42:48+00:00",
+    "cycle_end": "2026-10-24T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 929.73,
+    "trades": [
+      {
+        "coin": "PUMP",
+        "spot_pair": "@188",
+        "status": "filled",
+        "size": "2797.0",
+        "price": "0.0042932",
+        "notional": 12.01,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.0046075,
+        "drop_pct": 0.0696
+      },
+      {
+        "coin": "ZEC",
+        "spot_pair": "@272",
+        "status": "filled",
+        "size": "0.0102",
+        "price": "1168.3",
+        "notional": 11.92,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1207.2,
+        "drop_pct": 0.033
+      }
+    ],
+    "usdc_balance_after": 905.8
   }
 ]
