@@ -27246,5 +27246,82 @@
       }
     ],
     "usdc_balance_after": 385.93
+  },
+  {
+    "timestamp": "2026-10-30T00:23:23.383532+00:00",
+    "type": "dca",
+    "cycle_start": "2026-10-29T19:42:48+00:00",
+    "cycle_end": "2026-10-30T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 385.93,
+    "trades": [
+      {
+        "coin": "BTC",
+        "spot_pair": "@142",
+        "status": "filled",
+        "size": "0.00026",
+        "price": "76885.0",
+        "notional": 19.99,
+        "trigger": "DIP_TARGET",
+        "ref_price": 79878.0,
+        "drop_pct": 0.0377
+      },
+      {
+        "coin": "SOL",
+        "spot_pair": "@156",
+        "status": "filled",
+        "size": "0.129",
+        "price": "92.519",
+        "notional": 11.93,
+        "trigger": "DIP_TARGET",
+        "ref_price": 98.63662,
+        "drop_pct": 0.063
+      },
+      {
+        "coin": "HYPE",
+        "spot_pair": "@107",
+        "status": "filled",
+        "size": "0.13",
+        "price": "88.643",
+        "notional": 11.52,
+        "trigger": "DIP_TARGET",
+        "ref_price": 91.784,
+        "drop_pct": 0.0333
+      },
+      {
+        "coin": "ETH",
+        "spot_pair": "@151",
+        "status": "filled",
+        "size": "0.0054",
+        "price": "2211.2",
+        "notional": 11.94,
+        "trigger": "DIP_TARGET",
+        "ref_price": 2292.0,
+        "drop_pct": 0.0361
+      },
+      {
+        "coin": "PUMP",
+        "spot_pair": "@188",
+        "status": "filled",
+        "size": "3175.0",
+        "price": "0.0038026",
+        "notional": 12.07,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.0044002,
+        "drop_pct": 0.142
+      },
+      {
+        "coin": "ZEC",
+        "spot_pair": "@272",
+        "status": "filled",
+        "size": "0.0101",
+        "price": "1191.1",
+        "notional": 12.03,
+        "trigger": "DIP_TARGET",
+        "ref_price": 1245.1,
+        "drop_pct": 0.0489
+      }
+    ],
+    "usdc_balance_after": 318.46
   }
 ]
