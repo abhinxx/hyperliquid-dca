@@ -27654,5 +27654,27 @@
       }
     ],
     "usdc_balance_after": 995.12
+  },
+  {
+    "timestamp": "2026-11-04T07:28:55.648521+00:00",
+    "type": "dca",
+    "cycle_start": "2026-11-03T19:42:48+00:00",
+    "cycle_end": "2026-11-04T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 995.12,
+    "trades": [
+      {
+        "coin": "SPCXD",
+        "spot_pair": "@465",
+        "status": "filled",
+        "size": "0.08",
+        "price": "135.3",
+        "notional": 10.82,
+        "trigger": "DIP_TARGET",
+        "ref_price": 140.9,
+        "drop_pct": 0.04
+      }
+    ],
+    "usdc_balance_after": 984.29
   }
 ]
