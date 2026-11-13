@@ -28424,5 +28424,38 @@
       }
     ],
     "usdc_balance_after": 647.13
+  },
+  {
+    "timestamp": "2026-11-13T10:55:50.519764+00:00",
+    "type": "dca",
+    "cycle_start": "2026-11-12T19:42:48+00:00",
+    "cycle_end": "2026-11-13T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 647.13,
+    "trades": [
+      {
+        "coin": "BTC",
+        "spot_pair": "@142",
+        "status": "filled",
+        "size": "0.00028",
+        "price": "69261.0",
+        "notional": 19.39,
+        "trigger": "DIP_TARGET",
+        "ref_price": 71666.0,
+        "drop_pct": 0.0336
+      },
+      {
+        "coin": "ETH",
+        "spot_pair": "@151",
+        "status": "filled",
+        "size": "0.0061",
+        "price": "1949.6",
+        "notional": 11.89,
+        "trigger": "DIP_TARGET",
+        "ref_price": 2010.2,
+        "drop_pct": 0.0305
+      }
+    ],
+    "usdc_balance_after": 615.84
   }
 ]
