@@ -28513,5 +28513,71 @@
       }
     ],
     "usdc_balance_after": 557.51
+  },
+  {
+    "timestamp": "2026-11-14T13:47:32.157492+00:00",
+    "type": "dca",
+    "cycle_start": "2026-11-13T19:42:48+00:00",
+    "cycle_end": "2026-11-14T19:42:48+00:00",
+    "deadline_catch_up": false,
+    "usdc_balance_before": 557.51,
+    "trades": [
+      {
+        "coin": "BTC",
+        "spot_pair": "@142",
+        "status": "filled",
+        "size": "0.00029",
+        "price": "66891.0",
+        "notional": 19.4,
+        "trigger": "DIP_TARGET",
+        "ref_price": 69261.0,
+        "drop_pct": 0.0343
+      },
+      {
+        "coin": "SOL",
+        "spot_pair": "@156",
+        "status": "filled",
+        "size": "0.158",
+        "price": "75.628",
+        "notional": 11.95,
+        "trigger": "DIP_TARGET",
+        "ref_price": 78.01,
+        "drop_pct": 0.0306
+      },
+      {
+        "coin": "HYPE",
+        "spot_pair": "@107",
+        "status": "filled",
+        "size": "0.17",
+        "price": "68.091",
+        "notional": 11.58,
+        "trigger": "DIP_TARGET",
+        "ref_price": 71.524,
+        "drop_pct": 0.0486
+      },
+      {
+        "coin": "PUMP",
+        "spot_pair": "@188",
+        "status": "filled",
+        "size": "3681.0",
+        "price": "0.0032588",
+        "notional": 12.0,
+        "trigger": "DIP_TARGET",
+        "ref_price": 0.0034457,
+        "drop_pct": 0.054
+      },
+      {
+        "coin": "ZEC",
+        "spot_pair": "@272",
+        "status": "filled",
+        "size": "0.0134",
+        "price": "892.6",
+        "notional": 11.96,
+        "trigger": "DIP_TARGET",
+        "ref_price": 930.3,
+        "drop_pct": 0.0408
+      }
+    ],
+    "usdc_balance_after": 490.63
   }
 ]
